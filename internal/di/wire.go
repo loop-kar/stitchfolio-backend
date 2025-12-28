@@ -1,0 +1,135 @@
+//go:build wireinject
+// +build wireinject
+
+// go:build wireinject
+
+package di
+
+import (
+	"context"
+
+	"github.com/google/wire"
+	"github.com/imkarthi24/sf-backend/internal/app"
+	"github.com/imkarthi24/sf-backend/internal/config"
+	"github.com/imkarthi24/sf-backend/internal/cron"
+	"github.com/imkarthi24/sf-backend/internal/handler"
+	baseHandler "github.com/imkarthi24/sf-backend/internal/handler/base"
+	"github.com/imkarthi24/sf-backend/internal/log/newreliclog"
+	"github.com/imkarthi24/sf-backend/internal/mapper"
+	"github.com/imkarthi24/sf-backend/internal/repository"
+	"github.com/imkarthi24/sf-backend/internal/repository/common"
+	"github.com/imkarthi24/sf-backend/internal/router"
+	"github.com/imkarthi24/sf-backend/internal/service"
+	baseService "github.com/imkarthi24/sf-backend/internal/service/base"
+	"github.com/imkarthi24/sf-backend/pkg/db"
+)
+
+var appConfigSet = wire.NewSet(
+	config.ProvideAppConfig,
+	wire.FieldsOf(new(config.AppConfig), "Smtp", "Server", "Database"),
+	// wire.FieldsOf(new(config.AppConfig), "Server"),
+	// wire.FieldsOf(new(config.AppConfig), "Database"),
+)
+
+var handlerSet = wire.NewSet(
+	baseHandler.ProvideHealthHandler,
+	baseHandler.ProvideBaseHandler,
+	handler.ProvideUserHandler,
+	handler.ProvideChannelHandler,
+	handler.ProvideMasterConfigHandler,
+	handler.ProvideAdminHandler,
+	handler.ProvideCustomerHandler,
+	handler.ProvideEnquiryHandler,
+	handler.ProvideOrderHandler,
+	handler.ProvideOrderItemHandler,
+	handler.ProvideMeasurementHandler,
+)
+var logSet = wire.NewSet(
+	newreliclog.ProvideNewRelic,
+)
+
+var routerSet = wire.NewSet(
+	router.InitRouter,
+)
+
+var dbSet = wire.NewSet(
+	db.ProvideDatabase,
+	db.ProvideDBTransactionManager,
+)
+
+var mapperSet = wire.NewSet(
+	mapper.ProvideMapper,
+	mapper.ProvideResponseMapper,
+)
+
+var svcSet = wire.NewSet(
+	service.ProvideUserService,
+	service.ProvideNotificationService,
+	service.ProvideChannelService,
+	service.ProvideMasterConfigService,
+	service.ProvideAdminService,
+	service.ProvideCustomerService,
+	service.ProvideEnquiryService,
+	service.ProvideOrderService,
+	service.ProvideOrderItemService,
+	service.ProvideMeasurementService,
+)
+
+var baseSvc = wire.NewSet(
+	baseService.ProvideBaseService,
+)
+
+var repoSet = wire.NewSet(
+	common.ProvideCustomGormDB,
+	repository.ProvideUserRepository,
+	repository.ProvideNotificationRepository,
+	repository.ProvideChannelRepository,
+	repository.ProvideMasterConfigRepository,
+	repository.ProvideAdminRepository,
+	repository.ProvideCustomerRepository,
+	repository.ProvideEnquiryRepository,
+	repository.ProvideOrderRepository,
+	repository.ProvideOrderItemRepository,
+	repository.ProvideMeasurementRepository,
+)
+
+var cronSet = wire.NewSet(
+	cron.ProvideCron,
+)
+
+// var storageSet = wire.NewSet(
+// 	s3.LoadS3ConfigFromEnv,
+// 	s3.ProvideS3Config,
+// 	storageClient.ProvideCloudStorageClient,
+// )
+
+func InitApp(ctx *context.Context) (*app.App, error) {
+	wire.Build(
+		appConfigSet,
+		logSet,
+		mapperSet,
+		routerSet,
+		dbSet,
+		repoSet,
+		svcSet,
+		handlerSet,
+		wire.Struct(new(app.App), "*"),
+	)
+	return &app.App{}, nil
+
+}
+
+func InitJobService(ctx *context.Context) (*app.Task, error) {
+	wire.Build(
+		appConfigSet,
+		logSet,
+		mapperSet,
+		dbSet,
+		repoSet,
+		baseSvc,
+		svcSet,
+		cronSet,
+		wire.Struct(new(app.Task), "*"),
+	)
+	return &app.Task{}, nil
+}

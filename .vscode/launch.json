@@ -1,0 +1,112 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [  
+        {
+            "type": "go",
+            "request": "launch",
+            "name": "Debug Local App",
+            "program": "main.go",
+            "mode": "debug",
+            "args": ["--configFile","./config/dev.yaml"],
+            "envFile": "${workspaceFolder}/env/local.env"
+        },      
+        {
+            "type": "go",
+            "request": "launch",
+            "name": "Run Dev App",
+            "program": "main.go",
+            "mode": "debug",
+            "args": ["--configFile","./config/dev.yaml"],
+            "envFile": "${workspaceFolder}/env/dev.env"
+        },  
+        {
+            "type": "go", 
+            "request": "launch",
+            "name": "Debug Migrate dev",
+            "program": "main.go",
+            "mode": "debug",
+            "args": ["--configFile","./config/dev.yaml","--migrate","true"],
+            "envFile": "${workspaceFolder}/env/dev.env"
+        },
+        {
+            "type": "go",
+            "request": "launch",
+            "name": "Debug Dev App",
+            "program": "main.go",
+            "mode": "debug",
+            "args": ["--configFile","./config/dev.yaml"],
+            "envFile": "${workspaceFolder}/env/dev.env"
+        },
+        {
+            "type": "go",
+            "request": "launch",
+            "name": "Debug Local App",
+            "program": "main.go",
+            "mode": "debug",
+            "args": ["--configFile","./config/dev.yaml"],
+            "envFile": "${workspaceFolder}/env/local.env"
+        },
+        {
+            "type": "go", 
+            "request": "launch",
+            "name": "Migrate Dev",
+            "program": "main.go",
+            "args": ["--configFile","./config/dev.yaml","--migrate","true"],
+            "envFile": "${workspaceFolder}/env/dev.env"
+        },
+        {
+            "type": "go", 
+            "request": "launch",
+            "name": "Migrate Local",
+            "program": "main.go",
+            "args": ["--configFile","./config/dev.yaml","--migrate","true"],
+            "envFile": "${workspaceFolder}/env/local.env"
+        },
+        {
+            "type": "go", 
+            "request": "launch",
+            "name": "Migrate QA",
+            "program": "main.go",
+            "args": ["--configFile","./config/qa.yaml","--migrate","true"],
+            "envFile": "${workspaceFolder}/env/qa.env"
+        },
+        {
+            "type": "go", 
+            "request": "launch",
+            "name": "Debug Migrate QA",
+            "program": "main.go",
+            "mode": "debug",
+            "args": ["--configFile","./config/qa.yaml","--migrate","true"],
+            "envFile": "${workspaceFolder}/env/qa.env"
+        },
+        {
+            "type": "go",
+            "request": "launch",
+            "name": "Debug QA App",
+            "program": "main.go",
+            "mode": "debug",
+            "args": ["--configFile","./config/qa.yaml"],
+            "envFile": "${workspaceFolder}/env/qa.env"
+        },
+        {
+            "type": "go", 
+            "request": "launch",
+            "name": "Migrate Prod",
+            "program": "main.go",
+            "args": ["--configFile","./config/prod.yaml","--migrate","true"],
+            "envFile": "${workspaceFolder}/env/prod.env"
+        },
+        {
+            "type": "go",
+            "request": "launch",
+            "name": "Debug Prod App",
+            "program": "main.go",
+            "mode": "debug",
+            "args": ["--configFile","./config/prod.yaml"],
+            "envFile": "${workspaceFolder}/env/prod.env"
+        },
+    ]
+}

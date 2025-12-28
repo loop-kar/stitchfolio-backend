@@ -1,0 +1,1773 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is the backend for SkillFort.",
+        "title": "SkillFort-backend API docs",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:9000",
+    "basePath": "/api/sf/v1",
+    "paths": {
+        "/admin/switch-branch": {
+            "post": {
+                "description": "Switch a record from one channel to another",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Switch a record from one channel to another",
+                "parameters": [
+                    {
+                        "description": "batch",
+                        "name": "batch",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.SwitchBranch"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/channel": {
+            "get": {
+                "description": "Get all active channels",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Channel"
+                ],
+                "summary": "Get all active channels",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.Channel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Saves an instance of Channel",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Channel"
+                ],
+                "summary": "Save Channel",
+                "parameters": [
+                    {
+                        "description": "channel",
+                        "name": "channel",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.Channel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/channel/autocomplete": {
+            "get": {
+                "description": "Autocomplete for channels",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Channel"
+                ],
+                "summary": "Autocomplete for channels",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.ChannelAutoComplete"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/channel/{id}": {
+            "get": {
+                "description": "Get an instance of Channel",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Channel"
+                ],
+                "summary": "Get a specific  Channel",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Channel id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.Channel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates an instance of Channel",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Channel"
+                ],
+                "summary": "Update Channel",
+                "parameters": [
+                    {
+                        "description": "channel",
+                        "name": "channel",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.Channel"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Channel id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes an instance of Channel",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Channel"
+                ],
+                "summary": "Delete Channel",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Channel id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/health": {
+            "get": {
+                "description": "get string by ID",
+                "tags": [
+                    "Health"
+                ],
+                "summary": "Health endpoint",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/masterConfig": {
+            "post": {
+                "description": "Creates a new master config",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MasterConfig"
+                ],
+                "summary": "Create Master Config",
+                "parameters": [
+                    {
+                        "description": "Master Config",
+                        "name": "config",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.MasterConfig"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/masterConfig/browse": {
+            "get": {
+                "description": "Get Master Config for browse",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MasterConfig"
+                ],
+                "summary": "Get Master Config for browse",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "search",
+                        "name": "search",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/masterConfig/value": {
+            "get": {
+                "description": "Get a specific master config by name",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MasterConfig"
+                ],
+                "summary": "Get Master Config by Name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Master Config Name",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/masterConfig/{id}": {
+            "get": {
+                "description": "Get a specific master config by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MasterConfig"
+                ],
+                "summary": "Get Master Config",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Master Config ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates an existing master config",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MasterConfig"
+                ],
+                "summary": "Update Master Config",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Master Config ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Master Config",
+                        "name": "config",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.MasterConfig"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "description": "Get all active users",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get all active users",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "search",
+                        "name": "search",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Saves an instance of User",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Save User",
+                "parameters": [
+                    {
+                        "description": "user",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/autocomplete": {
+            "get": {
+                "description": "Get  Users for AutoComplete",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get  Users for AutoComplete",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "role",
+                        "name": "role",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.User"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/channel": {
+            "post": {
+                "description": "Saves an instance of User Channel Detail",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserChannelDetail"
+                ],
+                "summary": "Save User Channel Detail",
+                "parameters": [
+                    {
+                        "description": "userChannelDetail",
+                        "name": "userChannelDetail",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/requestModel.UserChannelDetail"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/channel/accessible": {
+            "get": {
+                "description": "Gets the channel the user can access, to be used for channel switcher",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Gets the channel the user can access",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User id",
+                        "name": "userId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/user/channel/{id}": {
+            "put": {
+                "description": "Update an instance of User Channel Detail",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserChannelDetail"
+                ],
+                "summary": "Update User Channel Detail",
+                "parameters": [
+                    {
+                        "description": "userconfig",
+                        "name": "userChannelDetail",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.UserChannelDetail"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "userChannelDetailId",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes an instance of User Channel Detail",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserChannelDetail"
+                ],
+                "summary": "Delete User Channel Detail",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user channel detail id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/config": {
+            "post": {
+                "description": "Saves an instance of User Config",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserConfig"
+                ],
+                "summary": "Save User Config",
+                "parameters": [
+                    {
+                        "description": "userconfig",
+                        "name": "userConfig",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.UserConfig"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/config/": {
+            "get": {
+                "description": "Get an instance of UserConfig",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserConfig"
+                ],
+                "summary": "Get a specific  UserConfig",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "userId",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.UserConfig"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/config/{id}": {
+            "put": {
+                "description": "Update an instance of User Config",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserConfig"
+                ],
+                "summary": "Update User Config",
+                "parameters": [
+                    {
+                        "description": "userconfig",
+                        "name": "userConfig",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.UserConfig"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "userconfigid",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/forgot-password": {
+            "post": {
+                "description": "Reset User Password",
+                "tags": [
+                    "User"
+                ],
+                "summary": "Reset User Password",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "email",
+                        "name": "email",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/login": {
+            "post": {
+                "description": "Saves an instance of User",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Login User",
+                "parameters": [
+                    {
+                        "description": "login",
+                        "name": "userLogin",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.Login"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/refresh-token": {
+            "get": {
+                "description": "Refresh JWT Token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Refresh JWT Token",
+                "responses": {}
+            }
+        },
+        "/user/reset-password": {
+            "post": {
+                "description": "Update User Password",
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update User Password",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "resetString",
+                        "name": "resetString",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "password",
+                        "name": "password",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/switch-channel": {
+            "get": {
+                "description": "Refresh JWT Token and switches the user to the requested channel",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Refresh JWT Token and Switches the Channel",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Channel id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/user/{id}": {
+            "get": {
+                "description": "Get an instance of User",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get a specific  User",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates an instance of User",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update User",
+                "parameters": [
+                    {
+                        "description": "user",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.User"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "User id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes an instance of User",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Delete User",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "db.Pagination": {
+            "type": "object",
+            "properties": {
+                "currentPage": {
+                    "type": "integer"
+                },
+                "size": {
+                    "type": "integer"
+                },
+                "skipPagination": {
+                    "type": "boolean"
+                },
+                "sort": {
+                    "type": "string"
+                },
+                "totalPages": {
+                    "type": "integer"
+                },
+                "totalRecords": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entities.Channel": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "type": "integer"
+                },
+                "channelId": {
+                    "description": "Channel Id must be create only since it will interfere with update operations\nUse tx.Exec as raw query to update the channelId as done in channel after-create hook",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdById": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ownerUserId": {
+                    "description": "Reference",
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedById": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entities.RoleType": {
+            "type": "string",
+            "enum": [
+                "SYSTEM ADMIN",
+                "DEV",
+                "SUPER ADMIN",
+                "ADMIN"
+            ],
+            "x-enum-comments": {
+                "ADMIN": "to be used by the application administrator",
+                "DEV": "to be used by developer, only read access in PROD",
+                "SUPERADMIN": "to be used for the owner of the application (customer)",
+                "SYSTEM_ADMIN": "to be used for managing system only,not exposed"
+            },
+            "x-enum-varnames": [
+                "SYSTEM_ADMIN",
+                "DEV",
+                "SUPERADMIN",
+                "ADMIN"
+            ]
+        },
+        "entities.User": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "type": "integer"
+                },
+                "channelId": {
+                    "description": "Channel Id must be create only since it will interfere with update operations\nUse tx.Exec as raw query to update the channelId as done in channel after-create hook",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdById": {
+                    "type": "integer"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "extension": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "isLoggedIn": {
+                    "type": "boolean"
+                },
+                "isLoginDisabled": {
+                    "type": "boolean"
+                },
+                "lastLoginTime": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "loginFailureCounter": {
+                    "type": "integer"
+                },
+                "phoneNumber": {
+                    "type": "string"
+                },
+                "resetPasswordString": {
+                    "type": "string"
+                },
+                "role": {
+                    "$ref": "#/definitions/entities.RoleType"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedById": {
+                    "type": "integer"
+                },
+                "userChannelDetails": {
+                    "description": "References",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entities.UserChannelDetail"
+                    }
+                }
+            }
+        },
+        "entities.UserChannelDetail": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "type": "integer"
+                },
+                "UserID": {
+                    "description": "References",
+                    "type": "integer"
+                },
+                "channel": {
+                    "$ref": "#/definitions/entities.Channel"
+                },
+                "channelId": {
+                    "description": "Channel Id must be create only since it will interfere with update operations\nUse tx.Exec as raw query to update the channelId as done in channel after-create hook",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdById": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedById": {
+                    "type": "integer"
+                },
+                "userChannelId": {
+                    "description": "Refers to channelId",
+                    "type": "integer"
+                }
+            }
+        },
+        "entities.UserConfig": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "type": "integer"
+                },
+                "UserID": {
+                    "description": "References",
+                    "type": "integer"
+                },
+                "channelId": {
+                    "description": "Channel Id must be create only since it will interfere with update operations\nUse tx.Exec as raw query to update the channelId as done in channel after-create hook",
+                    "type": "integer"
+                },
+                "config": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdById": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedById": {
+                    "type": "integer"
+                }
+            }
+        },
+        "errs.ErrorType": {
+            "type": "string",
+            "enum": [
+                "OTHER",
+                "INVALID",
+                "IO",
+                "EXIST",
+                "NOT_EXIST",
+                "PRIVATE",
+                "INTERNAL",
+                "BROKEN_LINK",
+                "DATABASE",
+                "VALIDATION",
+                "UNANTICIPATED",
+                "INVALID_REQUEST",
+                "SMTP_ERROR",
+                "EMAIL_ERROR",
+                "STORAGE",
+                "INSUFFICIENT_ACCESS",
+                "CUSTOMER_DUPLICATE_TRANSACTION"
+            ],
+            "x-enum-comments": {
+                "BROKEN_LINK": "Link target does not exist.",
+                "CUSTOMER_DUPLICATE_TRANSACTION": "Duplicate Transaction",
+                "DATABASE": "Error from database.",
+                "EMAILERROR": "SMTP Error",
+                "EXIST": "Item already exists.",
+                "INSUFFICIENT_ACCESS": "Insufficient Access",
+                "INTERNAL": "Internal error or inconsistency.",
+                "INVALID": "Invalid operation for this type of item.",
+                "INVALID_REQUEST": "Invalid Request",
+                "IO": "External I/O error such as network failure.",
+                "NOT_EXIST": "Item does not exist.",
+                "OTHER": "Unclassified error. This value is not printed in the error message.",
+                "PRIVATE": "Information withheld.",
+                "SMTPERROR": "SMTP Error",
+                "STORAGE": "Storage Error",
+                "UNANTICIPATED": "Unanticipated error.",
+                "VALIDATION": "Input validation error."
+            },
+            "x-enum-varnames": [
+                "OTHER",
+                "INVALID",
+                "IO",
+                "EXIST",
+                "NOT_EXIST",
+                "PRIVATE",
+                "INTERNAL",
+                "BROKEN_LINK",
+                "DATABASE",
+                "VALIDATION",
+                "UNANTICIPATED",
+                "INVALID_REQUEST",
+                "SMTPERROR",
+                "EMAILERROR",
+                "STORAGE",
+                "INSUFFICIENT_ACCESS",
+                "CUSTOMER_DUPLICATE_TRANSACTION"
+            ]
+        },
+        "errs.XError": {
+            "type": "object",
+            "properties": {
+                "error": {},
+                "errorCode": {
+                    "type": "string"
+                },
+                "errorType": {
+                    "$ref": "#/definitions/errs.ErrorType"
+                },
+                "params": {
+                    "type": "array",
+                    "items": {}
+                }
+            }
+        },
+        "requestModel.Channel": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ownerUserId": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "requestModel.Login": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "requestModel.MasterConfig": {
+            "type": "object",
+            "properties": {
+                "currentValue": {
+                    "type": "string"
+                },
+                "defaultValue": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "format": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "previousValue": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "useDefault": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "requestModel.SwitchBranch": {
+            "type": "object",
+            "properties": {
+                "enquiryId": {
+                    "type": "integer"
+                },
+                "studentId": {
+                    "type": "integer"
+                },
+                "toChannel": {
+                    "type": "integer"
+                }
+            }
+        },
+        "requestModel.User": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "extension": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "isLoggedIn": {
+                    "type": "boolean"
+                },
+                "isLoginDisabled": {
+                    "type": "boolean"
+                },
+                "lastLoginTime": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "loginFailureCounter": {
+                    "type": "integer"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phoneNumber": {
+                    "type": "string"
+                },
+                "resetPasswordString": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "userChannelDetails": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/requestModel.UserChannelDetail"
+                    }
+                }
+            }
+        },
+        "requestModel.UserChannelDetail": {
+            "type": "object",
+            "properties": {
+                "channelID": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "userID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "requestModel.UserConfig": {
+            "type": "object",
+            "properties": {
+                "config": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "userID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "response.DataResponse": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "error": {
+                    "$ref": "#/definitions/errs.XError"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "pageMetaData": {
+                    "$ref": "#/definitions/db.Pagination"
+                },
+                "type": {
+                    "$ref": "#/definitions/response.ResponseType"
+                }
+            }
+        },
+        "response.Response": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "$ref": "#/definitions/errs.XError"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "pageMetaData": {
+                    "$ref": "#/definitions/db.Pagination"
+                },
+                "type": {
+                    "$ref": "#/definitions/response.ResponseType"
+                }
+            }
+        },
+        "response.ResponseType": {
+            "type": "string",
+            "enum": [
+                "Success",
+                "Failure",
+                "Warning"
+            ],
+            "x-enum-varnames": [
+                "SUCCESS",
+                "FAILURE",
+                "WARNING"
+            ]
+        },
+        "responseModel.Channel": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "type": "integer"
+                },
+                "channelId": {
+                    "description": "Channel Id must be create only since it will interfere with update operations\nUse tx.Exec as raw query to update the channelId as done in channel after-create hook",
+                    "type": "integer"
+                },
+                "channelOwnerFirstName": {
+                    "type": "string"
+                },
+                "channelOwnerLastName": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdById": {
+                    "type": "integer"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ownerUserId": {
+                    "description": "Reference",
+                    "type": "integer"
+                },
+                "phoneNumber": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedById": {
+                    "type": "integer"
+                }
+            }
+        },
+        "responseModel.ChannelAutoComplete": {
+            "type": "object",
+            "properties": {
+                "channelId": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "responseModel.User": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "extension": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "isLoggedIn": {
+                    "type": "boolean"
+                },
+                "isLoginDisabled": {
+                    "type": "boolean"
+                },
+                "lastLoginTime": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "loginFailureCounter": {
+                    "type": "integer"
+                },
+                "phoneNumber": {
+                    "type": "string"
+                },
+                "resetPasswordString": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "userChannelDetails": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responseModel.UserChannelDetail"
+                    }
+                }
+            }
+        },
+        "responseModel.UserChannelDetail": {
+            "type": "object",
+            "properties": {
+                "channelId": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

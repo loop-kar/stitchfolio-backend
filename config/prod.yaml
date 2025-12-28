@@ -1,0 +1,40 @@
+server:
+  host: ${APP_HOST}
+  appName: ${APP_NAME}
+  port: ${APP_PORT}
+  logLevel: ${LOG_LEVEL}
+  jwtSecretKey: ${JWT_SECRET_KEY}
+  jwtExpiryMinutes: ${JWT_EXPIRY_MINUTES}
+  secretKey: ${SECRET_KEY}
+
+database:
+  host: ${DB_HOST}
+  name: ${DB_NAME}
+  port: 5432
+  user: ${DB_USER}
+  password: ${DB_PASSWORD}
+  schema: ${DB_SCHEMA}
+  logLevel: ${DB_LOG_LEVEL}
+
+smtp:
+  username: ${SMTP_USER}
+  password: ${SMTP_PASSWORD}
+  host: ${SMTP_HOST}
+  port: ${SMTP_PORT}
+
+site:
+  urlScheme: ${SITE_URL_SCHEME}
+  baseUrl: ${SITE_BASE_URL}  
+
+log:
+  license: ${NEW_RELIC_LICENSE_KEY}
+
+
+s3Config:
+  region: ${S3_REGION}
+  bucket: ${S3_BUCKET}
+  accessKey: ${S3_ACCESS_KEY_ID}
+  secretAccessKey: ${S3_SECRET_ACCESS_KEY}
+  endpoint: ${S3_ENDPOINT}
+  usePathStyle: ${S3_USE_PATH_STYLE}
+  forceHTTPS: ${S3_FORCE_HTTPS}

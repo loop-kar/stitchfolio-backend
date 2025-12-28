@@ -1,0 +1,1202 @@
+basePath: /api/sf/v1
+definitions:
+  db.Pagination:
+    properties:
+      currentPage:
+        type: integer
+      size:
+        type: integer
+      skipPagination:
+        type: boolean
+      sort:
+        type: string
+      totalPages:
+        type: integer
+      totalRecords:
+        type: integer
+    type: object
+  entities.Channel:
+    properties:
+      ID:
+        type: integer
+      channelId:
+        description: |-
+          Channel Id must be create only since it will interfere with update operations
+          Use tx.Exec as raw query to update the channelId as done in channel after-create hook
+        type: integer
+      createdAt:
+        type: string
+      createdById:
+        type: integer
+      isActive:
+        type: boolean
+      name:
+        type: string
+      ownerUserId:
+        description: Reference
+        type: integer
+      status:
+        type: string
+      updatedAt:
+        type: string
+      updatedById:
+        type: integer
+    type: object
+  entities.RoleType:
+    enum:
+    - SYSTEM ADMIN
+    - DEV
+    - SUPER ADMIN
+    - ADMIN
+    type: string
+    x-enum-comments:
+      ADMIN: to be used by the application administrator
+      DEV: to be used by developer, only read access in PROD
+      SUPERADMIN: to be used for the owner of the application (customer)
+      SYSTEM_ADMIN: to be used for managing system only,not exposed
+    x-enum-varnames:
+    - SYSTEM_ADMIN
+    - DEV
+    - SUPERADMIN
+    - ADMIN
+  entities.User:
+    properties:
+      ID:
+        type: integer
+      channelId:
+        description: |-
+          Channel Id must be create only since it will interfere with update operations
+          Use tx.Exec as raw query to update the channelId as done in channel after-create hook
+        type: integer
+      createdAt:
+        type: string
+      createdById:
+        type: integer
+      email:
+        type: string
+      extension:
+        type: string
+      firstName:
+        type: string
+      isActive:
+        type: boolean
+      isLoggedIn:
+        type: boolean
+      isLoginDisabled:
+        type: boolean
+      lastLoginTime:
+        type: string
+      lastName:
+        type: string
+      loginFailureCounter:
+        type: integer
+      phoneNumber:
+        type: string
+      resetPasswordString:
+        type: string
+      role:
+        $ref: '#/definitions/entities.RoleType'
+      updatedAt:
+        type: string
+      updatedById:
+        type: integer
+      userChannelDetails:
+        description: References
+        items:
+          $ref: '#/definitions/entities.UserChannelDetail'
+        type: array
+    type: object
+  entities.UserChannelDetail:
+    properties:
+      ID:
+        type: integer
+      UserID:
+        description: References
+        type: integer
+      channel:
+        $ref: '#/definitions/entities.Channel'
+      channelId:
+        description: |-
+          Channel Id must be create only since it will interfere with update operations
+          Use tx.Exec as raw query to update the channelId as done in channel after-create hook
+        type: integer
+      createdAt:
+        type: string
+      createdById:
+        type: integer
+      isActive:
+        type: boolean
+      updatedAt:
+        type: string
+      updatedById:
+        type: integer
+      userChannelId:
+        description: Refers to channelId
+        type: integer
+    type: object
+  entities.UserConfig:
+    properties:
+      ID:
+        type: integer
+      UserID:
+        description: References
+        type: integer
+      channelId:
+        description: |-
+          Channel Id must be create only since it will interfere with update operations
+          Use tx.Exec as raw query to update the channelId as done in channel after-create hook
+        type: integer
+      config:
+        type: string
+      createdAt:
+        type: string
+      createdById:
+        type: integer
+      isActive:
+        type: boolean
+      updatedAt:
+        type: string
+      updatedById:
+        type: integer
+    type: object
+  errs.ErrorType:
+    enum:
+    - OTHER
+    - INVALID
+    - IO
+    - EXIST
+    - NOT_EXIST
+    - PRIVATE
+    - INTERNAL
+    - BROKEN_LINK
+    - DATABASE
+    - VALIDATION
+    - UNANTICIPATED
+    - INVALID_REQUEST
+    - SMTP_ERROR
+    - EMAIL_ERROR
+    - STORAGE
+    - INSUFFICIENT_ACCESS
+    - CUSTOMER_DUPLICATE_TRANSACTION
+    type: string
+    x-enum-comments:
+      BROKEN_LINK: Link target does not exist.
+      CUSTOMER_DUPLICATE_TRANSACTION: Duplicate Transaction
+      DATABASE: Error from database.
+      EMAILERROR: SMTP Error
+      EXIST: Item already exists.
+      INSUFFICIENT_ACCESS: Insufficient Access
+      INTERNAL: Internal error or inconsistency.
+      INVALID: Invalid operation for this type of item.
+      INVALID_REQUEST: Invalid Request
+      IO: External I/O error such as network failure.
+      NOT_EXIST: Item does not exist.
+      OTHER: Unclassified error. This value is not printed in the error message.
+      PRIVATE: Information withheld.
+      SMTPERROR: SMTP Error
+      STORAGE: Storage Error
+      UNANTICIPATED: Unanticipated error.
+      VALIDATION: Input validation error.
+    x-enum-varnames:
+    - OTHER
+    - INVALID
+    - IO
+    - EXIST
+    - NOT_EXIST
+    - PRIVATE
+    - INTERNAL
+    - BROKEN_LINK
+    - DATABASE
+    - VALIDATION
+    - UNANTICIPATED
+    - INVALID_REQUEST
+    - SMTPERROR
+    - EMAILERROR
+    - STORAGE
+    - INSUFFICIENT_ACCESS
+    - CUSTOMER_DUPLICATE_TRANSACTION
+  errs.XError:
+    properties:
+      error: {}
+      errorCode:
+        type: string
+      errorType:
+        $ref: '#/definitions/errs.ErrorType'
+      params:
+        items: {}
+        type: array
+    type: object
+  requestModel.Channel:
+    properties:
+      id:
+        type: integer
+      isActive:
+        type: boolean
+      name:
+        type: string
+      ownerUserId:
+        type: integer
+      status:
+        type: string
+    type: object
+  requestModel.Login:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  requestModel.MasterConfig:
+    properties:
+      currentValue:
+        type: string
+      defaultValue:
+        type: string
+      description:
+        type: string
+      format:
+        type: string
+      id:
+        type: integer
+      isActive:
+        type: boolean
+      name:
+        type: string
+      previousValue:
+        type: string
+      type:
+        type: string
+      useDefault:
+        type: boolean
+    type: object
+  requestModel.SwitchBranch:
+    properties:
+      enquiryId:
+        type: integer
+      studentId:
+        type: integer
+      toChannel:
+        type: integer
+    type: object
+  requestModel.User:
+    properties:
+      email:
+        type: string
+      extension:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: integer
+      isActive:
+        type: boolean
+      isLoggedIn:
+        type: boolean
+      isLoginDisabled:
+        type: boolean
+      lastLoginTime:
+        type: string
+      lastName:
+        type: string
+      loginFailureCounter:
+        type: integer
+      password:
+        type: string
+      phoneNumber:
+        type: string
+      resetPasswordString:
+        type: string
+      role:
+        type: string
+      userChannelDetails:
+        items:
+          $ref: '#/definitions/requestModel.UserChannelDetail'
+        type: array
+    type: object
+  requestModel.UserChannelDetail:
+    properties:
+      channelID:
+        type: integer
+      id:
+        type: integer
+      isActive:
+        type: boolean
+      userID:
+        type: integer
+    type: object
+  requestModel.UserConfig:
+    properties:
+      config:
+        type: string
+      id:
+        type: integer
+      isActive:
+        type: boolean
+      userID:
+        type: integer
+    type: object
+  response.DataResponse:
+    properties:
+      data: {}
+      error:
+        $ref: '#/definitions/errs.XError'
+      message:
+        type: string
+      pageMetaData:
+        $ref: '#/definitions/db.Pagination'
+      type:
+        $ref: '#/definitions/response.ResponseType'
+    type: object
+  response.Response:
+    properties:
+      error:
+        $ref: '#/definitions/errs.XError'
+      message:
+        type: string
+      pageMetaData:
+        $ref: '#/definitions/db.Pagination'
+      type:
+        $ref: '#/definitions/response.ResponseType'
+    type: object
+  response.ResponseType:
+    enum:
+    - Success
+    - Failure
+    - Warning
+    type: string
+    x-enum-varnames:
+    - SUCCESS
+    - FAILURE
+    - WARNING
+  responseModel.Channel:
+    properties:
+      ID:
+        type: integer
+      channelId:
+        description: |-
+          Channel Id must be create only since it will interfere with update operations
+          Use tx.Exec as raw query to update the channelId as done in channel after-create hook
+        type: integer
+      channelOwnerFirstName:
+        type: string
+      channelOwnerLastName:
+        type: string
+      createdAt:
+        type: string
+      createdById:
+        type: integer
+      email:
+        type: string
+      isActive:
+        type: boolean
+      name:
+        type: string
+      ownerUserId:
+        description: Reference
+        type: integer
+      phoneNumber:
+        type: string
+      status:
+        type: string
+      updatedAt:
+        type: string
+      updatedById:
+        type: integer
+    type: object
+  responseModel.ChannelAutoComplete:
+    properties:
+      channelId:
+        type: integer
+      name:
+        type: string
+    type: object
+  responseModel.User:
+    properties:
+      email:
+        type: string
+      extension:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: integer
+      isActive:
+        type: boolean
+      isLoggedIn:
+        type: boolean
+      isLoginDisabled:
+        type: boolean
+      lastLoginTime:
+        type: string
+      lastName:
+        type: string
+      loginFailureCounter:
+        type: integer
+      phoneNumber:
+        type: string
+      resetPasswordString:
+        type: string
+      role:
+        type: string
+      userChannelDetails:
+        items:
+          $ref: '#/definitions/responseModel.UserChannelDetail'
+        type: array
+    type: object
+  responseModel.UserChannelDetail:
+    properties:
+      channelId:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+host: localhost:9000
+info:
+  contact: {}
+  description: This is the backend for SkillFort.
+  title: SkillFort-backend API docs
+  version: "1.0"
+paths:
+  /admin/switch-branch:
+    post:
+      consumes:
+      - application/json
+      description: Switch a record from one channel to another
+      parameters:
+      - description: batch
+        in: body
+        name: batch
+        required: true
+        schema:
+          $ref: '#/definitions/requestModel.SwitchBranch'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "501":
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Switch a record from one channel to another
+      tags:
+      - Admin
+  /channel:
+    get:
+      consumes:
+      - application/json
+      description: Get all active channels
+      parameters:
+      - description: name
+        in: query
+        name: name
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responseModel.Channel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Get all active channels
+      tags:
+      - Channel
+    post:
+      consumes:
+      - application/json
+      description: Saves an instance of Channel
+      parameters:
+      - description: channel
+        in: body
+        name: channel
+        required: true
+        schema:
+          $ref: '#/definitions/requestModel.Channel'
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "501":
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Save Channel
+      tags:
+      - Channel
+  /channel/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes an instance of Channel
+      parameters:
+      - description: Channel id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete Channel
+      tags:
+      - Channel
+    get:
+      consumes:
+      - application/json
+      description: Get an instance of Channel
+      parameters:
+      - description: Channel id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responseModel.Channel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Get a specific  Channel
+      tags:
+      - Channel
+    put:
+      consumes:
+      - application/json
+      description: Updates an instance of Channel
+      parameters:
+      - description: channel
+        in: body
+        name: channel
+        required: true
+        schema:
+          $ref: '#/definitions/requestModel.Channel'
+      - description: Channel id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "501":
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Update Channel
+      tags:
+      - Channel
+  /channel/autocomplete:
+    get:
+      consumes:
+      - application/json
+      description: Autocomplete for channels
+      parameters:
+      - description: name
+        in: query
+        name: name
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responseModel.ChannelAutoComplete'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Autocomplete for channels
+      tags:
+      - Channel
+  /health:
+    get:
+      description: get string by ID
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+      summary: Health endpoint
+      tags:
+      - Health
+  /masterConfig:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new master config
+      parameters:
+      - description: Master Config
+        in: body
+        name: config
+        required: true
+        schema:
+          $ref: '#/definitions/requestModel.MasterConfig'
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "501":
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Create Master Config
+      tags:
+      - MasterConfig
+  /masterConfig/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a specific master config by ID
+      parameters:
+      - description: Master Config ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get Master Config
+      tags:
+      - MasterConfig
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing master config
+      parameters:
+      - description: Master Config ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Master Config
+        in: body
+        name: config
+        required: true
+        schema:
+          $ref: '#/definitions/requestModel.MasterConfig'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "501":
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Update Master Config
+      tags:
+      - MasterConfig
+  /masterConfig/browse:
+    get:
+      consumes:
+      - application/json
+      description: Get Master Config for browse
+      parameters:
+      - description: search
+        in: query
+        name: search
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get Master Config for browse
+      tags:
+      - MasterConfig
+  /masterConfig/value:
+    get:
+      consumes:
+      - application/json
+      description: Get a specific master config by name
+      parameters:
+      - description: Master Config Name
+        in: query
+        name: name
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get Master Config by Name
+      tags:
+      - MasterConfig
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: Get all active users
+      parameters:
+      - description: search
+        in: query
+        name: search
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responseModel.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Get all active users
+      tags:
+      - User
+    post:
+      consumes:
+      - application/json
+      description: Saves an instance of User
+      parameters:
+      - description: user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/requestModel.User'
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "501":
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Save User
+      tags:
+      - User
+  /user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes an instance of User
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete User
+      tags:
+      - User
+    get:
+      consumes:
+      - application/json
+      description: Get an instance of User
+      parameters:
+      - description: User id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responseModel.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Get a specific  User
+      tags:
+      - User
+    put:
+      consumes:
+      - application/json
+      description: Updates an instance of User
+      parameters:
+      - description: user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/requestModel.User'
+      - description: User id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "501":
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Update User
+      tags:
+      - User
+  /user/autocomplete:
+    get:
+      description: Get  Users for AutoComplete
+      parameters:
+      - description: name
+        in: query
+        name: name
+        required: true
+        type: string
+      - description: role
+        in: query
+        name: role
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.User'
+      summary: Get  Users for AutoComplete
+      tags:
+      - User
+  /user/channel:
+    post:
+      consumes:
+      - application/json
+      description: Saves an instance of User Channel Detail
+      parameters:
+      - description: userChannelDetail
+        in: body
+        name: userChannelDetail
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/requestModel.UserChannelDetail'
+          type: array
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "501":
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Save User Channel Detail
+      tags:
+      - UserChannelDetail
+  /user/channel/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes an instance of User Channel Detail
+      parameters:
+      - description: user channel detail id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete User Channel Detail
+      tags:
+      - UserChannelDetail
+    put:
+      consumes:
+      - application/json
+      description: Update an instance of User Channel Detail
+      parameters:
+      - description: userconfig
+        in: body
+        name: userChannelDetail
+        required: true
+        schema:
+          $ref: '#/definitions/requestModel.UserChannelDetail'
+      - description: userChannelDetailId
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "501":
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Update User Channel Detail
+      tags:
+      - UserChannelDetail
+  /user/channel/accessible:
+    get:
+      consumes:
+      - application/json
+      description: Gets the channel the user can access, to be used for channel switcher
+      parameters:
+      - description: User id
+        in: query
+        name: userId
+        required: true
+        type: integer
+      responses: {}
+      summary: Gets the channel the user can access
+      tags:
+      - User
+  /user/config:
+    post:
+      consumes:
+      - application/json
+      description: Saves an instance of User Config
+      parameters:
+      - description: userconfig
+        in: body
+        name: userConfig
+        required: true
+        schema:
+          $ref: '#/definitions/requestModel.UserConfig'
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "501":
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Save User Config
+      tags:
+      - UserConfig
+  /user/config/:
+    get:
+      consumes:
+      - application/json
+      description: Get an instance of UserConfig
+      parameters:
+      - description: userId
+        in: query
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.UserConfig'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Get a specific  UserConfig
+      tags:
+      - UserConfig
+  /user/config/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Update an instance of User Config
+      parameters:
+      - description: userconfig
+        in: body
+        name: userConfig
+        required: true
+        schema:
+          $ref: '#/definitions/requestModel.UserConfig'
+      - description: userconfigid
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "501":
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Update User Config
+      tags:
+      - UserConfig
+  /user/forgot-password:
+    post:
+      description: Reset User Password
+      parameters:
+      - description: email
+        in: query
+        name: email
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Reset User Password
+      tags:
+      - User
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: Saves an instance of User
+      parameters:
+      - description: login
+        in: body
+        name: userLogin
+        required: true
+        schema:
+          $ref: '#/definitions/requestModel.Login'
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Login User
+      tags:
+      - User
+  /user/refresh-token:
+    get:
+      consumes:
+      - application/json
+      description: Refresh JWT Token
+      responses: {}
+      summary: Refresh JWT Token
+      tags:
+      - User
+  /user/reset-password:
+    post:
+      description: Update User Password
+      parameters:
+      - description: resetString
+        in: query
+        name: resetString
+        required: true
+        type: string
+      - description: password
+        in: query
+        name: password
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Update User Password
+      tags:
+      - User
+  /user/switch-channel:
+    get:
+      consumes:
+      - application/json
+      description: Refresh JWT Token and switches the user to the requested channel
+      parameters:
+      - description: Channel id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses: {}
+      summary: Refresh JWT Token and Switches the Channel
+      tags:
+      - User
+swagger: "2.0"
