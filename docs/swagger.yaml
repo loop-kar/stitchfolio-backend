@@ -258,13 +258,22 @@ definitions:
     type: object
   requestModel.Enquiry:
     properties:
+      address:
+        type: string
       customerId:
         type: integer
+      email:
+        type: string
       id:
         type: integer
       isActive:
         type: boolean
+      name:
+        description: Customer fields
+        type: string
       notes:
+        type: string
+      phoneNumber:
         type: string
       referredBy:
         type: string
@@ -275,6 +284,8 @@ definitions:
       status:
         type: string
       subject:
+        type: string
+      whatsappNumber:
         type: string
     type: object
   requestModel.Login:
@@ -1089,6 +1100,38 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Update Enquiry
+      tags:
+      - Enquiry
+  /enquiry/{id}/customer/{customerId}:
+    put:
+      consumes:
+      - application/json
+      description: Updates the customer linked to an enquiry
+      parameters:
+      - description: Enquiry id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Customer id
+        in: path
+        name: customerId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "501":
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Update Enquiry Customer
       tags:
       - Enquiry
   /health:

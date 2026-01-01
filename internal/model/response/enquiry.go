@@ -6,7 +6,7 @@ type Enquiry struct {
 	Subject    string    `json:"subject,omitempty"`
 	Notes      string    `json:"notes,omitempty"`
 	Status     string    `json:"status,omitempty"`
-	CustomerId uint      `json:"customerId,omitempty"`
+	CustomerId *uint     `json:"customerId,omitempty"`
 	Customer   *Customer `json:"customer,omitempty"`
 
 	Source              string `json:"source,omitempty"`

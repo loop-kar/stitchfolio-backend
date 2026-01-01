@@ -6,7 +6,14 @@ type Enquiry struct {
 	Subject    string `json:"subject,omitempty"`
 	Notes      string `json:"notes,omitempty"`
 	Status     string `json:"status,omitempty"`
-	CustomerId uint   `json:"customerId,omitempty"`
+	CustomerId *uint  `json:"customerId,omitempty"`
+
+	// Customer fields
+	Name           string `json:"name,omitempty"`
+	Email          string `json:"email,omitempty"`
+	PhoneNumber    string `json:"phoneNumber,omitempty"`
+	WhatsappNumber string `json:"whatsappNumber,omitempty"`
+	Address        string `json:"address,omitempty"`
 
 	Source              string `json:"source,omitempty"`
 	ReferredBy          string `json:"referredBy,omitempty"`

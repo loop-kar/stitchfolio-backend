@@ -156,3 +156,30 @@ func (h EnquiryHandler) Delete(ctx *gin.Context) {
 
 	h.resp.SuccessResponse("Delete Success").FormatAndSend(&context, ctx, http.StatusOK)
 }
+
+// Update Enquiry Customer
+//
+//	@Summary		Update Enquiry Customer
+//	@Description	Updates the customer linked to an enquiry
+//	@Tags			Enquiry
+//	@Accept			json
+//	@Success		200			{object}	response.Response
+//	@Failure		400			{object}	response.Response
+//	@Failure		501			{object}	response.Response
+//	@Param			id			path		int	true	"Enquiry id"
+//	@Param			customerId	path		int	true	"Customer id"
+//	@Router			/enquiry/{id}/customer/{customerId} [put]
+func (h EnquiryHandler) UpdateEnquiryCustomer(ctx *gin.Context) {
+	context := util.CopyContextFromGin(ctx)
+
+	enquiryId, _ := strconv.Atoi(ctx.Param("id"))
+	customerId, _ := strconv.Atoi(ctx.Param("customerId"))
+
+	errr := h.enquirySvc.UpdateEnquiryCustomer(&context, uint(enquiryId), uint(customerId))
+	if errr != nil {
+		h.resp.DefaultFailureResponse(errr).FormatAndSend(&context, ctx, http.StatusInternalServerError)
+		return
+	}
+
+	h.resp.SuccessResponse("Update success").FormatAndSend(&context, ctx, http.StatusOK)
+}

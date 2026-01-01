@@ -20,7 +20,7 @@ type Enquiry struct {
 	ReferredBy          string `json:"referredBy,omitempty"`
 	ReferrerPhoneNumber string `json:"referrerPhoneNumber,omitempty"`
 
-	CustomerId uint      `json:"customerId"`
+	CustomerId *uint     `json:"customerId"`
 	Customer   *Customer `gorm:"foreignKey:CustomerId" json:"customer"`
 }
 

@@ -666,6 +666,54 @@ const docTemplate = `{
                 }
             }
         },
+        "/enquiry/{id}/customer/{customerId}": {
+            "put": {
+                "description": "Updates the customer linked to an enquiry",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Enquiry"
+                ],
+                "summary": "Update Enquiry Customer",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Enquiry id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Customer id",
+                        "name": "customerId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/health": {
             "get": {
                 "description": "get string by ID",
@@ -2441,8 +2489,14 @@ const docTemplate = `{
         "requestModel.Enquiry": {
             "type": "object",
             "properties": {
+                "address": {
+                    "type": "string"
+                },
                 "customerId": {
                     "type": "integer"
+                },
+                "email": {
+                    "type": "string"
                 },
                 "id": {
                     "type": "integer"
@@ -2450,7 +2504,14 @@ const docTemplate = `{
                 "isActive": {
                     "type": "boolean"
                 },
+                "name": {
+                    "description": "Customer fields",
+                    "type": "string"
+                },
                 "notes": {
+                    "type": "string"
+                },
+                "phoneNumber": {
                     "type": "string"
                 },
                 "referredBy": {
@@ -2466,6 +2527,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "subject": {
+                    "type": "string"
+                },
+                "whatsappNumber": {
                     "type": "string"
                 }
             }

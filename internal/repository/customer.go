@@ -2,11 +2,13 @@ package repository
 
 import (
 	"context"
+	"errors"
 
 	"github.com/imkarthi24/sf-backend/internal/entities"
 	"github.com/imkarthi24/sf-backend/internal/repository/common"
 	"github.com/imkarthi24/sf-backend/pkg/db"
 	"github.com/imkarthi24/sf-backend/pkg/errs"
+	"gorm.io/gorm"
 )
 
 type CustomerRepository interface {
@@ -16,6 +18,7 @@ type CustomerRepository interface {
 	GetAll(*context.Context, string) ([]entities.Customer, *errs.XError)
 	Delete(*context.Context, uint) *errs.XError
 	CustomerAutoComplete(*context.Context, string) ([]entities.Customer, *errs.XError)
+	GetByPhoneNumber(*context.Context, string) (*entities.Customer, *errs.XError)
 }
 
 type customerRepository struct {
@@ -73,4 +76,19 @@ func (cr *customerRepository) CustomerAutoComplete(ctx *context.Context, search 
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find customers", res.Error)
 	}
 	return *customers, nil
+}
+
+func (cr *customerRepository) GetByPhoneNumber(ctx *context.Context, phoneNumber string) (*entities.Customer, *errs.XError) {
+	if phoneNumber == "" {
+		return nil, nil
+	}
+	customer := entities.Customer{}
+	res := cr.txn.Txn(ctx).Where("phone_number = ?", phoneNumber).First(&customer)
+	if res.Error != nil {
+		if errors.Is(res.Error, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, errs.NewXError(errs.DATABASE, "Unable to find customer by phone number", res.Error)
+	}
+	return &customer, nil
 }

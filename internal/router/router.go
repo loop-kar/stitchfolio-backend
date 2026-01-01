@@ -134,6 +134,7 @@ func InitRouter(handler baseHandler.BaseHandler, srvConfig config.ServerConfig) 
 		{
 			enquiryEndpoints.POST("", handler.EnquiryHandler.SaveEnquiry)
 			enquiryEndpoints.PUT(":id", handler.EnquiryHandler.UpdateEnquiry)
+			enquiryEndpoints.PUT(":id/customer/:customerId", handler.EnquiryHandler.UpdateEnquiryCustomer)
 			enquiryEndpoints.GET(":id", handler.EnquiryHandler.Get)
 			enquiryEndpoints.GET("", handler.EnquiryHandler.GetAllEnquiries)
 			enquiryEndpoints.DELETE(":id", handler.EnquiryHandler.Delete)
