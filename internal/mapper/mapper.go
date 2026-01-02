@@ -1,6 +1,7 @@
 package mapper
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/imkarthi24/sf-backend/internal/entities"
@@ -176,12 +177,22 @@ func (m *mapper) Measurement(e requestModel.Measurement) (*entities.Measurement,
 		return nil, err
 	}
 
+	// Validate and convert measurements JSON
+	var measurements entities.JSON
+	if len(e.Measurements) > 0 {
+		validatedJSON, err := entities.NewJSON(e.Measurements)
+		if err != nil {
+			return nil, fmt.Errorf("invalid measurements format: %w", err)
+		}
+		measurements = validatedJSON
+	}
+
 	return &entities.Measurement{
 		Model:           &entities.Model{ID: e.ID, IsActive: e.IsActive},
 		MeasurementDate: *measurementDate,
 		MeasurementBy:   e.MeasurementBy,
 		DressType:       e.DressType,
-		Measurements:    entities.JSON(e.Measurements),
+		Measurements:    measurements,
 		CustomerId:      e.CustomerId,
 	}, nil
 }

@@ -17,8 +17,8 @@ func (j JSON) Value() (driver.Value, error) {
 	return []byte(j), nil
 }
 
-// Scan implements the sql.Scanner interface for database retrieval
-// Expected structure for measurements:
+// validateMeasurementsStructure validates that the JSON bytes represent a valid measurements array
+// Expected structure:
 // [
 //
 //	{
@@ -27,22 +27,7 @@ func (j JSON) Value() (driver.Value, error) {
 //	}
 //
 // ]
-func (j *JSON) Scan(value interface{}) error {
-	if value == nil {
-		*j = nil
-		return nil
-	}
-
-	var bytes []byte
-	switch v := value.(type) {
-	case []byte:
-		bytes = v
-	case string:
-		bytes = []byte(v)
-	default:
-		return errors.New("failed to unmarshal JSON value")
-	}
-
+func validateMeasurementsStructure(bytes []byte) error {
 	var temp interface{}
 	err := json.Unmarshal(bytes, &temp)
 	if err != nil {
@@ -75,6 +60,46 @@ func (j *JSON) Scan(value interface{}) error {
 		}
 	}
 
+	return nil
+}
+
+// NewJSON creates a new JSON type with validation
+func NewJSON(data []byte) (JSON, error) {
+	if len(data) == 0 {
+		return nil, nil
+	}
+
+	err := validateMeasurementsStructure(data)
+	if err != nil {
+		return nil, err
+	}
+
+	return JSON(data), nil
+}
+
+// Scan implements the sql.Scanner interface for database retrieval
+func (j *JSON) Scan(value interface{}) error {
+	if value == nil {
+		*j = nil
+		return nil
+	}
+
+	var bytes []byte
+	switch v := value.(type) {
+	case []byte:
+		bytes = v
+	case string:
+		bytes = []byte(v)
+	default:
+		return errors.New("failed to unmarshal JSON value")
+	}
+
+	// Validate structure
+	err := validateMeasurementsStructure(bytes)
+	if err != nil {
+		return err
+	}
+
 	result := json.RawMessage{}
 	err = json.Unmarshal(bytes, &result)
 	if err != nil {
@@ -97,6 +122,13 @@ func (j *JSON) UnmarshalJSON(data []byte) error {
 	if j == nil {
 		return errors.New("json.RawMessage: UnmarshalJSON on nil pointer")
 	}
+
+	// Validate structure before accepting the data
+	err := validateMeasurementsStructure(data)
+	if err != nil {
+		return err
+	}
+
 	*j = append((*j)[0:0], data...)
 	return nil
 }
@@ -110,7 +142,7 @@ type Measurement struct {
 	Measurements    JSON      `gorm:"type:jsonb" json:"measurements"`
 
 	CustomerId *uint     `json:"customerId"`
-	Customer   *Customer `gorm:"-" json:"-"`
+	Customer   *Customer `gorm:"foreignKey:CustomerId" json:"customer"`
 }
 
 func (Measurement) TableName() string {

@@ -15,9 +15,9 @@ type Order struct {
 	Status OrderStatus `json:"status"`
 
 	CustomerId *uint     `json:"customerId"`
-	Customer   *Customer `gorm:"-" json:"-"`
+	Customer   *Customer `gorm:"foreignKey:CustomerId" json:"customer"`
 
-	OrderItems []OrderItem `json:"-"`
+	OrderItems []OrderItem `gorm:"foreignKey:OrderId" json:"orderItems"`
 }
 
 func (Order) TableName() string {
