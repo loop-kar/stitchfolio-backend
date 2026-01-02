@@ -281,6 +281,8 @@ func (m *responseMapper) Measurement(e *entities.Measurement) (*responseModel.Me
 		Measurements:    json.RawMessage(e.Measurements),
 		CustomerId:      e.CustomerId,
 		Customer:        customer,
+		UpdatedAt:       e.UpdatedAt,
+		UpdatedById:     e.UpdatedById,
 	}, nil
 }
 

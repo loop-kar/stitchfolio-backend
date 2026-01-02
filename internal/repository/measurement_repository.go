@@ -40,7 +40,7 @@ func (mr *measurementRepository) Update(ctx *context.Context, measurement *entit
 
 func (mr *measurementRepository) Get(ctx *context.Context, id uint) (*entities.Measurement, *errs.XError) {
 	measurement := entities.Measurement{}
-	res := mr.txn.Txn(ctx).Find(&measurement, id)
+	res := mr.txn.Txn(ctx).Preload("Customer").Find(&measurement, id)
 	if res.Error != nil {
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find measurement", res.Error)
 	}
@@ -49,7 +49,7 @@ func (mr *measurementRepository) Get(ctx *context.Context, id uint) (*entities.M
 
 func (mr *measurementRepository) GetAll(ctx *context.Context, search string) ([]entities.Measurement, *errs.XError) {
 	var measurements []entities.Measurement
-	res := mr.txn.Txn(ctx).Model(&entities.Measurement{}).Find(&measurements)
+	res := mr.txn.Txn(ctx).Model(&entities.Measurement{}).Preload("Customer").Find(&measurements)
 	if res.Error != nil {
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find measurements", res.Error)
 	}

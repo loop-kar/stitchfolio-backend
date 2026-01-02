@@ -843,6 +843,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/masterConfig/values": {
+            "post": {
+                "description": "Get multiple master config values by their names (format: \"Type.Name\")",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MasterConfig"
+                ],
+                "summary": "Get Multiple Master Config Values",
+                "parameters": [
+                    {
+                        "description": "Array of config names (e.g., [\\",
+                        "name": "names",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/masterConfig/{id}": {
             "get": {
                 "description": "Get a specific master config by ID",
@@ -2978,6 +3018,12 @@ const docTemplate = `{
                     "items": {
                         "type": "integer"
                     }
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedById": {
+                    "type": "integer"
                 }
             }
         },

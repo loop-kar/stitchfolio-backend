@@ -4,6 +4,7 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"time"
 )
 
@@ -17,6 +18,15 @@ func (j JSON) Value() (driver.Value, error) {
 }
 
 // Scan implements the sql.Scanner interface for database retrieval
+// Expected structure for measurements:
+// [
+//
+//	{
+//	  "type": "Pant",
+//	  "values": {"Height": "28", "Hip": "30", ...}
+//	}
+//
+// ]
 func (j *JSON) Scan(value interface{}) error {
 	if value == nil {
 		*j = nil
@@ -33,8 +43,40 @@ func (j *JSON) Scan(value interface{}) error {
 		return errors.New("failed to unmarshal JSON value")
 	}
 
+	var temp interface{}
+	err := json.Unmarshal(bytes, &temp)
+	if err != nil {
+		return errors.New("invalid JSON format")
+	}
+
+	// Allow null, empty array, or array of objects
+	if temp != nil {
+		arr, ok := temp.([]interface{})
+		if !ok {
+			return errors.New("measurements must be a JSON array")
+		}
+		for i, item := range arr {
+			itemMap, ok := item.(map[string]interface{})
+			if !ok {
+				return fmt.Errorf("measurements array item at index %d must be an object", i)
+			}
+			// Check for 'type' field
+			if _, exists := itemMap["type"]; !exists {
+				return fmt.Errorf("measurements array item at index %d missing 'type' field", i)
+			}
+			// Check for 'values' field
+			if _, exists := itemMap["values"]; !exists {
+				return fmt.Errorf("measurements array item at index %d missing 'values' field", i)
+			}
+			// Validate 'values' is an object
+			if _, ok := itemMap["values"].(map[string]interface{}); !ok {
+				return fmt.Errorf("measurements array item at index %d 'values' must be an object", i)
+			}
+		}
+	}
+
 	result := json.RawMessage{}
-	err := json.Unmarshal(bytes, &result)
+	err = json.Unmarshal(bytes, &result)
 	if err != nil {
 		return err
 	}

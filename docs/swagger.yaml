@@ -584,6 +584,10 @@ definitions:
         items:
           type: integer
         type: array
+      updatedAt:
+        type: string
+      updatedById:
+        type: integer
     type: object
   responseModel.Order:
     properties:
@@ -1271,6 +1275,32 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Get Master Config by Name
+      tags:
+      - MasterConfig
+  /masterConfig/values:
+    post:
+      consumes:
+      - application/json
+      description: 'Get multiple master config values by their names (format: "Type.Name")'
+      parameters:
+      - description: Array of config names (e.g., [\
+        in: body
+        name: names
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get Multiple Master Config Values
       tags:
       - MasterConfig
   /measurement:

@@ -40,7 +40,7 @@ func (er *enquiryRepository) Update(ctx *context.Context, enquiry *entities.Enqu
 
 func (er *enquiryRepository) Get(ctx *context.Context, id uint) (*entities.Enquiry, *errs.XError) {
 	enquiry := entities.Enquiry{}
-	res := er.txn.Txn(ctx).Find(&enquiry, id)
+	res := er.txn.Txn(ctx).Preload("Customer").Find(&enquiry, id)
 	if res.Error != nil {
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find enquiry", res.Error)
 	}
@@ -49,7 +49,7 @@ func (er *enquiryRepository) Get(ctx *context.Context, id uint) (*entities.Enqui
 
 func (er *enquiryRepository) GetAll(ctx *context.Context, search string) ([]entities.Enquiry, *errs.XError) {
 	enquiries := new([]entities.Enquiry)
-	res := er.txn.Txn(ctx).Find(enquiries)
+	res := er.txn.Txn(ctx).Preload("Customer").Find(enquiries)
 	if res.Error != nil {
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find enquiries", res.Error)
 	}

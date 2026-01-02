@@ -44,7 +44,7 @@ func (cr *customerRepository) Update(ctx *context.Context, customer *entities.Cu
 
 func (cr *customerRepository) Get(ctx *context.Context, id uint) (*entities.Customer, *errs.XError) {
 	customer := entities.Customer{}
-	res := cr.txn.Txn(ctx).Find(&customer, id)
+	res := cr.txn.Txn(ctx).Preload("Enquiries").Preload("Measurements").Preload("Orders").Find(&customer, id)
 	if res.Error != nil {
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find customer", res.Error)
 	}
@@ -52,12 +52,12 @@ func (cr *customerRepository) Get(ctx *context.Context, id uint) (*entities.Cust
 }
 
 func (cr *customerRepository) GetAll(ctx *context.Context, search string) ([]entities.Customer, *errs.XError) {
-	customers := new([]entities.Customer)
-	res := cr.txn.Txn(ctx).Find(customers)
+	var customers []entities.Customer
+	res := cr.txn.Txn(ctx).Model(&entities.Customer{}).Preload("Enquiries").Preload("Measurements").Preload("Orders").Find(&customers)
 	if res.Error != nil {
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find customers", res.Error)
 	}
-	return *customers, nil
+	return customers, nil
 }
 
 func (cr *customerRepository) Delete(ctx *context.Context, id uint) *errs.XError {

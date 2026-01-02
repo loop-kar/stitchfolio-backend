@@ -40,7 +40,7 @@ func (or *orderRepository) Update(ctx *context.Context, order *entities.Order) *
 
 func (or *orderRepository) Get(ctx *context.Context, id uint) (*entities.Order, *errs.XError) {
 	order := entities.Order{}
-	res := or.txn.Txn(ctx).Find(&order, id)
+	res := or.txn.Txn(ctx).Preload("Customer").Preload("OrderItems").Find(&order, id)
 	if res.Error != nil {
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find order", res.Error)
 	}
@@ -48,12 +48,12 @@ func (or *orderRepository) Get(ctx *context.Context, id uint) (*entities.Order, 
 }
 
 func (or *orderRepository) GetAll(ctx *context.Context, search string) ([]entities.Order, *errs.XError) {
-	orders := new([]entities.Order)
-	res := or.txn.Txn(ctx).Find(orders)
+	var orders []entities.Order
+	res := or.txn.Txn(ctx).Model(&entities.Order{}).Preload("Customer").Preload("OrderItems").Find(&orders)
 	if res.Error != nil {
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find orders", res.Error)
 	}
-	return *orders, nil
+	return orders, nil
 }
 
 func (or *orderRepository) Delete(ctx *context.Context, id uint) *errs.XError {

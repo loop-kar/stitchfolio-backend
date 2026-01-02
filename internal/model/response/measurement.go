@@ -1,6 +1,9 @@
 package responseModel
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"time"
+)
 
 type Measurement struct {
 	ID       uint `json:"id,omitempty"`
@@ -13,4 +16,7 @@ type Measurement struct {
 
 	CustomerId *uint     `json:"customerId,omitempty"`
 	Customer   *Customer `json:"customer,omitempty"`
+
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	UpdatedById *uint      `json:"updatedById,omitempty"`
 }
