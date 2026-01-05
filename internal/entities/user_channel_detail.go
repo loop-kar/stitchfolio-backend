@@ -16,5 +16,5 @@ func (UserChannelDetail) TableName() string {
 }
 
 func (UserChannelDetail) TableNameForQuery() string {
-	return "\"UserChannelDetails\" E"
+	return "\"stitch\".\"UserChannelDetails\" E"
 }

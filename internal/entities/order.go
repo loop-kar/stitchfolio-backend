@@ -25,5 +25,5 @@ func (Order) TableName() string {
 }
 
 func (Order) TableNameForQuery() string {
-	return "\"Orders\" E"
+	return "\"stitch\".\"Orders\" E"
 }

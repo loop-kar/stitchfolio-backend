@@ -20,7 +20,7 @@ func (MasterConfig) TableName() string {
 }
 
 func (MasterConfig) TableNameForQuery() string {
-	return "\"MasterConfigs\" E"
+	return "\"stitch\".\"MasterConfigs\" E"
 }
 
 // Type.Name  -> CandidateForm.Courses

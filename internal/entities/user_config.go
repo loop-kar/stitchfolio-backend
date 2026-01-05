@@ -14,5 +14,5 @@ func (UserConfig) TableName() string {
 }
 
 func (UserConfig) TableNameForQuery() string {
-	return "\"UserConfigs\" E"
+	return "\"stitch\".\"UserConfigs\" E"
 }

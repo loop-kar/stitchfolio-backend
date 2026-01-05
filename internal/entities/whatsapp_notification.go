@@ -18,5 +18,5 @@ func (WhatsappNotification) TableName() string {
 }
 
 func (WhatsappNotification) TableNameForQuery() string {
-	return "\"WhatsappNotifications\" E"
+	return "\"stitch\".\"WhatsappNotifications\" E"
 }

@@ -31,5 +31,5 @@ func (EnquiryHistory) TableName() string {
 }
 
 func (EnquiryHistory) TableNameForQuery() string {
-	return "\"EnquiryHistories\" E"
+	return "\"stitch\".\"EnquiryHistories\" E"
 }

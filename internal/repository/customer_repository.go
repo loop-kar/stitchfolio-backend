@@ -54,10 +54,10 @@ func (cr *customerRepository) Get(ctx *context.Context, id uint) (*entities.Cust
 
 func (cr *customerRepository) GetAll(ctx *context.Context, search string) ([]entities.Customer, *errs.XError) {
 	var customers []entities.Customer
-	res := cr.txn.Txn(ctx).Model(&entities.Customer{}).
-		Scopes(scopes.Channel("E"), scopes.IsActive("E")).
+	res := cr.txn.Txn(ctx).Table(entities.Customer{}.TableNameForQuery()).
+		Scopes(scopes.Channel(), scopes.IsActive()).
 		Scopes(scopes.ILike(search, "name", "email", "phone_number")).
-		Where("EXISTS (SELECT 1 FROM \"Orders\" WHERE customer_id = E.id)").
+		Where("EXISTS (SELECT 1 FROM \"stitch\".\"Orders\" WHERE customer_id = \"Customers\".id)").
 		Scopes(db.Paginate(ctx)).
 		Preload("Orders").Preload("Measurements").Preload("Enquiries").
 		Find(&customers)

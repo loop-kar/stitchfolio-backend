@@ -29,5 +29,5 @@ func (Enquiry) TableName() string {
 }
 
 func (Enquiry) TableNameForQuery() string {
-	return "\"Enquiries\" E"
+	return "\"stitch\".\"Enquiries\" E"
 }

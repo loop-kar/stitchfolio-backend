@@ -22,5 +22,5 @@ func (Customer) TableName() string {
 }
 
 func (Customer) TableNameForQuery() string {
-	return "\"Customers\" E"
+	return "\"stitch\".\"Customers\" E"
 }

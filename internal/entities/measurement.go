@@ -137,12 +137,15 @@ type Measurement struct {
 	*Model `mapstructure:",squash"`
 
 	MeasurementDate *time.Time `json:"measurementDate"`
-	MeasurementBy   string     `json:"measurementBy"`
+	MeasurementBy   string     `json:"measurementBy"` //incase of non employee , or use quickcreateuser api and remove this field
 	DressType       string     `json:"dressType"`
 	Measurements    JSON       `gorm:"type:jsonb" json:"measurements"`
 
 	CustomerId *uint     `json:"customerId"`
 	Customer   *Customer `gorm:"foreignKey:CustomerId" json:"customer"`
+
+	MeasurementTakenById *uint `json:"measurementTakenById"`
+	MeasurementTakenBy   *User `gorm:"foreignKey:MeasurementTakenById" json:"measurementTakenBy"`
 }
 
 func (Measurement) TableName() string {
@@ -150,5 +153,5 @@ func (Measurement) TableName() string {
 }
 
 func (Measurement) TableNameForQuery() string {
-	return "\"Measurements\" E"
+	return "\"stitch\".\"Measurements\" E"
 }

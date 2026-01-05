@@ -24,7 +24,7 @@ func (Channel) TableName() string {
 }
 
 func (Channel) TableNameForQuery() string {
-	return "\"Channels\" E"
+	return "\"stitch\".\"Channels\" E"
 }
 
 func (c *Channel) AfterCreate(tx *gorm.DB) (err error) {

@@ -25,7 +25,7 @@ func (Notification) TableName() string {
 }
 
 func (Notification) TableNameForQuery() string {
-	return "\"Notifications\" E"
+	return "\"stitch\".\"Notifications\" E"
 }
 
 func (n *Notification) AddEmailNotification(email ...EmailNotification) {
