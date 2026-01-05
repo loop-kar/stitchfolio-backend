@@ -188,12 +188,13 @@ func (m *mapper) Measurement(e requestModel.Measurement) (*entities.Measurement,
 	}
 
 	return &entities.Measurement{
-		Model:           &entities.Model{ID: e.ID, IsActive: e.IsActive},
-		MeasurementDate: measurementDate,
-		MeasurementBy:   e.MeasurementBy,
-		DressType:       e.DressType,
-		Measurements:    measurements,
-		CustomerId:      e.CustomerId,
+		Model:                &entities.Model{ID: e.ID, IsActive: e.IsActive},
+		MeasurementDate:      measurementDate,
+		MeasurementBy:        e.MeasurementBy,
+		DressType:            e.DressType,
+		Measurements:         measurements,
+		CustomerId:           e.CustomerId,
+		MeasurementTakenById: e.MeasurementTakenById,
 	}, nil
 }
 

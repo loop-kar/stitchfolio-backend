@@ -63,13 +63,13 @@ func (a *App) Migrate(ctx *context.Context, checkErr func(err error)) {
 		// entities.Channel{},
 		// entities.Notification{},
 
-		entities.MasterConfig{},
+		// entities.MasterConfig{},
 		// entities.EmailNotification{},
 		// entities.WhatsappNotification{},
 
 		// entities.Enquiry{},
 		// entities.EnquiryHistory{},
-		// entities.Customer{}, // Keep this so GORM knows about it for foreign key relationships
+		entities.Customer{}, // Keep this so GORM knows about it for foreign key relationships
 		//entities.Order{},
 		//entities.OrderItem{},
 		entities.Measurement{},

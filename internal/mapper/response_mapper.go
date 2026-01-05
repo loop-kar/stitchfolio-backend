@@ -272,17 +272,24 @@ func (m *responseMapper) Measurement(e *entities.Measurement) (*responseModel.Me
 		return nil, err
 	}
 
+	measurementTakenBy, err := m.User(e.MeasurementTakenBy)
+	if err != nil {
+		return nil, err
+	}
+
 	return &responseModel.Measurement{
-		ID:              e.ID,
-		IsActive:        e.IsActive,
-		MeasurementDate: util.DateTimeToStringOrDefault(e.MeasurementDate, time.DateOnly),
-		MeasurementBy:   e.MeasurementBy,
-		DressType:       e.DressType,
-		Measurements:    json.RawMessage(e.Measurements),
-		CustomerId:      e.CustomerId,
-		Customer:        customer,
-		UpdatedAt:       e.UpdatedAt,
-		UpdatedById:     e.UpdatedById,
+		ID:                   e.ID,
+		IsActive:             e.IsActive,
+		MeasurementDate:      util.DateTimeToStringOrDefault(e.MeasurementDate, time.DateOnly),
+		MeasurementBy:        e.MeasurementBy,
+		DressType:            e.DressType,
+		Measurements:         json.RawMessage(e.Measurements),
+		CustomerId:           e.CustomerId,
+		Customer:             customer,
+		MeasurementTakenById: e.MeasurementTakenById,
+		MeasurementTakenBy:   measurementTakenBy,
+		UpdatedAt:            e.UpdatedAt,
+		UpdatedById:          e.UpdatedById,
 	}, nil
 }
 
