@@ -59,7 +59,7 @@ func (a *App) Shutdown(ctx *context.Context, checkErr func(err error)) {
 func (a *App) Migrate(ctx *context.Context, checkErr func(err error)) {
 
 	entityList := []interface{}{
-		// &entities.User{},
+		&entities.User{},
 		// &entities.Channel{},
 		// &entities.Notification{},
 		// &entities.MasterConfig{},
@@ -70,7 +70,7 @@ func (a *App) Migrate(ctx *context.Context, checkErr func(err error)) {
 		// &entities.Customer{},
 		// &entities.Order{},
 		// &entities.OrderItem{},
-		&entities.Measurement{},
+		// &entities.Measurement{},
 	}
 	for _, entity := range entityList {
 		// pass entity directly (it's already a pointer to a struct)

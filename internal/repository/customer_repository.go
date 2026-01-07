@@ -57,9 +57,9 @@ func (cr *customerRepository) GetAll(ctx *context.Context, search string) ([]ent
 	res := cr.txn.Txn(ctx).Table(entities.Customer{}.TableNameForQuery()).
 		Scopes(scopes.Channel(), scopes.IsActive()).
 		Scopes(scopes.ILike(search, "name", "email", "phone_number")).
-		Where("EXISTS (SELECT 1 FROM \"stitch\".\"Orders\" WHERE customer_id = E.id)").
+		// Where("EXISTS (SELECT 1 FROM \"stitch\".\"Orders\" WHERE customer_id = E.id)").
 		Scopes(db.Paginate(ctx)).
-		Preload("Orders").Preload("Measurements").Preload("Enquiries").
+		// Preload("Orders").Preload("Measurements").Preload("Enquiries").
 		Find(&customers)
 	if res.Error != nil {
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find customers", res.Error)
