@@ -5,6 +5,7 @@ import (
 
 	"github.com/imkarthi24/sf-backend/internal/entities"
 	"github.com/imkarthi24/sf-backend/internal/repository/common"
+	"github.com/imkarthi24/sf-backend/internal/repository/scopes"
 	"github.com/imkarthi24/sf-backend/pkg/db"
 	"github.com/imkarthi24/sf-backend/pkg/errs"
 )
@@ -49,7 +50,17 @@ func (or *orderRepository) Get(ctx *context.Context, id uint) (*entities.Order, 
 
 func (or *orderRepository) GetAll(ctx *context.Context, search string) ([]entities.Order, *errs.XError) {
 	var orders []entities.Order
-	res := or.txn.Txn(ctx).Model(&entities.Order{}).Preload("Customer").Preload("OrderItems").Find(&orders)
+
+	res := or.txn.Txn(ctx).Model(&entities.Order{}).
+		Select(`"stitch"."Orders".*,
+			(SELECT COALESCE(SUM(quantity), 0) FROM "stitch"."OrderItems" 
+			 WHERE "stitch"."OrderItems".order_id = "stitch"."Orders".id) as order_quantity,
+			(SELECT COALESCE(SUM(total), 0) FROM "stitch"."OrderItems" 
+			 WHERE "stitch"."OrderItems".order_id = "stitch"."Orders".id) as order_value`).
+		Preload("Customer", scopes.SelectFields("first_name", "last_name")).
+		Preload("OrderTakenBy", scopes.SelectFields("first_name", "last_name")).
+		Preload("OrderItems").
+		Find(&orders)
 	if res.Error != nil {
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find orders", res.Error)
 	}

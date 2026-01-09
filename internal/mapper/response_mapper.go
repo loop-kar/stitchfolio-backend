@@ -325,13 +325,30 @@ func (m *responseMapper) Order(e *entities.Order) (*responseModel.Order, error) 
 		return nil, err
 	}
 
+	orderQuantity := e.OrderQuantity
+	orderValue := e.OrderValue
+	if orderQuantity == 0 && orderValue == 0 && len(e.OrderItems) > 0 {
+		for _, item := range e.OrderItems {
+			orderQuantity += item.Quantity
+			orderValue += item.Total
+		}
+	}
+
 	return &responseModel.Order{
-		ID:         e.ID,
-		IsActive:   e.IsActive,
-		Status:     string(e.Status),
-		CustomerId: e.CustomerId,
-		Customer:   customer,
-		OrderItems: orderItems,
+		ID:             e.ID,
+		IsActive:       e.IsActive,
+		Status:         string(e.Status),
+		Notes:          e.Notes,
+		CustomerId:     e.CustomerId,
+		Customer:       customer,
+		CustomerName:   e.Customer.FirstName + " " + e.Customer.LastName,
+		OrderTakenById: e.OrderTakenById,
+		OrderTakenBy:   e.OrderTakenBy.FirstName + " " + e.OrderTakenBy.LastName,
+		OrderQuantity:  orderQuantity,
+		OrderValue:     orderValue,
+		CreatedAt:      e.CreatedAt,
+		UpdatedAt:      e.UpdatedAt,
+		OrderItems:     orderItems,
 	}, nil
 }
 

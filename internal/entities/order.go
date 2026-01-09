@@ -14,10 +14,19 @@ type Order struct {
 
 	Status OrderStatus `json:"status"`
 
+	Notes string `json:"notes"`
+
 	CustomerId *uint     `json:"customerId"`
 	Customer   *Customer `gorm:"foreignKey:CustomerId" json:"customer"`
 
+	OrderTakenById *uint `json:"orderTakenById"`
+	OrderTakenBy   *User `gorm:"foreignKey:OrderTakenById" json:"orderTakenBy"`
+
 	OrderItems []OrderItem `gorm:"foreignKey:OrderId" json:"orderItems"`
+
+	// Calculated fields (populated via SQL subqueries, not stored in DB)
+	OrderQuantity int     `gorm:"-" json:"-"`
+	OrderValue    float64 `gorm:"-" json:"-"`
 }
 
 func (Order) TableName() string {

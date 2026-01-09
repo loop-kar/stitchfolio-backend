@@ -1,13 +1,27 @@
 package responseModel
 
+import "time"
+
 type Order struct {
 	ID       uint `json:"id,omitempty"`
 	IsActive bool `json:"isActive,omitempty"`
 
 	Status string `json:"status,omitempty"`
 
-	CustomerId *uint     `json:"customerId,omitempty"`
-	Customer   *Customer `json:"customer,omitempty"`
+	Notes string `json:"notes,omitempty"`
+
+	CustomerId   *uint     `json:"customerId,omitempty"`
+	Customer     *Customer `json:"customer,omitempty"`
+	CustomerName string    `json:"customerName,omitempty"` // first_name + last_name
+
+	OrderTakenById *uint  `json:"orderTakenById,omitempty"`
+	OrderTakenBy   string `json:"orderTakenBy,omitempty"` // first_name + last_name
+
+	OrderQuantity int     `json:"orderQuantity,omitempty"` // sum of quantity from order items
+	OrderValue    float64 `json:"orderValue,omitempty"`    // sum of total from order items
+
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 
 	OrderItems []OrderItem `json:"orderItems,omitempty"`
 }
