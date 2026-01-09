@@ -700,28 +700,30 @@ const docTemplate = `{
                 }
             }
         },
-        "/enquiry/{id}/customer/{customerId}": {
+        "/enquiry/{id}/customer": {
             "put": {
-                "description": "Updates the customer linked to an enquiry",
+                "description": "Updates both enquiry and customer data together",
                 "consumes": [
                     "application/json"
                 ],
                 "tags": [
                     "Enquiry"
                 ],
-                "summary": "Update Enquiry Customer",
+                "summary": "Update Enquiry and Customer",
                 "parameters": [
+                    {
+                        "description": "enquiry and customer",
+                        "name": "enquiry",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.UpdateEnquiryAndCustomer"
+                        }
+                    },
                     {
                         "type": "integer",
                         "description": "Enquiry id",
                         "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Customer id",
-                        "name": "customerId",
                         "in": "path",
                         "required": true
                     }
@@ -2284,7 +2286,10 @@ const docTemplate = `{
                 "SYSTEM ADMIN",
                 "DEV",
                 "SUPER ADMIN",
-                "ADMIN"
+                "ADMIN",
+                "STAFF",
+                "OUTSOURCED",
+                "VIEWER"
             ],
             "x-enum-comments": {
                 "ADMIN": "to be used by the application administrator",
@@ -2296,7 +2301,10 @@ const docTemplate = `{
                 "SYSTEM_ADMIN",
                 "DEV",
                 "SUPERADMIN",
-                "ADMIN"
+                "ADMIN",
+                "STAFF",
+                "OUTSOURCED",
+                "VIEWER"
             ]
         },
         "entities.User": {
@@ -2549,13 +2557,16 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
+                "firstName": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
                 "isActive": {
                     "type": "boolean"
                 },
-                "name": {
+                "lastName": {
                     "type": "string"
                 },
                 "phoneNumber": {
@@ -2578,14 +2589,17 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
+                "firstName": {
+                    "description": "Customer fields",
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
                 "isActive": {
                     "type": "boolean"
                 },
-                "name": {
-                    "description": "Customer fields",
+                "lastName": {
                     "type": "string"
                 },
                 "notes": {
@@ -2727,9 +2741,6 @@ const docTemplate = `{
                 "isActive": {
                     "type": "boolean"
                 },
-                "measurementId": {
-                    "type": "integer"
-                },
                 "orderId": {
                     "type": "integer"
                 },
@@ -2755,6 +2766,64 @@ const docTemplate = `{
                 },
                 "toChannel": {
                     "type": "integer"
+                }
+            }
+        },
+        "requestModel.UpdateEnquiryAndCustomer": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "customerID": {
+                    "description": "Customer fields",
+                    "type": "integer"
+                },
+                "customerId": {
+                    "type": "integer"
+                },
+                "customerIsActive": {
+                    "type": "boolean"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "Enquiry fields",
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "phoneNumber": {
+                    "type": "string"
+                },
+                "referredBy": {
+                    "type": "string"
+                },
+                "referrerPhoneNumber": {
+                    "type": "string"
+                },
+                "source": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "subject": {
+                    "type": "string"
+                },
+                "whatsappNumber": {
+                    "type": "string"
                 }
             }
         },
@@ -2974,20 +3043,23 @@ const docTemplate = `{
                         "$ref": "#/definitions/responseModel.Enquiry"
                     }
                 },
+                "firstName": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
                 "isActive": {
                     "type": "boolean"
                 },
+                "lastName": {
+                    "type": "string"
+                },
                 "measurements": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/responseModel.Measurement"
                     }
-                },
-                "name": {
-                    "type": "string"
                 },
                 "orders": {
                     "type": "array",
@@ -3012,7 +3084,10 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
-                "name": {
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
                     "type": "string"
                 },
                 "phoneNumber": {
@@ -3064,6 +3139,9 @@ const docTemplate = `{
                 "customerId": {
                     "type": "integer"
                 },
+                "customerName": {
+                    "type": "string"
+                },
                 "dressType": {
                     "type": "string"
                 },
@@ -3080,7 +3158,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "measurementTakenBy": {
-                    "$ref": "#/definitions/responseModel.User"
+                    "description": "MeasurementTakenBy   *User  ` + "`" + `json:\"measurementTakenBy,omitempty\"` + "`" + `",
+                    "type": "string"
                 },
                 "measurementTakenById": {
                     "type": "integer"
@@ -3136,12 +3215,6 @@ const docTemplate = `{
                 },
                 "isActive": {
                     "type": "boolean"
-                },
-                "measurement": {
-                    "$ref": "#/definitions/responseModel.Measurement"
-                },
-                "measurementId": {
-                    "type": "integer"
                 },
                 "order": {
                     "$ref": "#/definitions/responseModel.Order"

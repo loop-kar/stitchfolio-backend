@@ -357,22 +357,15 @@ func (m *responseMapper) OrderItem(e *entities.OrderItem) (*responseModel.OrderI
 		return nil, err
 	}
 
-	measurement, err := m.Measurement(e.Measurement)
-	if err != nil {
-		return nil, err
-	}
-
 	return &responseModel.OrderItem{
-		ID:            e.ID,
-		IsActive:      e.IsActive,
-		Description:   e.Description,
-		Quantity:      e.Quantity,
-		Price:         e.Price,
-		Total:         e.Total,
-		OrderId:       e.OrderId,
-		Order:         order,
-		MeasurementId: e.MeasurementId,
-		Measurement:   measurement,
+		ID:          e.ID,
+		IsActive:    e.IsActive,
+		Description: e.Description,
+		Quantity:    e.Quantity,
+		Price:       e.Price,
+		Total:       e.Total,
+		OrderId:     e.OrderId,
+		Order:       order,
 	}, nil
 }
 

@@ -13,6 +13,9 @@ const (
 	SUPERADMIN RoleType = "SUPER ADMIN" // to be used for the owner of the application (customer)
 	ADMIN      RoleType = "ADMIN"       // to be used by the application administrator
 
+	STAFF      RoleType = "STAFF"
+	OUTSOURCED RoleType = "OUTSOURCED"
+	VIEWER     RoleType = "VIEWER"
 )
 
 type User struct {

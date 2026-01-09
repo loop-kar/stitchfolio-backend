@@ -23,7 +23,4 @@ type OrderItem struct {
 
 	OrderId uint   `json:"orderId,omitempty"`
 	Order   *Order `json:"order,omitempty"`
-
-	MeasurementId *uint        `json:"measurementId,omitempty"`
-	Measurement   *Measurement `json:"measurement,omitempty"`
 }

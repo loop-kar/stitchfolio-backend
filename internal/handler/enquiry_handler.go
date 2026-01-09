@@ -157,25 +157,30 @@ func (h EnquiryHandler) Delete(ctx *gin.Context) {
 	h.resp.SuccessResponse("Delete Success").FormatAndSend(&context, ctx, http.StatusOK)
 }
 
-// Update Enquiry Customer
+// Update Enquiry and Customer
 //
-//	@Summary		Update Enquiry Customer
-//	@Description	Updates the customer linked to an enquiry
+//	@Summary		Update Enquiry and Customer
+//	@Description	Updates both enquiry and customer data together
 //	@Tags			Enquiry
 //	@Accept			json
-//	@Success		200			{object}	response.Response
-//	@Failure		400			{object}	response.Response
-//	@Failure		501			{object}	response.Response
-//	@Param			id			path		int	true	"Enquiry id"
-//	@Param			customerId	path		int	true	"Customer id"
-//	@Router			/enquiry/{id}/customer/{customerId} [put]
-func (h EnquiryHandler) UpdateEnquiryCustomer(ctx *gin.Context) {
+//	@Success		200		{object}	response.Response
+//	@Failure		400		{object}	response.Response
+//	@Failure		501		{object}	response.Response
+//	@Param			enquiry	body		requestModel.UpdateEnquiryAndCustomer	true	"enquiry and customer"
+//	@Param			id		path		int										true	"Enquiry id"
+//	@Router			/enquiry/{id}/customer [put]
+func (h EnquiryHandler) UpdateEnquiryAndCustomer(ctx *gin.Context) {
 	context := util.CopyContextFromGin(ctx)
+	var request requesModel.UpdateEnquiryAndCustomer
+	err := ctx.Bind(&request)
+	if err != nil {
+		x := errs.NewXError(errs.INVALID_REQUEST, errs.MALFORMED_REQUEST, err)
+		h.resp.DefaultFailureResponse(x).FormatAndSend(&context, ctx, http.StatusBadRequest)
+		return
+	}
 
-	enquiryId, _ := strconv.Atoi(ctx.Param("id"))
-	customerId, _ := strconv.Atoi(ctx.Param("customerId"))
-
-	errr := h.enquirySvc.UpdateEnquiryCustomer(&context, uint(enquiryId), uint(customerId))
+	id, _ := strconv.Atoi(ctx.Param("id"))
+	errr := h.enquirySvc.UpdateEnquiryAndCustomer(&context, request, uint(id))
 	if errr != nil {
 		h.resp.DefaultFailureResponse(errr).FormatAndSend(&context, ctx, http.StatusInternalServerError)
 		return

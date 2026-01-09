@@ -21,6 +21,4 @@ type OrderItem struct {
 	Total       float64 `json:"total,omitempty"`
 
 	OrderId uint `json:"orderId,omitempty"`
-
-	MeasurementId *uint `json:"measurementId,omitempty"`
 }

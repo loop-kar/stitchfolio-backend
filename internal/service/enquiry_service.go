@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 
+	"github.com/imkarthi24/sf-backend/internal/entities"
 	"github.com/imkarthi24/sf-backend/internal/mapper"
 	requestModel "github.com/imkarthi24/sf-backend/internal/model/request"
 	responseModel "github.com/imkarthi24/sf-backend/internal/model/response"
@@ -13,7 +14,7 @@ import (
 type EnquiryService interface {
 	SaveEnquiry(*context.Context, requestModel.Enquiry) *errs.XError
 	UpdateEnquiry(*context.Context, requestModel.Enquiry, uint) *errs.XError
-	UpdateEnquiryCustomer(*context.Context, uint, uint) *errs.XError
+	UpdateEnquiryAndCustomer(*context.Context, requestModel.UpdateEnquiryAndCustomer, uint) *errs.XError
 	Get(*context.Context, uint) (*responseModel.Enquiry, *errs.XError)
 	GetAll(*context.Context, string) ([]responseModel.Enquiry, *errs.XError)
 	Delete(*context.Context, uint) *errs.XError
@@ -105,23 +106,90 @@ func (svc enquiryService) UpdateEnquiry(ctx *context.Context, enquiry requestMod
 	return nil
 }
 
-func (svc enquiryService) UpdateEnquiryCustomer(ctx *context.Context, enquiryId uint, customerId uint) *errs.XError {
-	enquiry, err := svc.enquiryRepo.Get(ctx, enquiryId)
+func (svc enquiryService) UpdateEnquiryAndCustomer(ctx *context.Context, request requestModel.UpdateEnquiryAndCustomer, enquiryId uint) *errs.XError {
+	existingEnquiry, err := svc.enquiryRepo.Get(ctx, enquiryId)
 	if err != nil {
 		return err
 	}
 
-	_, customerErr := svc.customerRepo.Get(ctx, customerId)
-	if customerErr != nil {
-		return customerErr
+	enquiryRequest := requestModel.Enquiry{
+		ID:                  request.ID,
+		IsActive:            request.IsActive,
+		Subject:             request.Subject,
+		Notes:               request.Notes,
+		Status:              request.Status,
+		CustomerId:          request.CustomerId,
+		Source:              request.Source,
+		ReferredBy:          request.ReferredBy,
+		ReferrerPhoneNumber: request.ReferrerPhoneNumber,
 	}
 
-	customerIdPtr := &customerId
-	enquiry.CustomerId = customerIdPtr
-	errr := svc.enquiryRepo.Update(ctx, enquiry)
+	dbEnquiry, mapErr := svc.mapper.Enquiry(enquiryRequest)
+	if mapErr != nil {
+		return errs.NewXError(errs.INVALID_REQUEST, "Unable to map enquiry", mapErr)
+	}
+	dbEnquiry.ID = enquiryId
+	if dbEnquiry.CustomerId == nil {
+		dbEnquiry.CustomerId = existingEnquiry.CustomerId
+	}
+
+	var dbCustomer *entities.Customer
+	customerRequest := requestModel.Customer{
+		ID:             request.CustomerID,
+		IsActive:       request.CustomerIsActive,
+		FirstName:      request.FirstName,
+		LastName:       request.LastName,
+		Email:          request.Email,
+		PhoneNumber:    request.PhoneNumber,
+		WhatsappNumber: request.WhatsappNumber,
+		Address:        request.Address,
+	}
+
+	if customerRequest.ID != 0 {
+		dbCustomer, mapErr = svc.mapper.Customer(customerRequest)
+		if mapErr != nil {
+			return errs.NewXError(errs.INVALID_REQUEST, "Unable to map customer", mapErr)
+		}
+		dbCustomer.ID = customerRequest.ID
+	} else if existingEnquiry.CustomerId != nil {
+		// Get existing customer to update
+		existingCustomer, customerErr := svc.customerRepo.Get(ctx, *existingEnquiry.CustomerId)
+		if customerErr != nil {
+			return customerErr
+		}
+		// Map customer fields to existing customer
+		dbCustomer, mapErr = svc.mapper.Customer(customerRequest)
+		if mapErr != nil {
+			return errs.NewXError(errs.INVALID_REQUEST, "Unable to map customer", mapErr)
+		}
+		dbCustomer.ID = existingCustomer.ID
+		// Preserve fields that weren't provided
+		if dbCustomer.FirstName == "" {
+			dbCustomer.FirstName = existingCustomer.FirstName
+		}
+		if dbCustomer.LastName == "" {
+			dbCustomer.LastName = existingCustomer.LastName
+		}
+		if dbCustomer.Email == "" {
+			dbCustomer.Email = existingCustomer.Email
+		}
+		if dbCustomer.PhoneNumber == "" {
+			dbCustomer.PhoneNumber = existingCustomer.PhoneNumber
+		}
+		if dbCustomer.WhatsappNumber == "" {
+			dbCustomer.WhatsappNumber = existingCustomer.WhatsappNumber
+		}
+		if dbCustomer.Address == "" {
+			dbCustomer.Address = existingCustomer.Address
+		}
+	}
+
+	// Update both enquiry and customer
+	errr := svc.enquiryRepo.UpdateEnquiryAndCustomer(ctx, dbEnquiry, dbCustomer)
 	if errr != nil {
 		return errr
 	}
+
 	return nil
 }
 

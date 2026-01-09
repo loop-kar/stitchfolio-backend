@@ -40,7 +40,7 @@ func (oir *orderItemRepository) Update(ctx *context.Context, orderItem *entities
 
 func (oir *orderItemRepository) Get(ctx *context.Context, id uint) (*entities.OrderItem, *errs.XError) {
 	orderItem := entities.OrderItem{}
-	res := oir.txn.Txn(ctx).Preload("Order").Preload("Measurement").Find(&orderItem, id)
+	res := oir.txn.Txn(ctx).Preload("Order").Find(&orderItem, id)
 	if res.Error != nil {
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find order item", res.Error)
 	}
@@ -49,7 +49,7 @@ func (oir *orderItemRepository) Get(ctx *context.Context, id uint) (*entities.Or
 
 func (oir *orderItemRepository) GetAll(ctx *context.Context, search string) ([]entities.OrderItem, *errs.XError) {
 	var orderItems []entities.OrderItem
-	res := oir.txn.Txn(ctx).Model(&entities.OrderItem{}).Preload("Order").Preload("Measurement").Find(&orderItems)
+	res := oir.txn.Txn(ctx).Model(&entities.OrderItem{}).Preload("Order").Find(&orderItems)
 	if res.Error != nil {
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find order items", res.Error)
 	}

@@ -57,6 +57,7 @@ func (mr *measurementRepository) GetAll(ctx *context.Context, search string) ([]
 		Scopes(scopes.Channel(), scopes.IsActive()).
 		Scopes(scopes.ILike(search, "dress_type", "measurement_by")).
 		Scopes(db.Paginate(ctx)).
+		Omit("measurements").
 		Preload("Customer", scopes.SelectFields("first_name", "last_name")).
 		Preload("MeasurementTakenBy", scopes.SelectFields("first_name", "last_name")).
 		Find(&measurements)

@@ -217,13 +217,12 @@ func (m *mapper) Order(e requestModel.Order) (*entities.Order, error) {
 
 func (m *mapper) OrderItem(e requestModel.OrderItem) (*entities.OrderItem, error) {
 	return &entities.OrderItem{
-		Model:         &entities.Model{ID: e.ID, IsActive: e.IsActive},
-		Description:   e.Description,
-		Quantity:      e.Quantity,
-		Price:         e.Price,
-		Total:         e.Total,
-		OrderId:       e.OrderId,
-		MeasurementId: e.MeasurementId,
+		Model:       &entities.Model{ID: e.ID, IsActive: e.IsActive},
+		Description: e.Description,
+		Quantity:    e.Quantity,
+		Price:       e.Price,
+		Total:       e.Total,
+		OrderId:     e.OrderId,
 	}, nil
 }
 

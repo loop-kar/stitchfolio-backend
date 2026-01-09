@@ -13,6 +13,7 @@ import (
 type EnquiryRepository interface {
 	Create(*context.Context, *entities.Enquiry) *errs.XError
 	Update(*context.Context, *entities.Enquiry) *errs.XError
+	UpdateEnquiryAndCustomer(*context.Context, *entities.Enquiry, *entities.Customer) *errs.XError
 	Get(*context.Context, uint) (*entities.Enquiry, *errs.XError)
 	GetAll(*context.Context, string) ([]entities.Enquiry, *errs.XError)
 	Delete(*context.Context, uint) *errs.XError
@@ -36,6 +37,19 @@ func (er *enquiryRepository) Create(ctx *context.Context, enquiry *entities.Enqu
 }
 
 func (er *enquiryRepository) Update(ctx *context.Context, enquiry *entities.Enquiry) *errs.XError {
+	return er.customDB.Update(ctx, *enquiry)
+}
+
+func (er *enquiryRepository) UpdateEnquiryAndCustomer(ctx *context.Context, enquiry *entities.Enquiry, customer *entities.Customer) *errs.XError {
+	// Update customer first
+	if customer != nil && customer.ID != 0 {
+		customerErr := er.customDB.Update(ctx, *customer)
+		if customerErr != nil {
+			return customerErr
+		}
+	}
+
+	// Then update enquiry
 	return er.customDB.Update(ctx, *enquiry)
 }
 
