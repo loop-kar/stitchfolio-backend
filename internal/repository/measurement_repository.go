@@ -2,12 +2,14 @@ package repository
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/imkarthi24/sf-backend/internal/entities"
 	"github.com/imkarthi24/sf-backend/internal/repository/common"
 	"github.com/imkarthi24/sf-backend/internal/repository/scopes"
 	"github.com/imkarthi24/sf-backend/pkg/db"
 	"github.com/imkarthi24/sf-backend/pkg/errs"
+	"github.com/imkarthi24/sf-backend/pkg/util"
 )
 
 type MeasurementRepository interface {
@@ -53,9 +55,19 @@ func (mr *measurementRepository) Get(ctx *context.Context, id uint) (*entities.M
 
 func (mr *measurementRepository) GetAll(ctx *context.Context, search string) ([]entities.Measurement, *errs.XError) {
 	var measurements []entities.Measurement
-	res := mr.txn.Txn(ctx).
-		Scopes(scopes.Channel(), scopes.IsActive()).
-		Scopes(scopes.ILike(search, "dress_type", "measurement_by")).
+	query := mr.txn.Txn(ctx).
+		Scopes(scopes.Channel(), scopes.IsActive())
+
+	if !util.IsNilOrEmptyString(&search) {
+		formattedSearch := util.EncloseWithPercentageOperator(search)
+		whereClause := fmt.Sprintf(
+			"(dress_type ILIKE %s OR measurement_by ILIKE %s OR EXISTS (SELECT 1 FROM \"stitch\".\"Customers\" WHERE \"Customers\".id = \"stitch\".\"Measurements\".customer_id AND (\"Customers\".phone_number ILIKE %s OR \"Customers\".first_name ILIKE %s OR \"Customers\".last_name ILIKE %s)))",
+			formattedSearch, formattedSearch, formattedSearch, formattedSearch, formattedSearch,
+		)
+		query = query.Where(whereClause)
+	}
+
+	res := query.
 		Scopes(db.Paginate(ctx)).
 		Omit("measurements").
 		Preload("Customer", scopes.SelectFields("first_name", "last_name")).
