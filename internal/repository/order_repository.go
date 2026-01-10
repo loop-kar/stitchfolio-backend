@@ -57,6 +57,7 @@ func (or *orderRepository) GetAll(ctx *context.Context, search string) ([]entiti
 			 WHERE "stitch"."OrderItems".order_id = "stitch"."Orders".id) as order_quantity,
 			(SELECT COALESCE(SUM(total), 0) FROM "stitch"."OrderItems" 
 			 WHERE "stitch"."OrderItems".order_id = "stitch"."Orders".id) as order_value`).
+		Scopes(db.Paginate(ctx)).
 		Preload("Customer", scopes.SelectFields("first_name", "last_name")).
 		Preload("OrderTakenBy", scopes.SelectFields("first_name", "last_name")).
 		Preload("OrderItems").

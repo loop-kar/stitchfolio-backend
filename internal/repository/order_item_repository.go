@@ -49,7 +49,10 @@ func (oir *orderItemRepository) Get(ctx *context.Context, id uint) (*entities.Or
 
 func (oir *orderItemRepository) GetAll(ctx *context.Context, search string) ([]entities.OrderItem, *errs.XError) {
 	var orderItems []entities.OrderItem
-	res := oir.txn.Txn(ctx).Model(&entities.OrderItem{}).Preload("Order").Find(&orderItems)
+	res := oir.txn.Txn(ctx).Model(&entities.OrderItem{}).
+		Scopes(db.Paginate(ctx)).
+		Preload("Order").
+		Find(&orderItems)
 	if res.Error != nil {
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find order items", res.Error)
 	}
