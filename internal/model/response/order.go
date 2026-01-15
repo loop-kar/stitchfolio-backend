@@ -10,6 +10,9 @@ type Order struct {
 
 	Notes string `json:"notes,omitempty"`
 
+	ExpectedDeliveryDate *time.Time `json:"expectedDeliveryDate,omitempty"`
+	DeliveredDate        *time.Time `json:"deliveredDate,omitempty"`
+
 	CustomerId   *uint     `json:"customerId,omitempty"`
 	Customer     *Customer `json:"customer,omitempty"`
 	CustomerName string    `json:"customerName,omitempty"` // first_name + last_name
@@ -34,6 +37,16 @@ type OrderItem struct {
 	Quantity    int     `json:"quantity,omitempty"`
 	Price       float64 `json:"price,omitempty"`
 	Total       float64 `json:"total,omitempty"`
+
+	ExpectedDeliveryDate *time.Time `json:"expectedDeliveryDate,omitempty"`
+	DeliveredDate        *time.Time `json:"deliveredDate,omitempty"`
+
+	PersonId      *uint      `json:"personId,omitempty"`
+	Person        *Person    `json:"person,omitempty"`
+	MeasurementId *uint        `json:"measurementId,omitempty"`
+	Measurement   *Measurement `json:"measurement,omitempty"`
+	DressTypeId   *uint      `json:"dressTypeId,omitempty"`
+	DressType     *DressType `json:"dressType,omitempty"`
 
 	OrderId uint   `json:"orderId,omitempty"`
 	Order   *Order `json:"order,omitempty"`

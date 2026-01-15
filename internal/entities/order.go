@@ -1,5 +1,7 @@
 package entities
 
+import "time"
+
 type OrderStatus string
 
 const (
@@ -15,6 +17,9 @@ type Order struct {
 	Status OrderStatus `json:"status"`
 
 	Notes string `json:"notes"`
+
+	ExpectedDeliveryDate *time.Time `json:"expectedDeliveryDate,omitempty"`
+	DeliveredDate        *time.Time `json:"deliveredDate,omitempty"`
 
 	CustomerId *uint     `json:"customerId"`
 	Customer   *Customer `gorm:"foreignKey:CustomerId" json:"customer"`

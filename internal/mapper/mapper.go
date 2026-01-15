@@ -1,7 +1,6 @@
 package mapper
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/imkarthi24/sf-backend/internal/entities"
@@ -18,10 +17,14 @@ type Mapper interface {
 	UserChannelDetail(e requestModel.UserChannelDetail) (*entities.UserChannelDetail, error)
 	UserChannelDetails(items []requestModel.UserChannelDetail) ([]entities.UserChannelDetail, error)
 	Customer(e requestModel.Customer) (*entities.Customer, error)
+	Person(e requestModel.Person) (*entities.Person, error)
+	DressType(e requestModel.DressType) (*entities.DressType, error)
 	Measurement(e requestModel.Measurement) (*entities.Measurement, error)
 	Order(e requestModel.Order) (*entities.Order, error)
 	OrderItem(e requestModel.OrderItem) (*entities.OrderItem, error)
 	OrderItems(items []requestModel.OrderItem) ([]entities.OrderItem, error)
+	OrderHistory(e requestModel.OrderHistory) (*entities.OrderHistory, error)
+	MeasurementHistory(e requestModel.MeasurementHistory) (*entities.MeasurementHistory, error)
 }
 
 type mapper struct{}
@@ -101,17 +104,34 @@ func (mapper) EnquiryHistory(e requestModel.EnquiryHistory) (*entities.EnquiryHi
 		}
 	}
 
-	enquiryDate := util.GetLocalTime()
+	var enquiryDate *time.Time
 	if e.EnquiryDate != "" {
 		date, err := util.GenerateDateTimeFromString(&e.EnquiryDate)
 		if err != nil {
 			return nil, err
 		}
-		enquiryDate = *date
+		enquiryDate = date
+	}
+
+	var status *entities.EnquiryStatus
+	if e.Status != nil {
+		s := entities.EnquiryStatus(*e.Status)
+		status = &s
+	}
+
+	performedAt := util.GetLocalTime()
+	if e.PerformedAt != "" {
+		date, err := util.GenerateDateTimeFromString(&e.PerformedAt)
+		if err != nil {
+			return nil, err
+		}
+		performedAt = *date
 	}
 
 	return &entities.EnquiryHistory{
 		Model:           &entities.Model{ID: e.ID, IsActive: e.IsActive},
+		Action:          entities.EnquiryHistoryAction(e.Action),
+		Status:          status,
 		EmployeeComment: e.EmployeeComment,
 		CustomerComment: e.CustomerComment,
 		VisitingDate:    visitingDate,
@@ -120,6 +140,8 @@ func (mapper) EnquiryHistory(e requestModel.EnquiryHistory) (*entities.EnquiryHi
 		ResponseStatus:  entities.ResponseStatus(e.ResponseStatus),
 		EnquiryId:       e.EnquiryId,
 		EmployeeId:      e.EmployeeId,
+		PerformedAt:     performedAt,
+		PerformedById:   e.PerformedById,
 	}, nil
 }
 
@@ -174,30 +196,50 @@ func (m *mapper) Customer(e requestModel.Customer) (*entities.Customer, error) {
 	}, nil
 }
 
-func (m *mapper) Measurement(e requestModel.Measurement) (*entities.Measurement, error) {
-	measurementDate, err := util.GenerateDateTimeFromString(&e.MeasurementDate)
-	if err != nil {
-		return nil, err
+func (m *mapper) Person(e requestModel.Person) (*entities.Person, error) {
+	var customerId uint
+	if e.CustomerId != nil {
+		customerId = *e.CustomerId
 	}
 
-	// Validate and convert measurements JSON
-	var measurements entities.JSON
-	if len(e.Measurements) > 0 {
-		validatedJSON, err := entities.NewJSON(e.Measurements)
-		if err != nil {
-			return nil, fmt.Errorf("invalid measurements format: %w", err)
-		}
-		measurements = validatedJSON
+	return &entities.Person{
+		Model:      &entities.Model{ID: e.ID, IsActive: e.IsActive},
+		Name:       e.Name,
+		CustomerId: customerId,
+	}, nil
+}
+
+func (m *mapper) DressType(e requestModel.DressType) (*entities.DressType, error) {
+	return &entities.DressType{
+		Model:        &entities.Model{ID: e.ID, IsActive: e.IsActive},
+		Name:         e.Name,
+		Measurements: e.Measurements,
+	}, nil
+}
+
+func (m *mapper) Measurement(e requestModel.Measurement) (*entities.Measurement, error) {
+	// Convert values JSON
+	var values entities.JSON
+	if len(e.Values) > 0 {
+		values = entities.JSON(e.Values)
+	}
+
+	var personId uint
+	if e.PersonId != nil {
+		personId = *e.PersonId
+	}
+
+	var dressTypeId uint
+	if e.DressTypeId != nil {
+		dressTypeId = *e.DressTypeId
 	}
 
 	return &entities.Measurement{
-		Model:                &entities.Model{ID: e.ID, IsActive: e.IsActive},
-		MeasurementDate:      measurementDate,
-		MeasurementBy:        e.MeasurementBy,
-		DressType:            e.DressType,
-		Measurements:         measurements,
-		CustomerId:           e.CustomerId,
-		MeasurementTakenById: e.MeasurementTakenById,
+		Model:       &entities.Model{ID: e.ID, IsActive: e.IsActive},
+		Values:      values,
+		PersonId:    personId,
+		DressTypeId: dressTypeId,
+		TakenById:   e.TakenById,
 	}, nil
 }
 
@@ -207,22 +249,67 @@ func (m *mapper) Order(e requestModel.Order) (*entities.Order, error) {
 		return nil, err
 	}
 
+	var expectedDeliveryDate *time.Time
+	if e.ExpectedDeliveryDate != nil {
+		date, err := util.GenerateDateTimeFromString(e.ExpectedDeliveryDate)
+		if err != nil {
+			return nil, err
+		}
+		expectedDeliveryDate = date
+	}
+
+	var deliveredDate *time.Time
+	if e.DeliveredDate != nil {
+		date, err := util.GenerateDateTimeFromString(e.DeliveredDate)
+		if err != nil {
+			return nil, err
+		}
+		deliveredDate = date
+	}
+
 	return &entities.Order{
-		Model:      &entities.Model{ID: e.ID, IsActive: e.IsActive},
-		Status:     entities.OrderStatus(e.Status),
-		CustomerId: e.CustomerId,
-		OrderItems: orderItems,
+		Model:                &entities.Model{ID: e.ID, IsActive: e.IsActive},
+		Status:               entities.OrderStatus(e.Status),
+		Notes:                e.Notes,
+		ExpectedDeliveryDate: expectedDeliveryDate,
+		DeliveredDate:        deliveredDate,
+		CustomerId:           e.CustomerId,
+		OrderTakenById:       e.OrderTakenById,
+		OrderItems:           orderItems,
 	}, nil
 }
 
 func (m *mapper) OrderItem(e requestModel.OrderItem) (*entities.OrderItem, error) {
+	var expectedDeliveryDate *time.Time
+	if e.ExpectedDeliveryDate != nil {
+		date, err := util.GenerateDateTimeFromString(e.ExpectedDeliveryDate)
+		if err != nil {
+			return nil, err
+		}
+		expectedDeliveryDate = date
+	}
+
+	var deliveredDate *time.Time
+	if e.DeliveredDate != nil {
+		date, err := util.GenerateDateTimeFromString(e.DeliveredDate)
+		if err != nil {
+			return nil, err
+		}
+		deliveredDate = date
+	}
+
 	return &entities.OrderItem{
-		Model:       &entities.Model{ID: e.ID, IsActive: e.IsActive},
-		Description: e.Description,
-		Quantity:    e.Quantity,
-		Price:       e.Price,
-		Total:       e.Total,
-		OrderId:     e.OrderId,
+		Model:                &entities.Model{ID: e.ID, IsActive: e.IsActive},
+		Description:          e.Description,
+		Quantity:             e.Quantity,
+		Price:                e.Price,
+		Total:                e.Total,
+		ExpectedDeliveryDate: expectedDeliveryDate,
+		DeliveredDate:        deliveredDate,
+		PersonId:             e.PersonId,
+		MeasurementId:        e.MeasurementId,
+		DressTypeId:          e.DressTypeId,
+		OrderId:              e.OrderId,
 	}, nil
 }
 
@@ -236,4 +323,84 @@ func (m *mapper) OrderItems(items []requestModel.OrderItem) ([]entities.OrderIte
 		mappedItems[i] = *mapped
 	}
 	return mappedItems, nil
+}
+
+func (m *mapper) OrderHistory(e requestModel.OrderHistory) (*entities.OrderHistory, error) {
+	var expectedDeliveryDate *time.Time
+	if e.ExpectedDeliveryDate != nil {
+		date, err := util.GenerateDateTimeFromString(e.ExpectedDeliveryDate)
+		if err != nil {
+			return nil, err
+		}
+		expectedDeliveryDate = date
+	}
+
+	var deliveredDate *time.Time
+	if e.DeliveredDate != nil {
+		date, err := util.GenerateDateTimeFromString(e.DeliveredDate)
+		if err != nil {
+			return nil, err
+		}
+		deliveredDate = date
+	}
+
+	var status *entities.OrderStatus
+	if e.Status != nil {
+		s := entities.OrderStatus(*e.Status)
+		status = &s
+	}
+
+	var orderItemData entities.JSON
+	if e.OrderItemData != "" {
+		orderItemData = entities.JSON(e.OrderItemData)
+	}
+
+	performedAt := util.GetLocalTime()
+	if e.PerformedAt != "" {
+		date, err := util.GenerateDateTimeFromString(&e.PerformedAt)
+		if err != nil {
+			return nil, err
+		}
+		performedAt = *date
+	}
+
+	return &entities.OrderHistory{
+		Model:                &entities.Model{ID: e.ID, IsActive: e.IsActive},
+		Action:               entities.OrderHistoryAction(e.Action),
+		ChangedFields:        e.ChangedFields,
+		Status:               status,
+		ExpectedDeliveryDate: expectedDeliveryDate,
+		DeliveredDate:        deliveredDate,
+		OrderItemId:          e.OrderItemId,
+		OrderItemData:        &orderItemData,
+		OrderId:              e.OrderId,
+		PerformedAt:          performedAt,
+		PerformedById:        e.PerformedById,
+	}, nil
+}
+
+func (m *mapper) MeasurementHistory(e requestModel.MeasurementHistory) (*entities.MeasurementHistory, error) {
+	var oldValues entities.JSON
+	if e.OldValues != "" {
+		oldValues = entities.JSON(e.OldValues)
+	}
+
+	performedAt := util.GetLocalTime()
+	if e.PerformedAt != "" {
+		date, err := util.GenerateDateTimeFromString(&e.PerformedAt)
+		if err != nil {
+			return nil, err
+		}
+		performedAt = *date
+	}
+
+	return &entities.MeasurementHistory{
+		Model:         &entities.Model{ID: e.ID, IsActive: e.IsActive},
+		Action:        entities.MeasurementHistoryAction(e.Action),
+		ChangedValues: e.ChangedValues,
+		OldValues:     oldValues,
+		MeasurementId: e.MeasurementId,
+		PerformedAt:   performedAt,
+		PerformedById: e.PerformedById,
+	}, nil
 }

@@ -29,12 +29,20 @@ type ResponseMapper interface {
 
 	Customer(e *entities.Customer) (*responseModel.Customer, error)
 	Customers(items []entities.Customer) ([]responseModel.Customer, error)
+	Person(e *entities.Person) (*responseModel.Person, error)
+	Persons(items []entities.Person) ([]responseModel.Person, error)
+	DressType(e *entities.DressType) (*responseModel.DressType, error)
+	DressTypes(items []entities.DressType) ([]responseModel.DressType, error)
 	Measurement(e *entities.Measurement) (*responseModel.Measurement, error)
 	Measurements(items []entities.Measurement) ([]responseModel.Measurement, error)
 	Order(e *entities.Order) (*responseModel.Order, error)
 	Orders(items []entities.Order) ([]responseModel.Order, error)
 	OrderItem(e *entities.OrderItem) (*responseModel.OrderItem, error)
 	OrderItems(items []entities.OrderItem) ([]responseModel.OrderItem, error)
+	OrderHistory(e *entities.OrderHistory) (*responseModel.OrderHistory, error)
+	OrderHistories(items []entities.OrderHistory) ([]responseModel.OrderHistory, error)
+	MeasurementHistory(e *entities.MeasurementHistory) (*responseModel.MeasurementHistory, error)
+	MeasurementHistories(items []entities.MeasurementHistory) ([]responseModel.MeasurementHistory, error)
 }
 
 func ProvideResponseMapper() ResponseMapper {
@@ -176,18 +184,38 @@ func (m *responseMapper) EnquiryHistory(e *entities.EnquiryHistory) (*responseMo
 		callBackDateStr = &str
 	}
 
+	var statusStr *string
+	if e.Status != nil {
+		str := string(*e.Status)
+		statusStr = &str
+	}
+
+	var performedBy *responseModel.User
+	if e.PerformedBy != nil {
+		user, err := m.User(e.PerformedBy)
+		if err != nil {
+			return nil, err
+		}
+		performedBy = user
+	}
+
 	return &responseModel.EnquiryHistory{
 		ID:              e.ID,
 		IsActive:        e.IsActive,
+		Action:          string(e.Action),
+		Status:          statusStr,
 		EmployeeComment: e.EmployeeComment,
 		CustomerComment: e.CustomerComment,
 		VisitingDate:    visitingDateStr,
 		CallBackDate:    callBackDateStr,
-		EnquiryDate:     util.DateTimeToStringOrDefault(&e.EnquiryDate, time.DateOnly),
+		EnquiryDate:     util.DateTimeToStringOrDefault(e.EnquiryDate, time.DateOnly),
 		ResponseStatus:  string(e.ResponseStatus),
 		EnquiryId:       e.EnquiryId,
 		EmployeeId:      e.EmployeeId,
 		Employee:        employee,
+		PerformedAt:     e.PerformedAt,
+		PerformedById:   e.PerformedById,
+		PerformedBy:     performedBy,
 	}, nil
 }
 func (m *responseMapper) MasterConfig(e *entities.MasterConfig) (*responseModel.MasterConfig, error) {
@@ -223,12 +251,12 @@ func (m *responseMapper) Customer(e *entities.Customer) (*responseModel.Customer
 		return nil, nil
 	}
 
-	enquiries, err := m.Enquiries(e.Enquiries)
+	persons, err := m.Persons(e.Persons)
 	if err != nil {
 		return nil, err
 	}
 
-	measurements, err := m.Measurements(e.Measurements)
+	enquiries, err := m.Enquiries(e.Enquiries)
 	if err != nil {
 		return nil, err
 	}
@@ -247,10 +275,72 @@ func (m *responseMapper) Customer(e *entities.Customer) (*responseModel.Customer
 		PhoneNumber:    e.PhoneNumber,
 		WhatsappNumber: e.WhatsappNumber,
 		Address:        e.Address,
+		Persons:        persons,
 		Enquiries:      enquiries,
-		Measurements:   measurements,
 		Orders:         orders,
 	}, nil
+}
+
+func (m *responseMapper) Person(e *entities.Person) (*responseModel.Person, error) {
+	if e == nil {
+		return nil, nil
+	}
+
+	customer, err := m.Customer(e.Customer)
+	if err != nil {
+		return nil, err
+	}
+
+	measurements, err := m.Measurements(e.Measurements)
+	if err != nil {
+		return nil, err
+	}
+
+	return &responseModel.Person{
+		ID:           e.ID,
+		IsActive:     e.IsActive,
+		Name:         e.Name,
+		CustomerId:   &e.CustomerId,
+		Customer:     customer,
+		Measurements: measurements,
+	}, nil
+}
+
+func (m *responseMapper) Persons(items []entities.Person) ([]responseModel.Person, error) {
+	result := make([]responseModel.Person, 0)
+	for _, item := range items {
+		mappedItem, err := m.Person(&item)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, *mappedItem)
+	}
+	return result, nil
+}
+
+func (m *responseMapper) DressType(e *entities.DressType) (*responseModel.DressType, error) {
+	if e == nil {
+		return nil, nil
+	}
+
+	return &responseModel.DressType{
+		ID:           e.ID,
+		IsActive:     e.IsActive,
+		Name:         e.Name,
+		Measurements: e.Measurements,
+	}, nil
+}
+
+func (m *responseMapper) DressTypes(items []entities.DressType) ([]responseModel.DressType, error) {
+	result := make([]responseModel.DressType, 0)
+	for _, item := range items {
+		mappedItem, err := m.DressType(&item)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, *mappedItem)
+	}
+	return result, nil
 }
 
 func (m *responseMapper) Customers(items []entities.Customer) ([]responseModel.Customer, error) {
@@ -270,31 +360,39 @@ func (m *responseMapper) Measurement(e *entities.Measurement) (*responseModel.Me
 		return nil, nil
 	}
 
-	customer, err := m.Customer(e.Customer)
+	person, err := m.Person(e.Person)
 	if err != nil {
 		return nil, err
 	}
 
-	measurementTakenBy, err := m.User(e.MeasurementTakenBy)
+	dressType, err := m.DressType(e.DressType)
 	if err != nil {
 		return nil, err
+	}
+
+	var takenBy string
+	if e.TakenBy != nil {
+		takenBy = e.TakenBy.FirstName + " " + e.TakenBy.LastName
+	}
+
+	var personName string
+	if person != nil {
+		personName = person.Name
 	}
 
 	return &responseModel.Measurement{
-		ID:              e.ID,
-		IsActive:        e.IsActive,
-		MeasurementDate: util.DateTimeToStringOrDefault(e.MeasurementDate, time.DateOnly),
-		MeasurementBy:   e.MeasurementBy,
-		DressType:       e.DressType,
-		Measurements:    json.RawMessage(e.Measurements),
-		CustomerId:      e.CustomerId,
-		// Customer:             customer,
-		MeasurementTakenById: e.MeasurementTakenById,
-		// MeasurementTakenBy:   measurementTakenBy,
-		UpdatedAt:          e.UpdatedAt,
-		UpdatedById:        e.UpdatedById,
-		CustomerName:       customer.FirstName + " " + customer.LastName,
-		MeasurementTakenBy: measurementTakenBy.FirstName + " " + measurementTakenBy.LastName,
+		ID:          e.ID,
+		IsActive:    e.IsActive,
+		Values:      json.RawMessage(e.Values),
+		PersonId:    &e.PersonId,
+		Person:      person,
+		PersonName:  personName,
+		DressTypeId: &e.DressTypeId,
+		DressType:   dressType,
+		TakenById:   e.TakenById,
+		TakenBy:     takenBy,
+		UpdatedAt:   e.UpdatedAt,
+		UpdatedById: e.UpdatedById,
 	}, nil
 }
 
@@ -335,11 +433,13 @@ func (m *responseMapper) Order(e *entities.Order) (*responseModel.Order, error) 
 	}
 
 	return &responseModel.Order{
-		ID:         e.ID,
-		IsActive:   e.IsActive,
-		Status:     string(e.Status),
-		Notes:      e.Notes,
-		CustomerId: e.CustomerId,
+		ID:                   e.ID,
+		IsActive:             e.IsActive,
+		Status:               string(e.Status),
+		Notes:                e.Notes,
+		ExpectedDeliveryDate: e.ExpectedDeliveryDate,
+		DeliveredDate:        e.DeliveredDate,
+		CustomerId:           e.CustomerId,
 		// Customer:       customer,
 		CustomerName:   e.Customer.FirstName + " " + e.Customer.LastName,
 		OrderTakenById: e.OrderTakenById,
@@ -374,15 +474,38 @@ func (m *responseMapper) OrderItem(e *entities.OrderItem) (*responseModel.OrderI
 		return nil, err
 	}
 
+	person, err := m.Person(e.Person)
+	if err != nil {
+		return nil, err
+	}
+
+	measurement, err := m.Measurement(e.Measurement)
+	if err != nil {
+		return nil, err
+	}
+
+	dressType, err := m.DressType(e.DressType)
+	if err != nil {
+		return nil, err
+	}
+
 	return &responseModel.OrderItem{
-		ID:          e.ID,
-		IsActive:    e.IsActive,
-		Description: e.Description,
-		Quantity:    e.Quantity,
-		Price:       e.Price,
-		Total:       e.Total,
-		OrderId:     e.OrderId,
-		Order:       order,
+		ID:                   e.ID,
+		IsActive:             e.IsActive,
+		Description:          e.Description,
+		Quantity:             e.Quantity,
+		Price:                e.Price,
+		Total:                e.Total,
+		ExpectedDeliveryDate: e.ExpectedDeliveryDate,
+		DeliveredDate:        e.DeliveredDate,
+		PersonId:             e.PersonId,
+		Person:               person,
+		MeasurementId:        e.MeasurementId,
+		Measurement:          measurement,
+		DressTypeId:          e.DressTypeId,
+		DressType:            dressType,
+		OrderId:              e.OrderId,
+		Order:                order,
 	}, nil
 }
 
@@ -390,6 +513,108 @@ func (m *responseMapper) OrderItems(items []entities.OrderItem) ([]responseModel
 	result := make([]responseModel.OrderItem, 0)
 	for _, item := range items {
 		mappedItem, err := m.OrderItem(&item)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, *mappedItem)
+	}
+	return result, nil
+}
+
+func (m *responseMapper) OrderHistory(e *entities.OrderHistory) (*responseModel.OrderHistory, error) {
+	if e == nil {
+		return nil, nil
+	}
+
+	var status *string
+	if e.Status != nil {
+		s := string(*e.Status)
+		status = &s
+	}
+
+	var orderItemData string
+	if e.OrderItemData != nil {
+		orderItemData = string(*e.OrderItemData)
+	}
+
+	order, err := m.Order(e.Order)
+	if err != nil {
+		return nil, err
+	}
+
+	performedBy, err := m.User(e.PerformedBy)
+	if err != nil {
+		return nil, err
+	}
+
+	return &responseModel.OrderHistory{
+		ID:                   e.ID,
+		IsActive:             e.IsActive,
+		Action:               string(e.Action),
+		ChangedFields:        e.ChangedFields,
+		Status:               status,
+		ExpectedDeliveryDate: e.ExpectedDeliveryDate,
+		DeliveredDate:        e.DeliveredDate,
+		OrderItemId:          e.OrderItemId,
+		OrderItemData:        orderItemData,
+		OrderId:              e.OrderId,
+		Order:                order,
+		PerformedAt:          e.PerformedAt,
+		PerformedById:        e.PerformedById,
+		PerformedBy:          performedBy,
+	}, nil
+}
+
+func (m *responseMapper) OrderHistories(items []entities.OrderHistory) ([]responseModel.OrderHistory, error) {
+	result := make([]responseModel.OrderHistory, 0)
+	for _, item := range items {
+		mappedItem, err := m.OrderHistory(&item)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, *mappedItem)
+	}
+	return result, nil
+}
+
+func (m *responseMapper) MeasurementHistory(e *entities.MeasurementHistory) (*responseModel.MeasurementHistory, error) {
+	if e == nil {
+		return nil, nil
+	}
+
+	measurement, err := m.Measurement(e.Measurement)
+	if err != nil {
+		return nil, err
+	}
+
+	performedBy, err := m.User(e.PerformedBy)
+	if err != nil {
+		return nil, err
+	}
+
+	var oldValues json.RawMessage
+	if len(e.OldValues) > 0 {
+		oldValues = json.RawMessage(e.OldValues)
+	}
+
+	return &responseModel.MeasurementHistory{
+		ID:            e.ID,
+		IsActive:      e.IsActive,
+		Action:        string(e.Action),
+		ChangedValues: e.ChangedValues,
+		OldValues:     oldValues,
+		MeasurementId: e.MeasurementId,
+		Measurement:   measurement,
+		PerformedAt:   e.PerformedAt,
+		PerformedById: e.PerformedById,
+		PerformedBy:   performedBy,
+	}, nil
+}
+
+func (m *responseMapper) MeasurementHistories(items []entities.MeasurementHistory) ([]responseModel.MeasurementHistory, error) {
+	result := make([]responseModel.MeasurementHistory, 0)
+	for _, item := range items {
+		mappedItem, err := m.MeasurementHistory(&item)
 		if err != nil {
 			return nil, err
 		}

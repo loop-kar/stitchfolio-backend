@@ -41,7 +41,13 @@ func (or *orderRepository) Update(ctx *context.Context, order *entities.Order) *
 
 func (or *orderRepository) Get(ctx *context.Context, id uint) (*entities.Order, *errs.XError) {
 	order := entities.Order{}
-	res := or.txn.Txn(ctx).Preload("Customer").Preload("OrderItems").Find(&order, id)
+	res := or.txn.Txn(ctx).
+		Preload("Customer").
+		Preload("OrderTakenBy", scopes.SelectFields("first_name", "last_name")).
+		Preload("OrderItems.Person").
+		Preload("OrderItems.DressType").
+		Preload("OrderItems.Measurement").
+		Find(&order, id)
 	if res.Error != nil {
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find order", res.Error)
 	}
@@ -60,7 +66,9 @@ func (or *orderRepository) GetAll(ctx *context.Context, search string) ([]entiti
 		Scopes(db.Paginate(ctx)).
 		Preload("Customer", scopes.SelectFields("first_name", "last_name")).
 		Preload("OrderTakenBy", scopes.SelectFields("first_name", "last_name")).
-		Preload("OrderItems").
+		Preload("OrderItems.Person").
+		Preload("OrderItems.DressType").
+		Preload("OrderItems.Measurement").
 		Find(&orders)
 	if res.Error != nil {
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find orders", res.Error)

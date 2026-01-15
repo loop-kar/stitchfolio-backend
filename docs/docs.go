@@ -509,6 +509,197 @@ const docTemplate = `{
                 }
             }
         },
+        "/dress-type": {
+            "get": {
+                "description": "Get all active dress types",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DressType"
+                ],
+                "summary": "Get all active dress types",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "search",
+                        "name": "search",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.DressType"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Saves an instance of DressType",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DressType"
+                ],
+                "summary": "Save DressType",
+                "parameters": [
+                    {
+                        "description": "dressType",
+                        "name": "dressType",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.DressType"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/dress-type/{id}": {
+            "get": {
+                "description": "Get an instance of DressType",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DressType"
+                ],
+                "summary": "Get a specific DressType",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "DressType id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.DressType"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates an instance of DressType",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DressType"
+                ],
+                "summary": "Update DressType",
+                "parameters": [
+                    {
+                        "description": "dressType",
+                        "name": "dressType",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.DressType"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "DressType id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes an instance of DressType",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DressType"
+                ],
+                "summary": "Delete DressType",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "dressType id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/enquiry": {
             "get": {
                 "description": "Get all active enquiries",
@@ -1077,6 +1268,151 @@ const docTemplate = `{
                 }
             }
         },
+        "/measurement-history": {
+            "get": {
+                "description": "Get all active measurement histories",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MeasurementHistory"
+                ],
+                "summary": "Get all active measurement histories",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "search",
+                        "name": "search",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.MeasurementHistory"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Saves an instance of MeasurementHistory",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MeasurementHistory"
+                ],
+                "summary": "Save MeasurementHistory",
+                "parameters": [
+                    {
+                        "description": "measurementHistory",
+                        "name": "measurementHistory",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.MeasurementHistory"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/measurement-history/measurement/{measurementId}": {
+            "get": {
+                "description": "Get measurement histories by measurement id",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MeasurementHistory"
+                ],
+                "summary": "Get measurement histories by measurement id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "measurement id",
+                        "name": "measurementId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.MeasurementHistory"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/measurement-history/{id}": {
+            "get": {
+                "description": "Get an instance of MeasurementHistory",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MeasurementHistory"
+                ],
+                "summary": "Get a specific MeasurementHistory",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "MeasurementHistory id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.MeasurementHistory"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/measurement/{id}": {
             "get": {
                 "description": "Get an instance of Measurement",
@@ -1263,6 +1599,151 @@ const docTemplate = `{
                         "description": "Not Implemented",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/order-history": {
+            "get": {
+                "description": "Get all active order histories",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OrderHistory"
+                ],
+                "summary": "Get all active order histories",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "search",
+                        "name": "search",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.OrderHistory"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Saves an instance of OrderHistory",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OrderHistory"
+                ],
+                "summary": "Save OrderHistory",
+                "parameters": [
+                    {
+                        "description": "orderHistory",
+                        "name": "orderHistory",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.OrderHistory"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/order-history/order/{orderId}": {
+            "get": {
+                "description": "Get order histories by order id",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OrderHistory"
+                ],
+                "summary": "Get order histories by order id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "order id",
+                        "name": "orderId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.OrderHistory"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/order-history/{id}": {
+            "get": {
+                "description": "Get an instance of OrderHistory",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OrderHistory"
+                ],
+                "summary": "Get a specific OrderHistory",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "OrderHistory id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.OrderHistory"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
                         }
                     }
                 }
@@ -1554,6 +2035,232 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "description": "order id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/person": {
+            "get": {
+                "description": "Get all active persons",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Person"
+                ],
+                "summary": "Get all active persons",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "search",
+                        "name": "search",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.Person"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Saves an instance of Person",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Person"
+                ],
+                "summary": "Save Person",
+                "parameters": [
+                    {
+                        "description": "person",
+                        "name": "person",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.Person"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/person/customer/{customerId}": {
+            "get": {
+                "description": "Get persons by customer id",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Person"
+                ],
+                "summary": "Get persons by customer id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "customer id",
+                        "name": "customerId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.Person"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/person/{id}": {
+            "get": {
+                "description": "Get an instance of Person",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Person"
+                ],
+                "summary": "Get a specific Person",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Person id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.Person"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates an instance of Person",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Person"
+                ],
+                "summary": "Update Person",
+                "parameters": [
+                    {
+                        "description": "person",
+                        "name": "person",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.Person"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Person id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes an instance of Person",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Person"
+                ],
+                "summary": "Delete Person",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "person id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -2577,6 +3284,23 @@ const docTemplate = `{
                 }
             }
         },
+        "requestModel.DressType": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "measurements": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "requestModel.Enquiry": {
             "type": "object",
             "properties": {
@@ -2677,10 +3401,36 @@ const docTemplate = `{
         "requestModel.Measurement": {
             "type": "object",
             "properties": {
-                "customerId": {
+                "dressTypeId": {
                     "type": "integer"
                 },
-                "dressType": {
+                "id": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "personId": {
+                    "type": "integer"
+                },
+                "takenById": {
+                    "type": "integer"
+                },
+                "values": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "requestModel.MeasurementHistory": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "type": "string"
+                },
+                "changedValues": {
                     "type": "string"
                 },
                 "id": {
@@ -2689,20 +3439,18 @@ const docTemplate = `{
                 "isActive": {
                     "type": "boolean"
                 },
-                "measurementBy": {
-                    "type": "string"
-                },
-                "measurementDate": {
-                    "type": "string"
-                },
-                "measurementTakenById": {
+                "measurementId": {
                     "type": "integer"
                 },
-                "measurements": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
+                "oldValues": {
+                    "description": "JSON string",
+                    "type": "string"
+                },
+                "performedAt": {
+                    "type": "string"
+                },
+                "performedById": {
+                    "type": "integer"
                 }
             }
         },
@@ -2712,11 +3460,20 @@ const docTemplate = `{
                 "customerId": {
                     "type": "integer"
                 },
+                "deliveredDate": {
+                    "type": "string"
+                },
+                "expectedDeliveryDate": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
                 "isActive": {
                     "type": "boolean"
+                },
+                "notes": {
+                    "type": "string"
                 },
                 "orderItems": {
                     "type": "array",
@@ -2724,15 +3481,27 @@ const docTemplate = `{
                         "$ref": "#/definitions/requestModel.OrderItem"
                     }
                 },
+                "orderTakenById": {
+                    "type": "integer"
+                },
                 "status": {
                     "type": "string"
                 }
             }
         },
-        "requestModel.OrderItem": {
+        "requestModel.OrderHistory": {
             "type": "object",
             "properties": {
-                "description": {
+                "action": {
+                    "type": "string"
+                },
+                "changedFields": {
+                    "type": "string"
+                },
+                "deliveredDate": {
+                    "type": "string"
+                },
+                "expectedDeliveryDate": {
                     "type": "string"
                 },
                 "id": {
@@ -2744,6 +3513,54 @@ const docTemplate = `{
                 "orderId": {
                     "type": "integer"
                 },
+                "orderItemData": {
+                    "description": "JSON string",
+                    "type": "string"
+                },
+                "orderItemId": {
+                    "type": "integer"
+                },
+                "performedAt": {
+                    "type": "string"
+                },
+                "performedById": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "requestModel.OrderItem": {
+            "type": "object",
+            "properties": {
+                "deliveredDate": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "dressTypeId": {
+                    "type": "integer"
+                },
+                "expectedDeliveryDate": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "measurementId": {
+                    "type": "integer"
+                },
+                "orderId": {
+                    "type": "integer"
+                },
+                "personId": {
+                    "type": "integer"
+                },
                 "price": {
                     "type": "number"
                 },
@@ -2752,6 +3569,23 @@ const docTemplate = `{
                 },
                 "total": {
                     "type": "number"
+                }
+            }
+        },
+        "requestModel.Person": {
+            "type": "object",
+            "properties": {
+                "customerId": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         },
@@ -3052,16 +3886,16 @@ const docTemplate = `{
                 "lastName": {
                     "type": "string"
                 },
-                "measurements": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/responseModel.Measurement"
-                    }
-                },
                 "orders": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/responseModel.Order"
+                    }
+                },
+                "persons": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responseModel.Person"
                     }
                 },
                 "phoneNumber": {
@@ -3088,6 +3922,23 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "phoneNumber": {
+                    "type": "string"
+                }
+            }
+        },
+        "responseModel.DressType": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "measurements": {
+                    "type": "string"
+                },
+                "name": {
                     "type": "string"
                 }
             }
@@ -3130,16 +3981,55 @@ const docTemplate = `{
         "responseModel.Measurement": {
             "type": "object",
             "properties": {
-                "customer": {
-                    "$ref": "#/definitions/responseModel.Customer"
+                "dressType": {
+                    "$ref": "#/definitions/responseModel.DressType"
                 },
-                "customerId": {
+                "dressTypeId": {
                     "type": "integer"
                 },
-                "customerName": {
+                "id": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "person": {
+                    "$ref": "#/definitions/responseModel.Person"
+                },
+                "personId": {
+                    "type": "integer"
+                },
+                "personName": {
                     "type": "string"
                 },
-                "dressType": {
+                "takenBy": {
+                    "description": "first_name + last_name",
+                    "type": "string"
+                },
+                "takenById": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedById": {
+                    "type": "integer"
+                },
+                "values": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "responseModel.MeasurementHistory": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "type": "string"
+                },
+                "changedValues": {
                     "type": "string"
                 },
                 "id": {
@@ -3148,29 +4038,25 @@ const docTemplate = `{
                 "isActive": {
                     "type": "boolean"
                 },
-                "measurementBy": {
-                    "type": "string"
+                "measurement": {
+                    "$ref": "#/definitions/responseModel.Measurement"
                 },
-                "measurementDate": {
-                    "type": "string"
-                },
-                "measurementTakenBy": {
-                    "description": "MeasurementTakenBy   *User  ` + "`" + `json:\"measurementTakenBy,omitempty\"` + "`" + `",
-                    "type": "string"
-                },
-                "measurementTakenById": {
+                "measurementId": {
                     "type": "integer"
                 },
-                "measurements": {
+                "oldValues": {
                     "type": "array",
                     "items": {
                         "type": "integer"
                     }
                 },
-                "updatedAt": {
+                "performedAt": {
                     "type": "string"
                 },
-                "updatedById": {
+                "performedBy": {
+                    "$ref": "#/definitions/responseModel.User"
+                },
+                "performedById": {
                     "type": "integer"
                 }
             }
@@ -3189,6 +4075,12 @@ const docTemplate = `{
                 },
                 "customerName": {
                     "description": "first_name + last_name",
+                    "type": "string"
+                },
+                "deliveredDate": {
+                    "type": "string"
+                },
+                "expectedDeliveryDate": {
                     "type": "string"
                 },
                 "id": {
@@ -3229,10 +4121,19 @@ const docTemplate = `{
                 }
             }
         },
-        "responseModel.OrderItem": {
+        "responseModel.OrderHistory": {
             "type": "object",
             "properties": {
-                "description": {
+                "action": {
+                    "type": "string"
+                },
+                "changedFields": {
+                    "type": "string"
+                },
+                "deliveredDate": {
+                    "type": "string"
+                },
+                "expectedDeliveryDate": {
                     "type": "string"
                 },
                 "id": {
@@ -3247,6 +4148,69 @@ const docTemplate = `{
                 "orderId": {
                     "type": "integer"
                 },
+                "orderItemData": {
+                    "description": "JSON string",
+                    "type": "string"
+                },
+                "orderItemId": {
+                    "type": "integer"
+                },
+                "performedAt": {
+                    "type": "string"
+                },
+                "performedBy": {
+                    "$ref": "#/definitions/responseModel.User"
+                },
+                "performedById": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "responseModel.OrderItem": {
+            "type": "object",
+            "properties": {
+                "deliveredDate": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "dressType": {
+                    "$ref": "#/definitions/responseModel.DressType"
+                },
+                "dressTypeId": {
+                    "type": "integer"
+                },
+                "expectedDeliveryDate": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "measurement": {
+                    "$ref": "#/definitions/responseModel.Measurement"
+                },
+                "measurementId": {
+                    "type": "integer"
+                },
+                "order": {
+                    "$ref": "#/definitions/responseModel.Order"
+                },
+                "orderId": {
+                    "type": "integer"
+                },
+                "person": {
+                    "$ref": "#/definitions/responseModel.Person"
+                },
+                "personId": {
+                    "type": "integer"
+                },
                 "price": {
                     "type": "number"
                 },
@@ -3255,6 +4219,32 @@ const docTemplate = `{
                 },
                 "total": {
                     "type": "number"
+                }
+            }
+        },
+        "responseModel.Person": {
+            "type": "object",
+            "properties": {
+                "customer": {
+                    "$ref": "#/definitions/responseModel.Customer"
+                },
+                "customerId": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "measurements": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responseModel.Measurement"
+                    }
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         },

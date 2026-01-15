@@ -11,19 +11,35 @@ const (
 	ACCEPTED     ResponseStatus = "ACCEPTED"
 )
 
+type EnquiryHistoryAction string
+
+const (
+	EnquiryHistoryActionStatusChanged EnquiryHistoryAction = "STATUS_CHANGED"
+	EnquiryHistoryActionResponse      EnquiryHistoryAction = "RESPONSE"
+)
+
 type EnquiryHistory struct {
 	*Model `mapstructure:",squash"`
+
+	Action EnquiryHistoryAction `gorm:"type:string" json:"action,omitempty"`
+
+	Status *EnquiryStatus `gorm:"type:string" json:"status,omitempty"`
 
 	EmployeeComment string         `json:"employeeComment,omitempty"`
 	CustomerComment string         `json:"customerComment,omitempty"`
 	VisitingDate    *time.Time     `json:"visitingDate,omitempty"`
 	CallBackDate    *time.Time     `json:"callBackDate,omitempty"`
-	EnquiryDate     time.Time      `gorm:"not null" json:"enquiryDate,omitempty"`
-	ResponseStatus  ResponseStatus `gorm:"type:string;not null" json:"responseStatus,omitempty"`
+	EnquiryDate     *time.Time     `json:"enquiryDate,omitempty"`
+	ResponseStatus  ResponseStatus `gorm:"type:string" json:"responseStatus,omitempty"`
 
 	EnquiryId  uint  `json:"enquiryId,omitempty"`
 	EmployeeId uint  `json:"employeeId,omitempty"`
 	Employee   *User `json:"employee,omitempty"`
+
+	// History tracking fields
+	PerformedAt   time.Time `gorm:"not null" json:"performedAt"`
+	PerformedById uint      `json:"performedById"`
+	PerformedBy   *User     `gorm:"foreignKey:PerformedById" json:"-"`
 }
 
 func (EnquiryHistory) TableName() string {
