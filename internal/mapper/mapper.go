@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/imkarthi24/sf-backend/internal/entities"
+	entitiy_types "github.com/imkarthi24/sf-backend/internal/entities/types"
 	requestModel "github.com/imkarthi24/sf-backend/internal/model/request"
 	"github.com/imkarthi24/sf-backend/pkg/util"
 )
@@ -219,9 +220,9 @@ func (m *mapper) DressType(e requestModel.DressType) (*entities.DressType, error
 
 func (m *mapper) Measurement(e requestModel.Measurement) (*entities.Measurement, error) {
 	// Convert values JSON
-	var values entities.JSON
+	var values entitiy_types.JSON
 	if len(e.Values) > 0 {
-		values = entities.JSON(e.Values)
+		values = entitiy_types.JSON(e.Values)
 	}
 
 	var personId uint
@@ -236,7 +237,7 @@ func (m *mapper) Measurement(e requestModel.Measurement) (*entities.Measurement,
 
 	return &entities.Measurement{
 		Model:       &entities.Model{ID: e.ID, IsActive: e.IsActive},
-		Values:      values,
+		Value:       values,
 		PersonId:    personId,
 		DressTypeId: dressTypeId,
 		TakenById:   e.TakenById,
@@ -308,7 +309,6 @@ func (m *mapper) OrderItem(e requestModel.OrderItem) (*entities.OrderItem, error
 		DeliveredDate:        deliveredDate,
 		PersonId:             e.PersonId,
 		MeasurementId:        e.MeasurementId,
-		DressTypeId:          e.DressTypeId,
 		OrderId:              e.OrderId,
 	}, nil
 }
@@ -350,9 +350,9 @@ func (m *mapper) OrderHistory(e requestModel.OrderHistory) (*entities.OrderHisto
 		status = &s
 	}
 
-	var orderItemData entities.JSON
+	var orderItemData entitiy_types.JSON
 	if e.OrderItemData != "" {
-		orderItemData = entities.JSON(e.OrderItemData)
+		orderItemData = entitiy_types.JSON(e.OrderItemData)
 	}
 
 	performedAt := util.GetLocalTime()
@@ -380,9 +380,9 @@ func (m *mapper) OrderHistory(e requestModel.OrderHistory) (*entities.OrderHisto
 }
 
 func (m *mapper) MeasurementHistory(e requestModel.MeasurementHistory) (*entities.MeasurementHistory, error) {
-	var oldValues entities.JSON
+	var oldValues entitiy_types.JSON
 	if e.OldValues != "" {
-		oldValues = entities.JSON(e.OldValues)
+		oldValues = entitiy_types.JSON(e.OldValues)
 	}
 
 	performedAt := util.GetLocalTime()
@@ -397,7 +397,6 @@ func (m *mapper) MeasurementHistory(e requestModel.MeasurementHistory) (*entitie
 	return &entities.MeasurementHistory{
 		Model:         &entities.Model{ID: e.ID, IsActive: e.IsActive},
 		Action:        entities.MeasurementHistoryAction(e.Action),
-		ChangedValues: e.ChangedValues,
 		OldValues:     oldValues,
 		MeasurementId: e.MeasurementId,
 		PerformedAt:   performedAt,
