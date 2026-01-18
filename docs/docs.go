@@ -4178,12 +4178,6 @@ const docTemplate = `{
                 "description": {
                     "type": "string"
                 },
-                "dressType": {
-                    "$ref": "#/definitions/responseModel.DressType"
-                },
-                "dressTypeId": {
-                    "type": "integer"
-                },
                 "expectedDeliveryDate": {
                     "type": "string"
                 },
