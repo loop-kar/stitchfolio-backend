@@ -8,11 +8,9 @@ type Measurement struct {
 	ID       uint `json:"id,omitempty"`
 	IsActive bool `json:"isActive,omitempty"`
 
-	MeasurementDate string          `json:"measurementDate,omitempty"`
-	MeasurementBy   string          `json:"measurementBy,omitempty"`
-	DressType       string          `json:"dressType,omitempty"`
-	Measurements    json.RawMessage `json:"measurements,omitempty"`
+	Values json.RawMessage `json:"values,omitempty"`
 
-	CustomerId           *uint `json:"customerId,omitempty"`
-	MeasurementTakenById *uint `json:"measurementTakenById,omitempty"`
+	PersonId    *uint `json:"personId,omitempty"`
+	DressTypeId *uint `json:"dressTypeId,omitempty"`
+	TakenById   *uint `json:"takenById,omitempty"`
 }

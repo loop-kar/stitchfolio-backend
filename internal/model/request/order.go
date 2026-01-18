@@ -6,7 +6,13 @@ type Order struct {
 
 	Status string `json:"status,omitempty"`
 
-	CustomerId *uint `json:"customerId,omitempty"`
+	Notes string `json:"notes,omitempty"`
+
+	ExpectedDeliveryDate *string `json:"expectedDeliveryDate,omitempty"`
+	DeliveredDate        *string `json:"deliveredDate,omitempty"`
+
+	CustomerId     *uint `json:"customerId,omitempty"`
+	OrderTakenById *uint `json:"orderTakenById,omitempty"`
 
 	OrderItems []OrderItem `json:"orderItems,omitempty"`
 }
@@ -19,6 +25,13 @@ type OrderItem struct {
 	Quantity    int     `json:"quantity,omitempty"`
 	Price       float64 `json:"price,omitempty"`
 	Total       float64 `json:"total,omitempty"`
+
+	ExpectedDeliveryDate *string `json:"expectedDeliveryDate,omitempty"`
+	DeliveredDate        *string `json:"deliveredDate,omitempty"`
+
+	PersonId      *uint `json:"personId,omitempty"`
+	MeasurementId *uint `json:"measurementId,omitempty"`
+	DressTypeId   *uint `json:"dressTypeId,omitempty"`
 
 	OrderId uint `json:"orderId,omitempty"`
 }

@@ -45,7 +45,13 @@ func (cr *customerRepository) Update(ctx *context.Context, customer *entities.Cu
 
 func (cr *customerRepository) Get(ctx *context.Context, id uint) (*entities.Customer, *errs.XError) {
 	customer := entities.Customer{}
-	res := cr.txn.Txn(ctx).Preload("Enquiries").Preload("Measurements").Preload("Orders").Find(&customer, id)
+	res := cr.txn.Txn(ctx).
+		Preload("Persons").
+		Preload("Persons.Measurements").
+		Preload("Persons.Measurements.DressType").
+		Preload("Enquiries").
+		Preload("Orders").
+		Find(&customer, id)
 	if res.Error != nil {
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find customer", res.Error)
 	}
@@ -57,9 +63,7 @@ func (cr *customerRepository) GetAll(ctx *context.Context, search string) ([]ent
 	res := cr.txn.Txn(ctx).Table(entities.Customer{}.TableNameForQuery()).
 		Scopes(scopes.Channel(), scopes.IsActive()).
 		Scopes(scopes.ILike(search, "first_name", "last_name", "email", "phone_number")).
-		// Where("EXISTS (SELECT 1 FROM \"stitch\".\"Orders\" WHERE customer_id = E.id)").
 		Scopes(db.Paginate(ctx)).
-		// Preload("Orders").Preload("Measurements").Preload("Enquiries").
 		Find(&customers)
 	if res.Error != nil {
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find customers", res.Error)

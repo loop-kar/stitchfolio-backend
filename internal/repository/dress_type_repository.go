@@ -1,0 +1,71 @@
+package repository
+
+import (
+	"context"
+
+	"github.com/imkarthi24/sf-backend/internal/entities"
+	"github.com/imkarthi24/sf-backend/internal/repository/common"
+	"github.com/imkarthi24/sf-backend/internal/repository/scopes"
+	"github.com/imkarthi24/sf-backend/pkg/db"
+	"github.com/imkarthi24/sf-backend/pkg/errs"
+)
+
+type DressTypeRepository interface {
+	Create(*context.Context, *entities.DressType) *errs.XError
+	Update(*context.Context, *entities.DressType) *errs.XError
+	Get(*context.Context, uint) (*entities.DressType, *errs.XError)
+	GetAll(*context.Context, string) ([]entities.DressType, *errs.XError)
+	Delete(*context.Context, uint) *errs.XError
+}
+
+type dressTypeRepository struct {
+	txn      db.DBTransactionManager
+	customDB common.CustomGormDB
+}
+
+func ProvideDressTypeRepository(txn db.DBTransactionManager, customDB common.CustomGormDB) DressTypeRepository {
+	return &dressTypeRepository{txn: txn, customDB: customDB}
+}
+
+func (dtr *dressTypeRepository) Create(ctx *context.Context, dressType *entities.DressType) *errs.XError {
+	res := dtr.txn.Txn(ctx).Create(&dressType)
+	if res.Error != nil {
+		return errs.NewXError(errs.DATABASE, "Unable to save dress type", res.Error)
+	}
+	return nil
+}
+
+func (dtr *dressTypeRepository) Update(ctx *context.Context, dressType *entities.DressType) *errs.XError {
+	return dtr.customDB.Update(ctx, *dressType)
+}
+
+func (dtr *dressTypeRepository) Get(ctx *context.Context, id uint) (*entities.DressType, *errs.XError) {
+	dressType := entities.DressType{}
+	res := dtr.txn.Txn(ctx).Find(&dressType, id)
+	if res.Error != nil {
+		return nil, errs.NewXError(errs.DATABASE, "Unable to find dress type", res.Error)
+	}
+	return &dressType, nil
+}
+
+func (dtr *dressTypeRepository) GetAll(ctx *context.Context, search string) ([]entities.DressType, *errs.XError) {
+	var dressTypes []entities.DressType
+	res := dtr.txn.Txn(ctx).Table(entities.DressType{}.TableNameForQuery()).
+		Scopes(scopes.Channel(), scopes.IsActive()).
+		Scopes(scopes.ILike(search, "name")).
+		Scopes(db.Paginate(ctx)).
+		Find(&dressTypes)
+	if res.Error != nil {
+		return nil, errs.NewXError(errs.DATABASE, "Unable to find dress types", res.Error)
+	}
+	return dressTypes, nil
+}
+
+func (dtr *dressTypeRepository) Delete(ctx *context.Context, id uint) *errs.XError {
+	dressType := &entities.DressType{Model: &entities.Model{ID: id, IsActive: false}}
+	err := dtr.customDB.Delete(ctx, dressType)
+	if err != nil {
+		return err
+	}
+	return nil
+}

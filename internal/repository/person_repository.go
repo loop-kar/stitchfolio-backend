@@ -1,0 +1,89 @@
+package repository
+
+import (
+	"context"
+
+	"github.com/imkarthi24/sf-backend/internal/entities"
+	"github.com/imkarthi24/sf-backend/internal/repository/common"
+	"github.com/imkarthi24/sf-backend/internal/repository/scopes"
+	"github.com/imkarthi24/sf-backend/pkg/db"
+	"github.com/imkarthi24/sf-backend/pkg/errs"
+)
+
+type PersonRepository interface {
+	Create(*context.Context, *entities.Person) *errs.XError
+	Update(*context.Context, *entities.Person) *errs.XError
+	Get(*context.Context, uint) (*entities.Person, *errs.XError)
+	GetAll(*context.Context, string) ([]entities.Person, *errs.XError)
+	Delete(*context.Context, uint) *errs.XError
+	GetByCustomerId(*context.Context, uint) ([]entities.Person, *errs.XError)
+}
+
+type personRepository struct {
+	txn      db.DBTransactionManager
+	customDB common.CustomGormDB
+}
+
+func ProvidePersonRepository(txn db.DBTransactionManager, customDB common.CustomGormDB) PersonRepository {
+	return &personRepository{txn: txn, customDB: customDB}
+}
+
+func (pr *personRepository) Create(ctx *context.Context, person *entities.Person) *errs.XError {
+	res := pr.txn.Txn(ctx).Create(&person)
+	if res.Error != nil {
+		return errs.NewXError(errs.DATABASE, "Unable to save person", res.Error)
+	}
+	return nil
+}
+
+func (pr *personRepository) Update(ctx *context.Context, person *entities.Person) *errs.XError {
+	return pr.customDB.Update(ctx, *person)
+}
+
+func (pr *personRepository) Get(ctx *context.Context, id uint) (*entities.Person, *errs.XError) {
+	person := entities.Person{}
+	res := pr.txn.Txn(ctx).
+		Preload("Customer").
+		Preload("Measurements").
+		Find(&person, id)
+	if res.Error != nil {
+		return nil, errs.NewXError(errs.DATABASE, "Unable to find person", res.Error)
+	}
+	return &person, nil
+}
+
+func (pr *personRepository) GetAll(ctx *context.Context, search string) ([]entities.Person, *errs.XError) {
+	var persons []entities.Person
+	res := pr.txn.Txn(ctx).Table(entities.Person{}.TableNameForQuery()).
+		Scopes(scopes.Channel(), scopes.IsActive()).
+		Scopes(scopes.ILike(search, "name")).
+		Scopes(db.Paginate(ctx)).
+		Preload("Customer").
+		Find(&persons)
+	if res.Error != nil {
+		return nil, errs.NewXError(errs.DATABASE, "Unable to find persons", res.Error)
+	}
+	return persons, nil
+}
+
+func (pr *personRepository) Delete(ctx *context.Context, id uint) *errs.XError {
+	person := &entities.Person{Model: &entities.Model{ID: id, IsActive: false}}
+	err := pr.customDB.Delete(ctx, person)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (pr *personRepository) GetByCustomerId(ctx *context.Context, customerId uint) ([]entities.Person, *errs.XError) {
+	var persons []entities.Person
+	res := pr.txn.Txn(ctx).
+		Where("customer_id = ?", customerId).
+		Scopes(scopes.IsActive()).
+		Preload("Measurements").
+		Find(&persons)
+	if res.Error != nil {
+		return nil, errs.NewXError(errs.DATABASE, "Unable to find persons by customer id", res.Error)
+	}
+	return persons, nil
+}

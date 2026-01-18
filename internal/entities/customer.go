@@ -13,15 +13,15 @@ type Customer struct {
 	//transient field
 	Source string `json:"source" gorm:"-"`
 
-	Enquiries    []Enquiry     `gorm:"foreignKey:CustomerId;constraint:OnDelete:CASCADE" json:"enquiries"`
-	Measurements []Measurement `gorm:"foreignKey:CustomerId;constraint:OnDelete:CASCADE" json:"measurements"`
-	Orders       []Order       `gorm:"foreignKey:CustomerId;constraint:OnDelete:CASCADE" json:"orders"`
+	Persons   []Person  `gorm:"foreignKey:CustomerId;constraint:OnDelete:CASCADE" json:"persons"`
+	Enquiries []Enquiry `gorm:"foreignKey:CustomerId;constraint:OnDelete:CASCADE" json:"enquiries"`
+	Orders    []Order   `gorm:"foreignKey:CustomerId;constraint:OnDelete:CASCADE" json:"orders"`
 }
 
 func (Customer) TableName() string {
-	return "stitch.Customers"
+	return "Customers"
 }
 
 func (Customer) TableNameForQuery() string {
-	return "\"stitch\".\"Customers\" E"
+	return "\"Customers\" E"
 }

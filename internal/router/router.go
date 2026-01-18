@@ -168,6 +168,41 @@ func InitRouter(handler baseHandler.BaseHandler, srvConfig config.ServerConfig) 
 			measurementEndpoints.GET("", handler.MeasurementHandler.GetAllMeasurements)
 			measurementEndpoints.DELETE(":id", handler.MeasurementHandler.Delete)
 		}
+
+		personEndpoints := appRouter.Group("person", router.VerifyJWT(srvConfig.JwtSecretKey))
+		{
+			personEndpoints.POST("", handler.PersonHandler.SavePerson)
+			personEndpoints.PUT(":id", handler.PersonHandler.UpdatePerson)
+			personEndpoints.GET(":id", handler.PersonHandler.Get)
+			personEndpoints.GET("", handler.PersonHandler.GetAllPersons)
+			personEndpoints.GET("customer/:customerId", handler.PersonHandler.GetByCustomerId)
+			personEndpoints.DELETE(":id", handler.PersonHandler.Delete)
+		}
+
+		dressTypeEndpoints := appRouter.Group("dress-type", router.VerifyJWT(srvConfig.JwtSecretKey))
+		{
+			dressTypeEndpoints.POST("", handler.DressTypeHandler.SaveDressType)
+			dressTypeEndpoints.PUT(":id", handler.DressTypeHandler.UpdateDressType)
+			dressTypeEndpoints.GET(":id", handler.DressTypeHandler.Get)
+			dressTypeEndpoints.GET("", handler.DressTypeHandler.GetAllDressTypes)
+			dressTypeEndpoints.DELETE(":id", handler.DressTypeHandler.Delete)
+		}
+
+		orderHistoryEndpoints := appRouter.Group("order-history", router.VerifyJWT(srvConfig.JwtSecretKey))
+		{
+			orderHistoryEndpoints.POST("", handler.OrderHistoryHandler.SaveOrderHistory)
+			orderHistoryEndpoints.GET(":id", handler.OrderHistoryHandler.Get)
+			orderHistoryEndpoints.GET("", handler.OrderHistoryHandler.GetAllOrderHistories)
+			orderHistoryEndpoints.GET("order/:orderId", handler.OrderHistoryHandler.GetByOrderId)
+		}
+
+		measurementHistoryEndpoints := appRouter.Group("measurement-history", router.VerifyJWT(srvConfig.JwtSecretKey))
+		{
+			measurementHistoryEndpoints.POST("", handler.MeasurementHistoryHandler.SaveMeasurementHistory)
+			measurementHistoryEndpoints.GET(":id", handler.MeasurementHistoryHandler.Get)
+			measurementHistoryEndpoints.GET("", handler.MeasurementHistoryHandler.GetAllMeasurementHistories)
+			measurementHistoryEndpoints.GET("measurement/:measurementId", handler.MeasurementHistoryHandler.GetByMeasurementId)
+		}
 	}
 	return g
 }

@@ -11,7 +11,7 @@ const (
 
 type Notification struct {
 	*Model
-	Status       NotificationStatus `gorm:"default:'PENDING';type:string;not null" json:"status,omitempty"`
+	Status       NotificationStatus `gorm:"default:'PENDING';type:text;not null" json:"status,omitempty"`
 	SourceEntity string             `json:"sourceEntity,omitempty"`
 	EntityId     uint               `json:"entityId,omitempty"`
 
@@ -21,11 +21,11 @@ type Notification struct {
 }
 
 func (Notification) TableName() string {
-	return "stitch.Notifications"
+	return "Notifications"
 }
 
 func (Notification) TableNameForQuery() string {
-	return "\"stitch\".\"Notifications\" E"
+	return "\"Notifications\" E"
 }
 
 func (n *Notification) AddEmailNotification(email ...EmailNotification) {

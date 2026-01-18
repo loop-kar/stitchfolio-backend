@@ -44,8 +44,9 @@ func (mr *measurementRepository) Update(ctx *context.Context, measurement *entit
 func (mr *measurementRepository) Get(ctx *context.Context, id uint) (*entities.Measurement, *errs.XError) {
 	measurement := entities.Measurement{}
 	res := mr.txn.Txn(ctx).
-		Preload("Customer", scopes.SelectFields("first_name", "last_name")).
-		Preload("MeasurementTakenBy", scopes.SelectFields("first_name", "last_name")).
+		Preload("Person").
+		Preload("DressType").
+		Preload("TakenBy", scopes.SelectFields("first_name", "last_name")).
 		Find(&measurement, id)
 	if res.Error != nil {
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find measurement", res.Error)
@@ -69,9 +70,9 @@ func (mr *measurementRepository) GetAll(ctx *context.Context, search string) ([]
 
 	res := query.
 		Scopes(db.Paginate(ctx)).
-		Omit("measurements").
-		Preload("Customer", scopes.SelectFields("first_name", "last_name")).
-		Preload("MeasurementTakenBy", scopes.SelectFields("first_name", "last_name")).
+		Preload("Person").
+		Preload("DressType").
+		Preload("TakenBy", scopes.SelectFields("first_name", "last_name")).
 		Find(&measurements)
 	if res.Error != nil {
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find measurements", res.Error)

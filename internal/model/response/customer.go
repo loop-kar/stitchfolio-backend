@@ -11,9 +11,9 @@ type Customer struct {
 	WhatsappNumber string `json:"whatsappNumber,omitempty"`
 	Address        string `json:"address,omitempty"`
 
-	Enquiries    []Enquiry     `json:"enquiries,omitempty"`
-	Measurements []Measurement `json:"measurements,omitempty"`
-	Orders       []Order       `json:"orders,omitempty"`
+	Persons   []Person  `json:"persons,omitempty"`
+	Enquiries []Enquiry `json:"enquiries,omitempty"`
+	Orders    []Order   `json:"orders,omitempty"`
 }
 
 type CustomerAutoComplete struct {

@@ -3,6 +3,8 @@ package requestModel
 type EnquiryHistory struct {
 	ID              uint    `json:"id,omitempty"`
 	IsActive        bool    `json:"isActive,omitempty"`
+	Action          string  `json:"action,omitempty"`
+	Status          *string `json:"status,omitempty"`
 	EmployeeComment string  `json:"employeeComment,omitempty"`
 	CustomerComment string  `json:"customerComment,omitempty"`
 	VisitingDate    *string `json:"visitingDate,omitempty"`
@@ -11,4 +13,6 @@ type EnquiryHistory struct {
 	ResponseStatus  string  `json:"responseStatus,omitempty"`
 	EnquiryId       uint    `json:"enquiryId,omitempty"`
 	EmployeeId      uint    `json:"employeeId,omitempty"`
+	PerformedAt     string  `json:"performedAt,omitempty"`
+	PerformedById   uint    `json:"performedById,omitempty"`
 }

@@ -1,12 +1,14 @@
 package entities
 
+import "time"
+
 type OrderStatus string
 
 const (
-	OrderStatusPending   OrderStatus = "pending"
-	OrderStatusConfirmed OrderStatus = "confirmed"
-	OrderStatusCompleted OrderStatus = "completed"
-	OrderStatusCancelled OrderStatus = "cancelled"
+	OrderStatusPending   OrderStatus = "PENDING"
+	OrderStatusConfirmed OrderStatus = "CONFIRMED"
+	OrderStatusCompleted OrderStatus = "COMPLETED"
+	OrderStatusCancelled OrderStatus = "CANCELLED"
 )
 
 type Order struct {
@@ -15,6 +17,9 @@ type Order struct {
 	Status OrderStatus `json:"status"`
 
 	Notes string `json:"notes"`
+
+	ExpectedDeliveryDate *time.Time `json:"expectedDeliveryDate,omitempty"`
+	DeliveredDate        *time.Time `json:"deliveredDate,omitempty"`
 
 	CustomerId *uint     `json:"customerId"`
 	Customer   *Customer `gorm:"foreignKey:CustomerId" json:"customer"`
@@ -30,9 +35,9 @@ type Order struct {
 }
 
 func (Order) TableName() string {
-	return "stitch.Orders"
+	return "Orders"
 }
 
 func (Order) TableNameForQuery() string {
-	return "\"stitch\".\"Orders\" E"
+	return "\"Orders\" E"
 }
