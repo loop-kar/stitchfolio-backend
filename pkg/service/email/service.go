@@ -7,17 +7,17 @@ import (
 	mail "github.com/jordan-wright/email"
 )
 
-func SendEmail(config SMTPConfig, mailContent EmailContent) error {
+func (s *emailService) SendEmail(mailContent EmailContent) error {
 
 	// hostAddress := fmt.Sprintf("%s:%d", config.Host, config.Port)
 
 	e := mail.NewEmail()
 	e.Subject = mailContent.Subject
-	e.From = config.UserName
+	e.From = s.config.UserName
 	e.To = mailContent.To
 
-	if config.Override {
-		e.To = []string{config.OverrideTo}
+	if s.config.Override {
+		e.To = []string{s.config.OverrideTo}
 	}
 
 	mailtype, text, err := BuildEmailBody(mailContent)

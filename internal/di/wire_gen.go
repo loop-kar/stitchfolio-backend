@@ -8,7 +8,6 @@ package di
 
 import (
 	"context"
-
 	"github.com/google/wire"
 	"github.com/imkarthi24/sf-backend/internal/app"
 	"github.com/imkarthi24/sf-backend/internal/config"
@@ -23,6 +22,7 @@ import (
 	"github.com/imkarthi24/sf-backend/internal/service"
 	base2 "github.com/imkarthi24/sf-backend/internal/service/base"
 	"github.com/imkarthi24/sf-backend/pkg/db"
+	service2 "github.com/imkarthi24/sf-backend/pkg/service"
 )
 
 // Injectors from wire.go:
@@ -45,7 +45,9 @@ func InitApp(ctx *context.Context) (*app.App, error) {
 	channelRepository := repository.ProvideChannelRepository(dbTransactionManager, customGormDB)
 	mapperMapper := mapper.ProvideMapper()
 	responseMapper := mapper.ProvideResponseMapper()
-	userService := service.ProvideUserService(userRepository, channelRepository, mapperMapper, appConfig, responseMapper)
+	serviceService := ProvideServiceContainer(appConfig)
+	emailService := serviceService.EmailService
+	userService := service.ProvideUserService(userRepository, channelRepository, mapperMapper, appConfig, responseMapper, emailService)
 	userHandler := handler.ProvideUserHandler(userService)
 	channelService := service.ProvideChannelService(channelRepository, userRepository, mapperMapper, responseMapper)
 	channelHandler := handler.ProvideChannelHandler(channelService)
@@ -113,10 +115,12 @@ func InitJobService(ctx *context.Context) (*app.Task, error) {
 	channelRepository := repository.ProvideChannelRepository(dbTransactionManager, customGormDB)
 	mapperMapper := mapper.ProvideMapper()
 	responseMapper := mapper.ProvideResponseMapper()
-	userService := service.ProvideUserService(userRepository, channelRepository, mapperMapper, appConfig, responseMapper)
+	serviceService := ProvideServiceContainer(appConfig)
+	emailService := serviceService.EmailService
+	userService := service.ProvideUserService(userRepository, channelRepository, mapperMapper, appConfig, responseMapper, emailService)
 	notificationRepository := repository.ProvideNotificationRepository(dbTransactionManager)
 	smtpConfig := appConfig.SMTP
-	notificationService := service.ProvideNotificationService(notificationRepository, mapperMapper, smtpConfig)
+	notificationService := service.ProvideNotificationService(notificationRepository, mapperMapper, smtpConfig, emailService)
 	channelService := service.ProvideChannelService(channelRepository, userRepository, mapperMapper, responseMapper)
 	masterConfigRepository := repository.ProvideMasterConfigRepository(dbTransactionManager, customGormDB)
 	masterConfigService := service.ProvideMasterConfigService(masterConfigRepository, mapperMapper, appConfig, responseMapper)
@@ -153,7 +157,11 @@ func InitJobService(ctx *context.Context) (*app.Task, error) {
 
 // wire.go:
 
-var appConfigSet = wire.NewSet(config.ProvideAppConfig, wire.FieldsOf(new(config.AppConfig), "Smtp", "Server", "Database"))
+var appConfigSet = wire.NewSet(config.ProvideAppConfig, wire.FieldsOf(new(config.AppConfig), "SMTP", "Server", "Database"))
+
+var pkgServiceSet = wire.NewSet(
+	ProvideServiceContainer, wire.FieldsOf(new(*service2.Service), "EmailService"),
+)
 
 var handlerSet = wire.NewSet(base.ProvideHealthHandler, base.ProvideBaseHandler, handler.ProvideUserHandler, handler.ProvideChannelHandler, handler.ProvideMasterConfigHandler, handler.ProvideAdminHandler, handler.ProvideCustomerHandler, handler.ProvideEnquiryHandler, handler.ProvideOrderHandler, handler.ProvideOrderItemHandler, handler.ProvideMeasurementHandler, handler.ProvidePersonHandler, handler.ProvideDressTypeHandler, handler.ProvideOrderHistoryHandler, handler.ProvideMeasurementHistoryHandler)
 
@@ -161,7 +169,9 @@ var logSet = wire.NewSet(newreliclog.ProvideNewRelic)
 
 var routerSet = wire.NewSet(router.InitRouter)
 
-var dbSet = wire.NewSet(ProvideDatabaseConnectionParams, db.ProvideDatabase, db.ProvideDBTransactionManager)
+var dbSet = wire.NewSet(
+	ProvideDatabaseConnectionParams, db.ProvideDatabase, db.ProvideDBTransactionManager,
+)
 
 var mapperSet = wire.NewSet(mapper.ProvideMapper, mapper.ProvideResponseMapper)
 
@@ -172,17 +182,3 @@ var baseSvc = wire.NewSet(base2.ProvideBaseService)
 var repoSet = wire.NewSet(common.ProvideCustomGormDB, repository.ProvideUserRepository, repository.ProvideNotificationRepository, repository.ProvideChannelRepository, repository.ProvideMasterConfigRepository, repository.ProvideAdminRepository, repository.ProvideCustomerRepository, repository.ProvideEnquiryRepository, repository.ProvideOrderRepository, repository.ProvideOrderItemRepository, repository.ProvideMeasurementRepository, repository.ProvidePersonRepository, repository.ProvideDressTypeRepository, repository.ProvideOrderHistoryRepository, repository.ProvideMeasurementHistoryRepository)
 
 var cronSet = wire.NewSet(cron.ProvideCron)
-
-func ProvideDatabaseConnectionParams(dbConfig config.DatabaseConfig) db.DatabaseConnectionParams {
-	sslMode := "prefer"
-
-	return db.DatabaseConnectionParams{
-		Host:     dbConfig.Host,
-		Port:     dbConfig.Port,
-		Username: dbConfig.Username,
-		DBName:   dbConfig.DBName,
-		Password: dbConfig.Password,
-		SSLMode:  sslMode,
-		Schema:   dbConfig.Schema,
-	}
-}

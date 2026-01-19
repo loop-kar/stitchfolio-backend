@@ -68,6 +68,7 @@ func (repo *masterConfigRepository) GetValue(ctx *context.Context, keyType strin
 }
 
 func (repo *masterConfigRepository) LoadAll(ctx *context.Context) ([]entities.MasterConfig, *errs.XError) {
+
 	var configs []entities.MasterConfig
 	res := repo.txn.Txn(ctx).
 		Scopes(scopes.Channel(), scopes.IsActive()).

@@ -26,13 +26,15 @@ type notificationService struct {
 	notifRepo  repository.NotificationRepository
 	mapper     mapper.Mapper
 	smtpConfig config.SMTPConfig
+	emailSvc   email.EmailService
 }
 
-func ProvideNotificationService(repo repository.NotificationRepository, mapper mapper.Mapper, smtpConfig config.SMTPConfig) NotificationService {
+func ProvideNotificationService(repo repository.NotificationRepository, mapper mapper.Mapper, smtpConfig config.SMTPConfig, emailSvc email.EmailService) NotificationService {
 	return &notificationService{
 		notifRepo:  repo,
 		mapper:     mapper,
 		smtpConfig: smtpConfig,
+		emailSvc:   emailSvc,
 	}
 }
 
@@ -135,7 +137,7 @@ func (svc *notificationService) sendEmailNotification(ctx *context.Context, emai
 			Message: &notif.Body,
 		}
 
-		err := email.SendEmail(&svc.smtpConfig, mail)
+		err := svc.emailSvc.SendEmail(mail)
 		notifStatus := entities.NOTIF_COMPLETED
 		if err != nil {
 			notifStatus = entities.NOTIF_FAULTED

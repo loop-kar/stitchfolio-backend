@@ -32,9 +32,6 @@ func (a *App) Start(ctx *context.Context, checkErr func(err error)) {
 		pkgLog.InitLogger(a.NewRelic)
 		config_cache.InitMasterConfig(a.MasterConfigRepository)
 
-		//Spin up server
-		//Render needs host to be empty , while Oracel needs it as 0.0.0.0. so trim by setting " " for render
-
 		host := a.AppConfig.Server.Host
 		if strings.Contains(host, "render") {
 			host = ""

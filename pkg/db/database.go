@@ -8,7 +8,9 @@ import (
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+
 	"gorm.io/gorm/logger"
+	skeema "gorm.io/gorm/schema"
 )
 
 type DatabaseConnectionParams struct {
@@ -43,6 +45,11 @@ func ProvideDatabase(connectionParams DatabaseConnectionParams) (*gorm.DB, error
 				Colorful:                  true,            // Enable color
 			},
 		),
+		NamingStrategy: skeema.NamingStrategy{
+			TablePrefix:   fmt.Sprintf("%s.", schema), // schema name
+			SingularTable: false,
+			NoLowerCase:   true,
+		},
 	})
 	if err != nil {
 		return nil, fmt.Errorf("Error Connecting to Database : %v", err)

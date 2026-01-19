@@ -45,5 +45,5 @@ func (User) TableName() string {
 }
 
 func (User) TableNameForQuery() string {
-	return "\"Users\" E"
+	return `"Users" E`
 }

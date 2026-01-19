@@ -22,13 +22,19 @@ import (
 	"github.com/imkarthi24/sf-backend/internal/service"
 	baseService "github.com/imkarthi24/sf-backend/internal/service/base"
 	"github.com/imkarthi24/sf-backend/pkg/db"
+	pkgservice "github.com/imkarthi24/sf-backend/pkg/service"
 )
 
 var appConfigSet = wire.NewSet(
 	config.ProvideAppConfig,
-	wire.FieldsOf(new(config.AppConfig), "Smtp", "Server", "Database"),
+	wire.FieldsOf(new(config.AppConfig), "SMTP", "Server", "Database"),
 	// wire.FieldsOf(new(config.AppConfig), "Server"),
 	// wire.FieldsOf(new(config.AppConfig), "Database"),
+)
+
+var pkgServiceSet = wire.NewSet(
+	ProvideServiceContainer,
+	wire.FieldsOf(new(*pkgservice.Service), "EmailService"),
 )
 
 var handlerSet = wire.NewSet(
@@ -55,21 +61,6 @@ var logSet = wire.NewSet(
 var routerSet = wire.NewSet(
 	router.InitRouter,
 )
-
-func ProvideDatabaseConnectionParams(dbConfig config.DatabaseConfig) db.DatabaseConnectionParams {
-	sslMode := "prefer"
-	// You can add logic here to determine SSL mode based on config if needed
-	
-	return db.DatabaseConnectionParams{
-		Host:     dbConfig.Host,
-		Port:     dbConfig.Port,
-		Username: dbConfig.Username,
-		DBName:   dbConfig.DBName,
-		Password: dbConfig.Password,
-		SSLMode:  sslMode,
-		Schema:   dbConfig.Schema,
-	}
-}
 
 var dbSet = wire.NewSet(
 	ProvideDatabaseConnectionParams,
@@ -125,15 +116,10 @@ var cronSet = wire.NewSet(
 	cron.ProvideCron,
 )
 
-// var storageSet = wire.NewSet(
-// 	s3.LoadS3ConfigFromEnv,
-// 	s3.ProvideS3Config,
-// 	storageClient.ProvideCloudStorageClient,
-// )
-
 func InitApp(ctx *context.Context) (*app.App, error) {
 	wire.Build(
 		appConfigSet,
+		pkgServiceSet,
 		logSet,
 		mapperSet,
 		routerSet,
@@ -150,6 +136,7 @@ func InitApp(ctx *context.Context) (*app.App, error) {
 func InitJobService(ctx *context.Context) (*app.Task, error) {
 	wire.Build(
 		appConfigSet,
+		pkgServiceSet,
 		logSet,
 		mapperSet,
 		dbSet,

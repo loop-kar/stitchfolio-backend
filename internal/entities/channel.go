@@ -31,7 +31,7 @@ func (Channel) TableNameForQuery() string {
 
 func (c *Channel) AfterCreate(tx *gorm.DB) (err error) {
 
-	res := tx.Exec("UPDATE \"Channels\" SET channel_id = ? WHERE id = ?", c.ID, c.ID)
+	res := tx.Exec(`UPDATE stich."Channels" SET channel_id = ? WHERE id = ?`, c.ID, c.ID)
 	// schema := GetSchema()
 	// res := tx.Exec(fmt.Sprintf("UPDATE \"%s\".\"Channels\" SET channel_id = ? WHERE id = ?", schema), c.ID, c.ID)
 
@@ -39,7 +39,7 @@ func (c *Channel) AfterCreate(tx *gorm.DB) (err error) {
 		return err
 	}
 
-	res = tx.Exec("UPDATE \"Users\" SET channel_id = ? WHERE id = ?", c.ID, c.OwnerUserID)
+	res = tx.Exec(`UPDATE stich."Users" SET channel_id = ? WHERE id = ?`, c.ID, c.OwnerUserID)
 	if res.Error != nil {
 		return err
 	}

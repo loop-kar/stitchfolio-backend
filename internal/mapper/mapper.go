@@ -66,7 +66,7 @@ func (m mapper) User(e requestModel.User) (*entities.User, error) {
 
 func (*mapper) Channel(chnl requestModel.Channel) (*entities.Channel, error) {
 	return &entities.Channel{
-		Model:       &entities.Model{ID: chnl.ID},
+		Model:       &entities.Model{ID: chnl.ID, IsActive: chnl.IsActive},
 		Name:        chnl.Name,
 		Status:      entities.ChannelStatus(chnl.Status),
 		OwnerUserID: chnl.OwnerUserId,

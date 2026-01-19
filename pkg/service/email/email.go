@@ -25,3 +25,17 @@ const (
 	HTML emailType = "HTML"
 	TEXT emailType = "TEXT"
 )
+
+type emailService struct {
+	config SMTPConfig
+}
+
+type EmailService interface {
+	SendEmail(mailContent EmailContent) error
+}
+
+func NewEmailService(cfg SMTPConfig) EmailService {
+	return &emailService{
+		config: cfg,
+	}
+}

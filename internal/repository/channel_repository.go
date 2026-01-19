@@ -29,7 +29,7 @@ func ProvideChannelRepository(txn db.DBTransactionManager, customDB common.Custo
 }
 
 func (ur *channelRepository) Save(ctx *context.Context, channel *entities.Channel) *errs.XError {
-	res := ur.txn.Txn(ctx).Create(&channel)
+	res := DB(ctx, ur.txn).Create(&channel)
 	if res.Error != nil {
 		return errs.NewXError(errs.DATABASE, "Unable to save channel", res.Error)
 	}
@@ -50,9 +50,9 @@ func (ur *channelRepository) Update(ctx *context.Context, channel *entities.Chan
 	return ur.customDB.Update(ctx, *channel)
 }
 
-func (repo *channelRepository) Get(ctx *context.Context, id uint) (*entities.Channel, *errs.XError) {
+func (ur *channelRepository) Get(ctx *context.Context, id uint) (*entities.Channel, *errs.XError) {
 	channel := entities.Channel{}
-	res := repo.txn.Txn(ctx).
+	res := DB(ctx, ur.txn).
 		Preload("OwnerUser").
 		Find(&channel, id)
 
@@ -62,20 +62,20 @@ func (repo *channelRepository) Get(ctx *context.Context, id uint) (*entities.Cha
 	return &channel, nil
 }
 
-func (repo *channelRepository) Delete(ctx *context.Context, id uint) *errs.XError {
+func (ur *channelRepository) Delete(ctx *context.Context, id uint) *errs.XError {
 
 	channel := &entities.Channel{Model: &entities.Model{ID: id, IsActive: false}}
 
-	err := repo.customDB.Delete(ctx, channel)
+	err := ur.customDB.Delete(ctx, channel)
 
 	return err
 
 }
 
-func (repo *channelRepository) GetAllChannels(ctx *context.Context, autoCompName string) ([]entities.Channel, *errs.XError) {
+func (ur *channelRepository) GetAllChannels(ctx *context.Context, autoCompName string) ([]entities.Channel, *errs.XError) {
 	channels := new([]entities.Channel)
 
-	res := repo.txn.Txn(ctx).
+	res := DB(ctx, ur.txn).
 		Preload("OwnerUser").
 		Scopes(scopes.ChannelAutoComplete_Filter(autoCompName)).
 		Scopes(scopes.IsActive()).
@@ -89,10 +89,10 @@ func (repo *channelRepository) GetAllChannels(ctx *context.Context, autoCompName
 	return *channels, nil
 }
 
-func (repo *channelRepository) ChannelAutoComplete(ctx *context.Context, autoCompName string) ([]entities.Channel, *errs.XError) {
+func (ur *channelRepository) ChannelAutoComplete(ctx *context.Context, autoCompName string) ([]entities.Channel, *errs.XError) {
 	channels := new([]entities.Channel)
 
-	res := repo.txn.Txn(ctx).
+	res := DB(ctx, ur.txn).
 		Scopes(scopes.ChannelAutoComplete_Filter(autoCompName)).
 		Select("id", "name").
 		Find(&channels)
