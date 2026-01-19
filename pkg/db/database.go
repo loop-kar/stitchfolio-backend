@@ -25,6 +25,11 @@ type DatabaseConnectionParams struct {
 	Schema   string
 }
 
+func init() {
+	// Clear default irregular rules to prevent unwanted pluralization
+	inflection.SetIrregular(inflection.IrregularSlice{})
+}
+
 // ProvideDatabase initializes and returns a gorm DB connection
 func ProvideDatabase(connectionParams DatabaseConnectionParams) (*gorm.DB, error) {
 

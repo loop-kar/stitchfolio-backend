@@ -90,7 +90,7 @@ func (a *App) Migrate(ctx *context.Context, checkErr func(err error)) {
 	*/
 	//************************//
 
-	migrator.Migrate(entityList, checkErr)
+	//migrator.Migrate(entityList, checkErr)
 
-	//migrator.GenerateAlterMigration(entityList, "002_person_entity_update")
+	migrator.GenerateAlterMigration(entityList, "002_person_entity_update")
 }

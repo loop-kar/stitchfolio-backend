@@ -227,7 +227,7 @@ CREATE TABLE IF NOT EXISTS stich."OrderItems" (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS stich."People" (
+CREATE TABLE IF NOT EXISTS stich."Persons" (
   id BIGSERIAL NOT NULL,
   created_at TIMESTAMPTZ,
   updated_at TIMESTAMPTZ,
@@ -325,7 +325,7 @@ ALTER TABLE stich."EnquiryHistories" ADD CONSTRAINT fk_EnquiryHistory_performed_
 
 ALTER TABLE stich."Enquiries" ADD CONSTRAINT fk_Enquiry_customer_id FOREIGN KEY (customer_id) REFERENCES stich."Customers" (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-ALTER TABLE stich."Measurements" ADD CONSTRAINT fk_Measurement_person_id FOREIGN KEY (person_id) REFERENCES stich."People" (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE stich."Measurements" ADD CONSTRAINT fk_Measurement_person_id FOREIGN KEY (person_id) REFERENCES stich."Persons" (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE stich."Measurements" ADD CONSTRAINT fk_Measurement_dress_type_id FOREIGN KEY (dress_type_id) REFERENCES stich."DressTypes" (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
@@ -343,13 +343,13 @@ ALTER TABLE stich."Orders" ADD CONSTRAINT fk_Order_customer_id FOREIGN KEY (cust
 
 ALTER TABLE stich."Orders" ADD CONSTRAINT fk_Order_order_taken_by_id FOREIGN KEY (order_taken_by_id) REFERENCES stich."Users" (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-ALTER TABLE stich."OrderItems" ADD CONSTRAINT fk_OrderItem_person_id FOREIGN KEY (person_id) REFERENCES stich."People" (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE stich."OrderItems" ADD CONSTRAINT fk_OrderItem_person_id FOREIGN KEY (person_id) REFERENCES stich."Persons" (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE stich."OrderItems" ADD CONSTRAINT fk_OrderItem_measurement_id FOREIGN KEY (measurement_id) REFERENCES stich."Measurements" (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE stich."OrderItems" ADD CONSTRAINT fk_OrderItem_order_id FOREIGN KEY (order_id) REFERENCES stich."Orders" (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
-ALTER TABLE stich."People" ADD CONSTRAINT fk_Person_customer_id FOREIGN KEY (customer_id) REFERENCES stich."Customers" (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE stich."Persons" ADD CONSTRAINT fk_Person_customer_id FOREIGN KEY (customer_id) REFERENCES stich."Customers" (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE stich."UserChannelDetails" ADD CONSTRAINT fk_UserChannelDetail_user_id FOREIGN KEY (user_id) REFERENCES stich."Users" (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
