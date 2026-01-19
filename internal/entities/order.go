@@ -34,10 +34,6 @@ type Order struct {
 	OrderValue    float64 `gorm:"-" json:"-"`
 }
 
-func (Order) TableName() string {
-	return "Orders"
-}
-
 func (Order) TableNameForQuery() string {
 	return "\"Orders\" E"
 }

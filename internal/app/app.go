@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	config_cache "github.com/imkarthi24/sf-backend/internal/cache"
 	"github.com/imkarthi24/sf-backend/internal/config"
+	"github.com/imkarthi24/sf-backend/internal/entities"
 	"github.com/imkarthi24/sf-backend/internal/repository"
 	"github.com/imkarthi24/sf-backend/pkg/db/migrator"
 	pkgLog "github.com/imkarthi24/sf-backend/pkg/log"
@@ -58,24 +59,24 @@ func (a *App) Migrate(ctx *context.Context, checkErr func(err error)) {
 	migrator := migrator.NewMigrator(a.StitchDB)
 
 	entityList := []interface{}{
-		// &entities.Channel{},
-		// &entities.Customer{},
-		// &entities.DressType{},
-		// &entities.EmailNotification{},
-		// &entities.EnquiryHistory{},
-		// &entities.Enquiry{},
-		// &entities.MasterConfig{},
-		// &entities.Measurement{},
-		// &entities.MeasurementHistory{},
-		// &entities.Notification{},
-		// &entities.OrderHistory{},
-		// &entities.Order{},
-		// &entities.OrderItem{},
-		// &entities.Person{},
-		// &entities.UserChannelDetail{},
-		// &entities.UserConfig{},
-		// &entities.User{},
-		// &entities.WhatsappNotification{},
+		&entities.Channel{},
+		&entities.Customer{},
+		&entities.DressType{},
+		&entities.EmailNotification{},
+		&entities.EnquiryHistory{},
+		&entities.Enquiry{},
+		&entities.MasterConfig{},
+		&entities.Measurement{},
+		&entities.MeasurementHistory{},
+		&entities.Notification{},
+		&entities.OrderHistory{},
+		&entities.Order{},
+		&entities.OrderItem{},
+		&entities.Person{},
+		&entities.UserChannelDetail{},
+		&entities.UserConfig{},
+		&entities.User{},
+		&entities.WhatsappNotification{},
 	}
 
 	//************************//
@@ -89,7 +90,7 @@ func (a *App) Migrate(ctx *context.Context, checkErr func(err error)) {
 	*/
 	//************************//
 
-	//migrator.Migrate(entityList, checkErr)
+	migrator.Migrate(entityList, checkErr)
 
-	migrator.GenerateAlterMigration(entityList, "002_person_entity_update")
+	//migrator.GenerateAlterMigration(entityList, "002_person_entity_update")
 }

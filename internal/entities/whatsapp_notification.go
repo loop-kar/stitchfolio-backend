@@ -13,10 +13,6 @@ type WhatsappNotification struct {
 	Notification   *Notification `json:"-"`
 }
 
-func (WhatsappNotification) TableName() string {
-	return "stitch.WhatsappNotifications"
-}
-
 func (WhatsappNotification) TableNameForQuery() string {
 	return "\"stitch\".\"WhatsappNotifications\" E"
 }

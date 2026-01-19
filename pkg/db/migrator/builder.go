@@ -173,9 +173,9 @@ func getPostgresType(field *schema.Field) string {
 		return "DOUBLE PRECISION"
 	case "string":
 		return "TEXT"
-	case "time.Time":
+	case "time":
 		return "TIMESTAMPTZ"
-	case "*time.Time":
+	case "time.Time":
 		return "TIMESTAMPTZ"
 	case "[]byte":
 		return "BYTEA"

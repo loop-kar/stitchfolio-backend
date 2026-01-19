@@ -23,10 +23,6 @@ type OrderItem struct {
 	Order   *Order `gorm:"foreignKey:OrderId" json:"order"`
 }
 
-func (OrderItem) TableName() string {
-	return "OrderItems"
-}
-
 func (OrderItem) TableNameForQuery() string {
 	return "\"OrderItems\" E"
 }

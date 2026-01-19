@@ -9,10 +9,6 @@ type UserConfig struct {
 	User   *User `json:"-,omitempty"`
 }
 
-func (UserConfig) TableName() string {
-	return "stitch.UserConfigs"
-}
-
 func (UserConfig) TableNameForQuery() string {
 	return "\"stitch\".\"UserConfigs\" E"
 }

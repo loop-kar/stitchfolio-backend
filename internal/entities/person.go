@@ -13,10 +13,6 @@ type Person struct {
 	Measurements []Measurement `gorm:"foreignKey:PersonId;constraint:OnDelete:CASCADE" json:"measurements"`
 }
 
-func (Person) TableName() string {
-	return "Persons"
-}
-
 func (Person) TableNameForQuery() string {
 	return "\"Persons\" E"
 }

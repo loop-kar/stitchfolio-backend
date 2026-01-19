@@ -20,10 +20,6 @@ type Notification struct {
 	WhatsappNotifications []WhatsappNotification `json:"-"`
 }
 
-func (Notification) TableName() string {
-	return "Notifications"
-}
-
 func (Notification) TableNameForQuery() string {
 	return "\"Notifications\" E"
 }

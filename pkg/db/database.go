@@ -6,11 +6,13 @@ import (
 	"os"
 	"time"
 
+	"github.com/jinzhu/inflection"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
 	"gorm.io/gorm/logger"
-	skeema "gorm.io/gorm/schema"
+	"gorm.io/gorm/schema"
+	skema "gorm.io/gorm/schema"
 )
 
 type DatabaseConnectionParams struct {
@@ -23,6 +25,7 @@ type DatabaseConnectionParams struct {
 	Schema   string
 }
 
+// ProvideDatabase initializes and returns a gorm DB connection
 func ProvideDatabase(connectionParams DatabaseConnectionParams) (*gorm.DB, error) {
 
 	host := connectionParams.Host
@@ -45,10 +48,12 @@ func ProvideDatabase(connectionParams DatabaseConnectionParams) (*gorm.DB, error
 				Colorful:                  true,            // Enable color
 			},
 		),
-		NamingStrategy: skeema.NamingStrategy{
-			TablePrefix:   fmt.Sprintf("%s.", schema), // schema name
-			SingularTable: false,
-			NoLowerCase:   true,
+		NamingStrategy: CustomStrategy{
+			NamingStrategy: skema.NamingStrategy{
+				NoLowerCase:   false, //  keep columns snake_case and for table we resolve using custom strategy
+				SingularTable: false,
+			},
+			Schema: schema,
 		},
 	})
 	if err != nil {
@@ -66,4 +71,26 @@ func ProvideDatabase(connectionParams DatabaseConnectionParams) (*gorm.DB, error
 
 	fmt.Println("Connected to database")
 	return connection, nil
+}
+
+type CustomStrategy struct {
+	schema.NamingStrategy
+	Schema string
+}
+
+func (ns CustomStrategy) TableName(str string) string {
+	// original = struct name (e.g. UserChannelDetail)
+	table := str
+
+	// pluralize if gorm needs it (you can disable if you want single)
+	if !ns.SingularTable {
+		table = inflection.Plural(str)
+	}
+
+	// attach schema prefix
+	if ns.Schema != "" {
+		return fmt.Sprintf(`%s.%s`, ns.Schema, table)
+	}
+
+	return table
 }

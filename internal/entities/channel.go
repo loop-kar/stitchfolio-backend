@@ -21,10 +21,6 @@ type Channel struct {
 	OwnerUser   *User `gorm:"foreignKey:OwnerUserID;references:ID" json:"-"`
 }
 
-func (Channel) TableName() string {
-	return "Channels"
-}
-
 func (Channel) TableNameForQuery() string {
 	return "\"Channels\" E"
 }

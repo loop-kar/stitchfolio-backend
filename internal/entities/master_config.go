@@ -15,10 +15,6 @@ type MasterConfig struct {
 	Format string `json:"format,omitempty"`
 }
 
-func (MasterConfig) TableName() string {
-	return "MasterConfigs"
-}
-
 func (MasterConfig) TableNameForQuery() string {
 	return "\"MasterConfigs\" E"
 }

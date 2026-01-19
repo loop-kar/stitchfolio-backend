@@ -24,10 +24,6 @@ type Enquiry struct {
 	Customer   *Customer `gorm:"foreignKey:CustomerId" json:"customer"`
 }
 
-func (Enquiry) TableName() string {
-	return "Enquiries"
-}
-
 func (Enquiry) TableNameForQuery() string {
 	return "\"Enquiries\" E"
 }

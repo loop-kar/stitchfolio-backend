@@ -7,10 +7,6 @@ type DressType struct {
 	Measurements string `json:"measurements"` //CSV of mesurement types Hip, Waist, Chest
 }
 
-func (DressType) TableName() string {
-	return "DressTypes"
-}
-
 func (DressType) TableNameForQuery() string {
 	return "\"DressTypes\" E"
 }
