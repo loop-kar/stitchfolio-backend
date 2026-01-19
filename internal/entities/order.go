@@ -35,5 +35,5 @@ type Order struct {
 }
 
 func (Order) TableNameForQuery() string {
-	return "\"Orders\" E"
+	return "\"stich\".\"Orders\" E"
 }

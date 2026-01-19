@@ -14,5 +14,5 @@ type WhatsappNotification struct {
 }
 
 func (WhatsappNotification) TableNameForQuery() string {
-	return "\"stitch\".\"WhatsappNotifications\" E"
+	return "\"stich\".\"WhatsappNotifications\" E"
 }

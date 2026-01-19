@@ -24,5 +24,5 @@ type OrderItem struct {
 }
 
 func (OrderItem) TableNameForQuery() string {
-	return "\"OrderItems\" E"
+	return "\"stich\".\"OrderItems\" E"
 }

@@ -21,7 +21,7 @@ type Notification struct {
 }
 
 func (Notification) TableNameForQuery() string {
-	return "\"Notifications\" E"
+	return "\"stich\".\"Notifications\" E"
 }
 
 func (n *Notification) AddEmailNotification(email ...EmailNotification) {

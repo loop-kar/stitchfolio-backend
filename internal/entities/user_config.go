@@ -10,5 +10,5 @@ type UserConfig struct {
 }
 
 func (UserConfig) TableNameForQuery() string {
-	return "\"stitch\".\"UserConfigs\" E"
+	return "\"stich\".\"UserConfigs\" E"
 }

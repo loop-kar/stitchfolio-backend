@@ -30,5 +30,5 @@ type MeasurementHistory struct {
 }
 
 func (MeasurementHistory) TableNameForQuery() string {
-	return "\"MeasurementHistories\" E"
+	return "\"stich\".\"MeasurementHistories\" E"
 }

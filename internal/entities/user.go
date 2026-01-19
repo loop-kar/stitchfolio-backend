@@ -40,10 +40,6 @@ type User struct {
 	UserChannelDetails []UserChannelDetail `json:"userChannelDetails,omitempty"`
 }
 
-// func (User) TableName() string {
-// 	return `Users`
-// }
-
 func (User) TableNameForQuery() string {
 	return `"Users" E`
 }

@@ -22,7 +22,7 @@ type Channel struct {
 }
 
 func (Channel) TableNameForQuery() string {
-	return "\"Channels\" E"
+	return "\"stich\".\"Channels\" E"
 }
 
 func (c *Channel) AfterCreate(tx *gorm.DB) (err error) {

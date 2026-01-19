@@ -34,5 +34,5 @@ type EnquiryHistory struct {
 }
 
 func (EnquiryHistory) TableNameForQuery() string {
-	return "\"EnquiryHistories\" E"
+	return "\"stich\".\"EnquiryHistories\" E"
 }

@@ -8,5 +8,5 @@ type DressType struct {
 }
 
 func (DressType) TableNameForQuery() string {
-	return "\"DressTypes\" E"
+	return "\"stich\".\"DressTypes\" E"
 }
