@@ -84,28 +84,26 @@ func (h MeasurementHandler) SaveBulkMeasurements(ctx *gin.Context) {
 
 // Update Measurement
 //
-//	@Summary		Update Measurement
-//	@Description	Updates an instance of Measurement
+//	@Summary		Update Measurement(s)
+//	@Description	Updates one or more measurements. Each measurement must have an ID in the JSON body.
 //	@Tags			Measurement
 //	@Accept			json
-//	@Success		201			{object}	response.Response
-//	@Failure		400			{object}	response.Response
-//	@Failure		501			{object}	response.Response
-//	@Param			measurement	body		requestModel.Measurement	true	"measurement"
-//	@Param			id			path		int							true	"Measurement id"
-//	@Router			/measurement/{id} [put]
+//	@Success		201				{object}	response.Response
+//	@Failure		400				{object}	response.Response
+//	@Failure		501				{object}	response.Response
+//	@Param			measurements	body		[]requestModel.Measurement	true	"Array of measurements with IDs"
+//	@Router			/measurement [put]
 func (h MeasurementHandler) UpdateMeasurement(ctx *gin.Context) {
 	context := util.CopyContextFromGin(ctx)
-	var measurement requesModel.Measurement
-	err := ctx.Bind(&measurement)
+	var measurements []requesModel.Measurement
+	err := ctx.Bind(&measurements)
 	if err != nil {
 		x := errs.NewXError(errs.INVALID_REQUEST, errs.MALFORMED_REQUEST, err)
 		h.resp.DefaultFailureResponse(x).FormatAndSend(&context, ctx, http.StatusBadRequest)
 		return
 	}
 
-	id, _ := strconv.Atoi(ctx.Param("id"))
-	errr := h.measurementSvc.UpdateMeasurement(&context, measurement, uint(id))
+	errr := h.measurementSvc.UpdateBulkMeasurements(&context, measurements)
 	if errr != nil {
 		h.resp.DefaultFailureResponse(errr).FormatAndSend(&context, ctx, http.StatusInternalServerError)
 		return
@@ -147,6 +145,7 @@ func (h MeasurementHandler) Get(ctx *gin.Context) {
 //	@Success		200		{object}	responseModel.Measurement
 //	@Failure		400		{object}	response.DataResponse
 //	@Param			search	query		string	false	"search"
+//	@Param			filters	query		string	false	"filters (e.g., personId eq 1, takenById eq 2, dressTypeId eq 3, name eq 'Shirt')"
 //	@Router			/measurement [get]
 func (h MeasurementHandler) GetAllMeasurements(ctx *gin.Context) {
 	context := util.CopyContextFromGin(ctx)

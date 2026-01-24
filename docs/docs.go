@@ -1354,6 +1354,12 @@ const docTemplate = `{
                         "description": "search",
                         "name": "search",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filters (e.g., personId eq 1, takenById eq 2, dressTypeId eq 3, name eq 'Shirt')",
+                        "name": "filters",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1367,6 +1373,50 @@ const docTemplate = `{
                         "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates one or more measurements. Each measurement must have an ID in the JSON body.",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Measurement"
+                ],
+                "summary": "Update Measurement(s)",
+                "parameters": [
+                    {
+                        "description": "Array of measurements with IDs",
+                        "name": "measurements",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/requestModel.Measurement"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -1634,54 +1684,6 @@ const docTemplate = `{
                         "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/response.DataResponse"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Updates an instance of Measurement",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Measurement"
-                ],
-                "summary": "Update Measurement",
-                "parameters": [
-                    {
-                        "description": "measurement",
-                        "name": "measurement",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/requestModel.Measurement"
-                        }
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Measurement id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
-                    "501": {
-                        "description": "Not Implemented",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }

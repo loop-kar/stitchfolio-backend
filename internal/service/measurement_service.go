@@ -17,7 +17,7 @@ import (
 type MeasurementService interface {
 	SaveMeasurement(*context.Context, requestModel.Measurement) *errs.XError
 	SaveBulkMeasurements(*context.Context, []requestModel.BulkMeasurementRequest) *errs.XError
-	UpdateMeasurement(*context.Context, requestModel.Measurement, uint) *errs.XError
+	UpdateBulkMeasurements(*context.Context, []requestModel.Measurement) *errs.XError
 	Get(*context.Context, uint) (*responseModel.Measurement, *errs.XError)
 	GetAll(*context.Context, string) ([]responseModel.Measurement, *errs.XError)
 	Delete(*context.Context, uint) *errs.XError
@@ -72,7 +72,7 @@ func (svc measurementService) SaveBulkMeasurements(ctx *context.Context, bulkReq
 
 			measurement := &entities.Measurement{
 				Model: &entities.Model{
-					IsActive:    true,
+					IsActive: true,
 				},
 				Value:       valuesJSON,
 				PersonId:    bulkRequest.PersonId,
@@ -101,28 +101,59 @@ func (svc measurementService) SaveBulkMeasurements(ctx *context.Context, bulkReq
 	return nil
 }
 
-func (svc measurementService) UpdateMeasurement(ctx *context.Context, measurement requestModel.Measurement, id uint) *errs.XError {
-	// Get the old measurement values before updating
-	oldMeasurement, err := svc.measurementRepo.Get(ctx, id)
-	if err != nil {
-		return err
+func (svc measurementService) UpdateBulkMeasurements(ctx *context.Context, measurements []requestModel.Measurement) *errs.XError {
+	var measurementsToUpdate []*entities.Measurement
+	var oldMeasurementsMap = make(map[uint]*entities.Measurement)
+
+	// First, collect all IDs and fetch old values
+	var ids []uint
+	for _, measurement := range measurements {
+		if measurement.ID == 0 {
+			continue // Skip measurements without IDs
+		}
+		ids = append(ids, measurement.ID)
 	}
 
-	dbMeasurement, mapErr := svc.mapper.Measurement(measurement)
-	if mapErr != nil {
-		return errs.NewXError(errs.INVALID_REQUEST, "Unable to update measurement", mapErr)
+	// Fetch old measurements for history tracking
+	for _, id := range ids {
+		oldMeasurement, err := svc.measurementRepo.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+		oldMeasurementsMap[id] = oldMeasurement
 	}
 
-	dbMeasurement.ID = id
-	errr := svc.measurementRepo.Update(ctx, dbMeasurement)
+	// Map request models to entity models
+	for _, measurement := range measurements {
+		if measurement.ID == 0 {
+			continue // Skip measurements without IDs
+		}
+
+		dbMeasurement, mapErr := svc.mapper.Measurement(measurement)
+		if mapErr != nil {
+			return errs.NewXError(errs.INVALID_REQUEST, "Unable to update measurement", mapErr)
+		}
+
+		// Ensure ID is set
+		dbMeasurement.ID = measurement.ID
+		measurementsToUpdate = append(measurementsToUpdate, dbMeasurement)
+	}
+
+	// Batch update all measurements
+	errr := svc.measurementRepo.BatchUpdate(ctx, measurementsToUpdate)
 	if errr != nil {
 		return errr
 	}
 
-	// Record measurement history for UPDATED action with old values
-	errr = svc.recordMeasurementHistory(ctx, id, entities.MeasurementHistoryActionUpdated, &oldMeasurement.Value)
-	if errr != nil {
-		return errr
+	// Record measurement history for each updated measurement
+	for _, measurement := range measurementsToUpdate {
+		oldMeasurement, exists := oldMeasurementsMap[measurement.ID]
+		if exists {
+			errr = svc.recordMeasurementHistory(ctx, measurement.ID, entities.MeasurementHistoryActionUpdated, &oldMeasurement.Value)
+			if errr != nil {
+				return errr
+			}
+		}
 	}
 
 	return nil

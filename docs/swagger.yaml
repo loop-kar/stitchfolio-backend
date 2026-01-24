@@ -1947,6 +1947,11 @@ paths:
         in: query
         name: search
         type: string
+      - description: filters (e.g., personId eq 1, takenById eq 2, dressTypeId eq
+          3, name eq 'Shirt')
+        in: query
+        name: filters
+        type: string
       responses:
         "200":
           description: OK
@@ -1984,6 +1989,36 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Save Measurement
+      tags:
+      - Measurement
+    put:
+      consumes:
+      - application/json
+      description: Updates one or more measurements. Each measurement must have an
+        ID in the JSON body.
+      parameters:
+      - description: Array of measurements with IDs
+        in: body
+        name: measurements
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/requestModel.Measurement'
+          type: array
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "501":
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Update Measurement(s)
       tags:
       - Measurement
   /measurement-history:
@@ -2124,38 +2159,6 @@ paths:
           schema:
             $ref: '#/definitions/response.DataResponse'
       summary: Get a specific Measurement
-      tags:
-      - Measurement
-    put:
-      consumes:
-      - application/json
-      description: Updates an instance of Measurement
-      parameters:
-      - description: measurement
-        in: body
-        name: measurement
-        required: true
-        schema:
-          $ref: '#/definitions/requestModel.Measurement'
-      - description: Measurement id
-        in: path
-        name: id
-        required: true
-        type: integer
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/response.Response'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.Response'
-        "501":
-          description: Not Implemented
-          schema:
-            $ref: '#/definitions/response.Response'
-      summary: Update Measurement
       tags:
       - Measurement
   /measurement/bulk:

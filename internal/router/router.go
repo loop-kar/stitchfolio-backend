@@ -164,7 +164,7 @@ func InitRouter(handler baseHandler.BaseHandler, srvConfig config.ServerConfig) 
 		{
 			measurementEndpoints.POST("", handler.MeasurementHandler.SaveMeasurement)
 			measurementEndpoints.POST("bulk", handler.MeasurementHandler.SaveBulkMeasurements)
-			measurementEndpoints.PUT(":id", handler.MeasurementHandler.UpdateMeasurement)
+			measurementEndpoints.PUT("", handler.MeasurementHandler.UpdateMeasurement)
 			measurementEndpoints.GET(":id", handler.MeasurementHandler.Get)
 			measurementEndpoints.GET("", handler.MeasurementHandler.GetAllMeasurements)
 			measurementEndpoints.DELETE(":id", handler.MeasurementHandler.Delete)
