@@ -43,6 +43,8 @@ type ResponseMapper interface {
 	OrderHistories(items []entities.OrderHistory) ([]responseModel.OrderHistory, error)
 	MeasurementHistory(e *entities.MeasurementHistory) (*responseModel.MeasurementHistory, error)
 	MeasurementHistories(items []entities.MeasurementHistory) ([]responseModel.MeasurementHistory, error)
+	ExpenseTracker(e *entities.ExpenseTracker) (*responseModel.ExpenseTracker, error)
+	ExpenseTrackers(items []entities.ExpenseTracker) ([]responseModel.ExpenseTracker, error)
 }
 
 func ProvideResponseMapper() ResponseMapper {
@@ -298,7 +300,10 @@ func (m *responseMapper) Person(e *entities.Person) (*responseModel.Person, erro
 	return &responseModel.Person{
 		ID:           e.ID,
 		IsActive:     e.IsActive,
-		Name:         e.Name,
+		FirstName:    e.FirstName,
+		LastName:     e.LastName,
+		Gender:       string(e.Gender),
+		Age:          e.Age,
 		CustomerId:   &e.CustomerId,
 		Customer:     customer,
 		Measurements: measurements,
@@ -326,6 +331,7 @@ func (m *responseMapper) DressType(e *entities.DressType) (*responseModel.DressT
 		ID:           e.ID,
 		IsActive:     e.IsActive,
 		Name:         e.Name,
+		Description:  e.Description,
 		Measurements: e.Measurements,
 	}, nil
 }
@@ -376,7 +382,7 @@ func (m *responseMapper) Measurement(e *entities.Measurement) (*responseModel.Me
 
 	var personName string
 	if person != nil {
-		personName = person.Name
+		personName = person.FirstName + " " + person.LastName
 	}
 
 	return &responseModel.Measurement{
@@ -436,6 +442,7 @@ func (m *responseMapper) Order(e *entities.Order) (*responseModel.Order, error) 
 		IsActive:             e.IsActive,
 		Status:               string(e.Status),
 		Notes:                e.Notes,
+		AdditionalCharges:    e.AdditionalCharges,
 		ExpectedDeliveryDate: e.ExpectedDeliveryDate,
 		DeliveredDate:        e.DeliveredDate,
 		CustomerId:           e.CustomerId,
@@ -490,6 +497,7 @@ func (m *responseMapper) OrderItem(e *entities.OrderItem) (*responseModel.OrderI
 		Quantity:             e.Quantity,
 		Price:                e.Price,
 		Total:                e.Total,
+		AdditionalCharges:    e.AdditionalCharges,
 		ExpectedDeliveryDate: e.ExpectedDeliveryDate,
 		DeliveredDate:        e.DeliveredDate,
 		PersonId:             e.PersonId,
@@ -607,6 +615,40 @@ func (m *responseMapper) MeasurementHistories(items []entities.MeasurementHistor
 	result := make([]responseModel.MeasurementHistory, 0)
 	for _, item := range items {
 		mappedItem, err := m.MeasurementHistory(&item)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, *mappedItem)
+	}
+	return result, nil
+}
+
+func (m *responseMapper) ExpenseTracker(e *entities.ExpenseTracker) (*responseModel.ExpenseTracker, error) {
+	if e == nil {
+		return nil, nil
+	}
+
+	return &responseModel.ExpenseTracker{
+		ID:           e.ID,
+		IsActive:     e.IsActive,
+		PurchaseDate: e.PurchaseDate,
+		BillNumber:   e.BillNumber,
+		CompanyName:  e.CompanyName,
+		Material:     e.Material,
+		Price:        e.Price,
+		Location:     e.Location,
+		Notes:        e.Notes,
+		CreatedAt:    e.CreatedAt,
+		UpdatedAt:    e.UpdatedAt,
+		CreatedById:  e.CreatedById,
+		UpdatedById:  e.UpdatedById,
+	}, nil
+}
+
+func (m *responseMapper) ExpenseTrackers(items []entities.ExpenseTracker) ([]responseModel.ExpenseTracker, error) {
+	result := make([]responseModel.ExpenseTracker, 0)
+	for _, item := range items {
+		mappedItem, err := m.ExpenseTracker(&item)
 		if err != nil {
 			return nil, err
 		}

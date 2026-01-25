@@ -5,10 +5,16 @@ import "time"
 type OrderStatus string
 
 const (
-	OrderStatusPending   OrderStatus = "PENDING"
-	OrderStatusConfirmed OrderStatus = "CONFIRMED"
-	OrderStatusCompleted OrderStatus = "COMPLETED"
-	OrderStatusCancelled OrderStatus = "CANCELLED"
+	DRAFT               OrderStatus = "DRAFT"
+	CONFIRMED           OrderStatus = "CONFIRMED"
+	DESIGN_CONFIRMED    OrderStatus = "DESIGN_CONFIRMED"
+	RAW_MATERIAL_SOURCE OrderStatus = "RAW_MATERIAL_SOURCE"
+	CUTTING             OrderStatus = "CUTTING"
+	STITCHING           OrderStatus = "STITCHING"
+	FINISHING           OrderStatus = "FINISHING"
+	READY_FOR_DELIVERY  OrderStatus = "READY_FOR_DELIVERY"
+	DELIVERED           OrderStatus = "DELIVERED"
+	CANCELLED           OrderStatus = "CANCELLED"
 )
 
 type Order struct {
@@ -17,6 +23,8 @@ type Order struct {
 	Status OrderStatus `json:"status"`
 
 	Notes string `json:"notes"`
+
+	AdditionalCharges float64 `json:"additionalCharges"`
 
 	ExpectedDeliveryDate *time.Time `json:"expectedDeliveryDate,omitempty"`
 	DeliveredDate        *time.Time `json:"deliveredDate,omitempty"`

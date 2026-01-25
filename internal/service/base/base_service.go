@@ -16,6 +16,7 @@ type BaseService struct {
 	DressTypeService          service.DressTypeService
 	OrderHistoryService       service.OrderHistoryService
 	MeasurementHistoryService service.MeasurementHistoryService
+	ExpenseTrackerService     service.ExpenseTrackerService
 }
 
 func ProvideBaseService(
@@ -32,6 +33,7 @@ func ProvideBaseService(
 	dressTypeService service.DressTypeService,
 	orderHistoryService service.OrderHistoryService,
 	measurementHistoryService service.MeasurementHistoryService,
+	expenseTrackerService service.ExpenseTrackerService,
 ) BaseService {
 	return BaseService{
 		UserService:               user,
@@ -47,5 +49,6 @@ func ProvideBaseService(
 		DressTypeService:          dressTypeService,
 		OrderHistoryService:       orderHistoryService,
 		MeasurementHistoryService: measurementHistoryService,
+		ExpenseTrackerService:     expenseTrackerService,
 	}
 }

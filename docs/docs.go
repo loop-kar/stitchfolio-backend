@@ -775,6 +775,151 @@ const docTemplate = `{
                 }
             }
         },
+        "/enquiry-history": {
+            "get": {
+                "description": "Get all active enquiry histories",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "EnquiryHistory"
+                ],
+                "summary": "Get all active enquiry histories",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "search",
+                        "name": "search",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.EnquiryHistory"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Saves an instance of EnquiryHistory",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "EnquiryHistory"
+                ],
+                "summary": "Save EnquiryHistory",
+                "parameters": [
+                    {
+                        "description": "enquiryHistory",
+                        "name": "enquiryHistory",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.EnquiryHistory"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/enquiry-history/enquiry/{enquiryId}": {
+            "get": {
+                "description": "Get enquiry histories by enquiry id",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "EnquiryHistory"
+                ],
+                "summary": "Get enquiry histories by enquiry id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "enquiry id",
+                        "name": "enquiryId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.EnquiryHistory"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/enquiry-history/{id}": {
+            "get": {
+                "description": "Get an instance of EnquiryHistory",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "EnquiryHistory"
+                ],
+                "summary": "Get a specific EnquiryHistory",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "EnquiryHistory id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.EnquiryHistory"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/enquiry/{id}": {
             "get": {
                 "description": "Get an instance of Enquiry",
@@ -934,6 +1079,197 @@ const docTemplate = `{
                     },
                     "501": {
                         "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/expense-tracker": {
+            "get": {
+                "description": "Get all active expense trackers",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ExpenseTracker"
+                ],
+                "summary": "Get all active expense trackers",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "search",
+                        "name": "search",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.ExpenseTracker"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Saves an instance of ExpenseTracker",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ExpenseTracker"
+                ],
+                "summary": "Save ExpenseTracker",
+                "parameters": [
+                    {
+                        "description": "expenseTracker",
+                        "name": "expenseTracker",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.ExpenseTracker"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/expense-tracker/{id}": {
+            "get": {
+                "description": "Get an instance of ExpenseTracker",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ExpenseTracker"
+                ],
+                "summary": "Get a specific ExpenseTracker",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ExpenseTracker id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.ExpenseTracker"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates an instance of ExpenseTracker",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ExpenseTracker"
+                ],
+                "summary": "Update ExpenseTracker",
+                "parameters": [
+                    {
+                        "description": "expenseTracker",
+                        "name": "expenseTracker",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.ExpenseTracker"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ExpenseTracker id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes an instance of ExpenseTracker",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ExpenseTracker"
+                ],
+                "summary": "Delete ExpenseTracker",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "expenseTracker id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -1209,6 +1545,12 @@ const docTemplate = `{
                         "description": "search",
                         "name": "search",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filters (e.g., personId eq 1, takenById eq 2, dressTypeId eq 3, name eq 'Shirt')",
+                        "name": "filters",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1222,6 +1564,47 @@ const docTemplate = `{
                         "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates measurements by personId and dressTypeId. If measurement exists, it will be updated; otherwise, it will be created.",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Measurement"
+                ],
+                "summary": "Update Measurement(s)",
+                "parameters": [
+                    {
+                        "description": "Bulk update measurement request with persons array",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.BulkUpdateMeasurementRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -1413,6 +1796,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/measurement/bulk": {
+            "post": {
+                "description": "Saves multiple measurements for multiple persons in bulk",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Measurement"
+                ],
+                "summary": "Save Bulk Measurements",
+                "parameters": [
+                    {
+                        "description": "Array of bulk measurement requests",
+                        "name": "measurements",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/requestModel.BulkMeasurementRequest"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/measurement/{id}": {
             "get": {
                 "description": "Get an instance of Measurement",
@@ -1443,54 +1872,6 @@ const docTemplate = `{
                         "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/response.DataResponse"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Updates an instance of Measurement",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Measurement"
-                ],
-                "summary": "Update Measurement",
-                "parameters": [
-                    {
-                        "description": "measurement",
-                        "name": "measurement",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/requestModel.Measurement"
-                        }
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Measurement id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
-                    "501": {
-                        "description": "Not Implemented",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -1544,6 +1925,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "search",
                         "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "filters (e.g., name eq 'Shirt', status eq 'Active')",
+                        "name": "filters",
                         "in": "query"
                     }
                 ],
@@ -3235,6 +3622,65 @@ const docTemplate = `{
                 }
             }
         },
+        "requestModel.BulkMeasurementItem": {
+            "type": "object",
+            "properties": {
+                "dressTypeId": {
+                    "type": "integer"
+                },
+                "values": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "requestModel.BulkMeasurementRequest": {
+            "type": "object",
+            "properties": {
+                "measurements": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/requestModel.BulkMeasurementItem"
+                    }
+                },
+                "personId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "requestModel.BulkUpdateMeasurementPerson": {
+            "type": "object",
+            "properties": {
+                "isActive": {
+                    "type": "boolean"
+                },
+                "measurements": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/requestModel.BulkMeasurementItem"
+                    }
+                },
+                "personId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "requestModel.BulkUpdateMeasurementRequest": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "persons": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/requestModel.BulkUpdateMeasurementPerson"
+                    }
+                }
+            }
+        },
         "requestModel.Channel": {
             "type": "object",
             "properties": {
@@ -3261,10 +3707,16 @@ const docTemplate = `{
                 "address": {
                     "type": "string"
                 },
+                "age": {
+                    "type": "integer"
+                },
                 "email": {
                     "type": "string"
                 },
                 "firstName": {
+                    "type": "string"
+                },
+                "gender": {
                     "type": "string"
                 },
                 "id": {
@@ -3287,6 +3739,9 @@ const docTemplate = `{
         "requestModel.DressType": {
             "type": "object",
             "properties": {
+                "description": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
@@ -3348,6 +3803,85 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "whatsappNumber": {
+                    "type": "string"
+                }
+            }
+        },
+        "requestModel.EnquiryHistory": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "type": "string"
+                },
+                "callBackDate": {
+                    "type": "string"
+                },
+                "customerComment": {
+                    "type": "string"
+                },
+                "employeeComment": {
+                    "type": "string"
+                },
+                "employeeId": {
+                    "type": "integer"
+                },
+                "enquiryDate": {
+                    "type": "string"
+                },
+                "enquiryId": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "performedAt": {
+                    "type": "string"
+                },
+                "performedById": {
+                    "type": "integer"
+                },
+                "responseStatus": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "visitingDate": {
+                    "type": "string"
+                }
+            }
+        },
+        "requestModel.ExpenseTracker": {
+            "type": "object",
+            "properties": {
+                "billNumber": {
+                    "type": "string"
+                },
+                "companyName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "material": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "purchaseDate": {
                     "type": "string"
                 }
             }
@@ -3457,6 +3991,9 @@ const docTemplate = `{
         "requestModel.Order": {
             "type": "object",
             "properties": {
+                "additionalCharges": {
+                    "type": "number"
+                },
                 "customerId": {
                     "type": "integer"
                 },
@@ -3534,6 +4071,9 @@ const docTemplate = `{
         "requestModel.OrderItem": {
             "type": "object",
             "properties": {
+                "additionalCharges": {
+                    "type": "number"
+                },
                 "deliveredDate": {
                     "type": "string"
                 },
@@ -3575,8 +4115,17 @@ const docTemplate = `{
         "requestModel.Person": {
             "type": "object",
             "properties": {
+                "age": {
+                    "type": "integer"
+                },
                 "customerId": {
                     "type": "integer"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
                 },
                 "id": {
                     "type": "integer"
@@ -3584,7 +4133,7 @@ const docTemplate = `{
                 "isActive": {
                     "type": "boolean"
                 },
-                "name": {
+                "lastName": {
                     "type": "string"
                 }
             }
@@ -3929,6 +4478,9 @@ const docTemplate = `{
         "responseModel.DressType": {
             "type": "object",
             "properties": {
+                "description": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
@@ -3975,6 +4527,100 @@ const docTemplate = `{
                 },
                 "subject": {
                     "type": "string"
+                }
+            }
+        },
+        "responseModel.EnquiryHistory": {
+            "type": "object",
+            "properties": {
+                "callBackDate": {
+                    "type": "string"
+                },
+                "customerComment": {
+                    "type": "string"
+                },
+                "employee": {
+                    "$ref": "#/definitions/responseModel.User"
+                },
+                "employeeComment": {
+                    "type": "string"
+                },
+                "employeeId": {
+                    "type": "integer"
+                },
+                "enquiryDate": {
+                    "type": "string"
+                },
+                "enquiryId": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "performedAt": {
+                    "type": "string"
+                },
+                "performedBy": {
+                    "$ref": "#/definitions/responseModel.User"
+                },
+                "performedById": {
+                    "type": "integer"
+                },
+                "responseStatus": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "visitingDate": {
+                    "type": "string"
+                }
+            }
+        },
+        "responseModel.ExpenseTracker": {
+            "type": "object",
+            "properties": {
+                "billNumber": {
+                    "type": "string"
+                },
+                "companyName": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdById": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "material": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "purchaseDate": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedById": {
+                    "type": "integer"
                 }
             }
         },
@@ -4064,6 +4710,9 @@ const docTemplate = `{
         "responseModel.Order": {
             "type": "object",
             "properties": {
+                "additionalCharges": {
+                    "type": "number"
+                },
                 "createdAt": {
                     "type": "string"
                 },
@@ -4172,6 +4821,9 @@ const docTemplate = `{
         "responseModel.OrderItem": {
             "type": "object",
             "properties": {
+                "additionalCharges": {
+                    "type": "number"
+                },
                 "deliveredDate": {
                     "type": "string"
                 },
@@ -4219,11 +4871,20 @@ const docTemplate = `{
         "responseModel.Person": {
             "type": "object",
             "properties": {
+                "age": {
+                    "type": "integer"
+                },
                 "customer": {
                     "$ref": "#/definitions/responseModel.Customer"
                 },
                 "customerId": {
                     "type": "integer"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
                 },
                 "id": {
                     "type": "integer"
@@ -4231,14 +4892,14 @@ const docTemplate = `{
                 "isActive": {
                     "type": "boolean"
                 },
+                "lastName": {
+                    "type": "string"
+                },
                 "measurements": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/responseModel.Measurement"
                     }
-                },
-                "name": {
-                    "type": "string"
                 }
             }
         },

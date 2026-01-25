@@ -236,6 +236,44 @@ definitions:
         items: {}
         type: array
     type: object
+  requestModel.BulkMeasurementItem:
+    properties:
+      dressTypeId:
+        type: integer
+      values:
+        items:
+          type: integer
+        type: array
+    type: object
+  requestModel.BulkMeasurementRequest:
+    properties:
+      measurements:
+        items:
+          $ref: '#/definitions/requestModel.BulkMeasurementItem'
+        type: array
+      personId:
+        type: integer
+    type: object
+  requestModel.BulkUpdateMeasurementPerson:
+    properties:
+      isActive:
+        type: boolean
+      measurements:
+        items:
+          $ref: '#/definitions/requestModel.BulkMeasurementItem'
+        type: array
+      personId:
+        type: integer
+    type: object
+  requestModel.BulkUpdateMeasurementRequest:
+    properties:
+      id:
+        type: integer
+      persons:
+        items:
+          $ref: '#/definitions/requestModel.BulkUpdateMeasurementPerson'
+        type: array
+    type: object
   requestModel.Channel:
     properties:
       id:
@@ -253,9 +291,13 @@ definitions:
     properties:
       address:
         type: string
+      age:
+        type: integer
       email:
         type: string
       firstName:
+        type: string
+      gender:
         type: string
       id:
         type: integer
@@ -270,6 +312,8 @@ definitions:
     type: object
   requestModel.DressType:
     properties:
+      description:
+        type: string
       id:
         type: integer
       isActive:
@@ -311,6 +355,58 @@ definitions:
       subject:
         type: string
       whatsappNumber:
+        type: string
+    type: object
+  requestModel.EnquiryHistory:
+    properties:
+      action:
+        type: string
+      callBackDate:
+        type: string
+      customerComment:
+        type: string
+      employeeComment:
+        type: string
+      employeeId:
+        type: integer
+      enquiryDate:
+        type: string
+      enquiryId:
+        type: integer
+      id:
+        type: integer
+      isActive:
+        type: boolean
+      performedAt:
+        type: string
+      performedById:
+        type: integer
+      responseStatus:
+        type: string
+      status:
+        type: string
+      visitingDate:
+        type: string
+    type: object
+  requestModel.ExpenseTracker:
+    properties:
+      billNumber:
+        type: string
+      companyName:
+        type: string
+      id:
+        type: integer
+      isActive:
+        type: boolean
+      location:
+        type: string
+      material:
+        type: string
+      notes:
+        type: string
+      price:
+        type: number
+      purchaseDate:
         type: string
     type: object
   requestModel.Login:
@@ -382,6 +478,8 @@ definitions:
     type: object
   requestModel.Order:
     properties:
+      additionalCharges:
+        type: number
       customerId:
         type: integer
       deliveredDate:
@@ -433,6 +531,8 @@ definitions:
     type: object
   requestModel.OrderItem:
     properties:
+      additionalCharges:
+        type: number
       deliveredDate:
         type: string
       description:
@@ -460,13 +560,19 @@ definitions:
     type: object
   requestModel.Person:
     properties:
+      age:
+        type: integer
       customerId:
         type: integer
+      firstName:
+        type: string
+      gender:
+        type: string
       id:
         type: integer
       isActive:
         type: boolean
-      name:
+      lastName:
         type: string
     type: object
   requestModel.SwitchBranch:
@@ -697,6 +803,8 @@ definitions:
     type: object
   responseModel.DressType:
     properties:
+      description:
+        type: string
       id:
         type: integer
       isActive:
@@ -728,6 +836,68 @@ definitions:
         type: string
       subject:
         type: string
+    type: object
+  responseModel.EnquiryHistory:
+    properties:
+      callBackDate:
+        type: string
+      customerComment:
+        type: string
+      employee:
+        $ref: '#/definitions/responseModel.User'
+      employeeComment:
+        type: string
+      employeeId:
+        type: integer
+      enquiryDate:
+        type: string
+      enquiryId:
+        type: integer
+      id:
+        type: integer
+      isActive:
+        type: boolean
+      performedAt:
+        type: string
+      performedBy:
+        $ref: '#/definitions/responseModel.User'
+      performedById:
+        type: integer
+      responseStatus:
+        type: string
+      status:
+        type: string
+      visitingDate:
+        type: string
+    type: object
+  responseModel.ExpenseTracker:
+    properties:
+      billNumber:
+        type: string
+      companyName:
+        type: string
+      createdAt:
+        type: string
+      createdById:
+        type: integer
+      id:
+        type: integer
+      isActive:
+        type: boolean
+      location:
+        type: string
+      material:
+        type: string
+      notes:
+        type: string
+      price:
+        type: number
+      purchaseDate:
+        type: string
+      updatedAt:
+        type: string
+      updatedById:
+        type: integer
     type: object
   responseModel.Measurement:
     properties:
@@ -786,6 +956,8 @@ definitions:
     type: object
   responseModel.Order:
     properties:
+      additionalCharges:
+        type: number
       createdAt:
         type: string
       customer:
@@ -859,6 +1031,8 @@ definitions:
     type: object
   responseModel.OrderItem:
     properties:
+      additionalCharges:
+        type: number
       deliveredDate:
         type: string
       description:
@@ -890,20 +1064,26 @@ definitions:
     type: object
   responseModel.Person:
     properties:
+      age:
+        type: integer
       customer:
         $ref: '#/definitions/responseModel.Customer'
       customerId:
         type: integer
+      firstName:
+        type: string
+      gender:
+        type: string
       id:
         type: integer
       isActive:
         type: boolean
+      lastName:
+        type: string
       measurements:
         items:
           $ref: '#/definitions/responseModel.Measurement'
         type: array
-      name:
-        type: string
     type: object
   responseModel.User:
     properties:
@@ -1457,6 +1637,101 @@ paths:
       summary: Save Enquiry
       tags:
       - Enquiry
+  /enquiry-history:
+    get:
+      consumes:
+      - application/json
+      description: Get all active enquiry histories
+      parameters:
+      - description: search
+        in: query
+        name: search
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responseModel.EnquiryHistory'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Get all active enquiry histories
+      tags:
+      - EnquiryHistory
+    post:
+      consumes:
+      - application/json
+      description: Saves an instance of EnquiryHistory
+      parameters:
+      - description: enquiryHistory
+        in: body
+        name: enquiryHistory
+        required: true
+        schema:
+          $ref: '#/definitions/requestModel.EnquiryHistory'
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "501":
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Save EnquiryHistory
+      tags:
+      - EnquiryHistory
+  /enquiry-history/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get an instance of EnquiryHistory
+      parameters:
+      - description: EnquiryHistory id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responseModel.EnquiryHistory'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Get a specific EnquiryHistory
+      tags:
+      - EnquiryHistory
+  /enquiry-history/enquiry/{enquiryId}:
+    get:
+      consumes:
+      - application/json
+      description: Get enquiry histories by enquiry id
+      parameters:
+      - description: enquiry id
+        in: path
+        name: enquiryId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responseModel.EnquiryHistory'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Get enquiry histories by enquiry id
+      tags:
+      - EnquiryHistory
   /enquiry/{id}:
     delete:
       consumes:
@@ -1567,6 +1842,132 @@ paths:
       summary: Update Enquiry and Customer
       tags:
       - Enquiry
+  /expense-tracker:
+    get:
+      consumes:
+      - application/json
+      description: Get all active expense trackers
+      parameters:
+      - description: search
+        in: query
+        name: search
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responseModel.ExpenseTracker'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Get all active expense trackers
+      tags:
+      - ExpenseTracker
+    post:
+      consumes:
+      - application/json
+      description: Saves an instance of ExpenseTracker
+      parameters:
+      - description: expenseTracker
+        in: body
+        name: expenseTracker
+        required: true
+        schema:
+          $ref: '#/definitions/requestModel.ExpenseTracker'
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "501":
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Save ExpenseTracker
+      tags:
+      - ExpenseTracker
+  /expense-tracker/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes an instance of ExpenseTracker
+      parameters:
+      - description: expenseTracker id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete ExpenseTracker
+      tags:
+      - ExpenseTracker
+    get:
+      consumes:
+      - application/json
+      description: Get an instance of ExpenseTracker
+      parameters:
+      - description: ExpenseTracker id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responseModel.ExpenseTracker'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Get a specific ExpenseTracker
+      tags:
+      - ExpenseTracker
+    put:
+      consumes:
+      - application/json
+      description: Updates an instance of ExpenseTracker
+      parameters:
+      - description: expenseTracker
+        in: body
+        name: expenseTracker
+        required: true
+        schema:
+          $ref: '#/definitions/requestModel.ExpenseTracker'
+      - description: ExpenseTracker id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "501":
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Update ExpenseTracker
+      tags:
+      - ExpenseTracker
   /health:
     get:
       description: get string by ID
@@ -1742,6 +2143,11 @@ paths:
         in: query
         name: search
         type: string
+      - description: filters (e.g., personId eq 1, takenById eq 2, dressTypeId eq
+          3, name eq 'Shirt')
+        in: query
+        name: filters
+        type: string
       responses:
         "200":
           description: OK
@@ -1779,6 +2185,34 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Save Measurement
+      tags:
+      - Measurement
+    put:
+      consumes:
+      - application/json
+      description: Updates measurements by personId and dressTypeId. If measurement
+        exists, it will be updated; otherwise, it will be created.
+      parameters:
+      - description: Bulk update measurement request with persons array
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/requestModel.BulkUpdateMeasurementRequest'
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "501":
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Update Measurement(s)
       tags:
       - Measurement
   /measurement-history:
@@ -1921,22 +2355,20 @@ paths:
       summary: Get a specific Measurement
       tags:
       - Measurement
-    put:
+  /measurement/bulk:
+    post:
       consumes:
       - application/json
-      description: Updates an instance of Measurement
+      description: Saves multiple measurements for multiple persons in bulk
       parameters:
-      - description: measurement
+      - description: Array of bulk measurement requests
         in: body
-        name: measurement
+        name: measurements
         required: true
         schema:
-          $ref: '#/definitions/requestModel.Measurement'
-      - description: Measurement id
-        in: path
-        name: id
-        required: true
-        type: integer
+          items:
+            $ref: '#/definitions/requestModel.BulkMeasurementRequest'
+          type: array
       responses:
         "201":
           description: Created
@@ -1950,7 +2382,7 @@ paths:
           description: Not Implemented
           schema:
             $ref: '#/definitions/response.Response'
-      summary: Update Measurement
+      summary: Save Bulk Measurements
       tags:
       - Measurement
   /order:
@@ -1962,6 +2394,10 @@ paths:
       - description: search
         in: query
         name: search
+        type: string
+      - description: filters (e.g., name eq 'Shirt', status eq 'Active')
+        in: query
+        name: filters
         type: string
       responses:
         "200":

@@ -26,6 +26,7 @@ type Mapper interface {
 	OrderItems(items []requestModel.OrderItem) ([]entities.OrderItem, error)
 	OrderHistory(e requestModel.OrderHistory) (*entities.OrderHistory, error)
 	MeasurementHistory(e requestModel.MeasurementHistory) (*entities.MeasurementHistory, error)
+	ExpenseTracker(e requestModel.ExpenseTracker) (*entities.ExpenseTracker, error)
 }
 
 type mapper struct{}
@@ -204,7 +205,10 @@ func (m *mapper) Person(e requestModel.Person) (*entities.Person, error) {
 
 	return &entities.Person{
 		Model:      &entities.Model{ID: e.ID, IsActive: e.IsActive},
-		Name:       e.Name,
+		FirstName:  e.FirstName,
+		LastName:   e.LastName,
+		Gender:     entities.Gender(e.Gender),
+		Age:        e.Age,
 		CustomerId: customerId,
 	}, nil
 }
@@ -213,6 +217,7 @@ func (m *mapper) DressType(e requestModel.DressType) (*entities.DressType, error
 	return &entities.DressType{
 		Model:        &entities.Model{ID: e.ID, IsActive: e.IsActive},
 		Name:         e.Name,
+		Description:  e.Description,
 		Measurements: e.Measurements,
 	}, nil
 }
@@ -271,6 +276,7 @@ func (m *mapper) Order(e requestModel.Order) (*entities.Order, error) {
 		Model:                &entities.Model{ID: e.ID, IsActive: e.IsActive},
 		Status:               entities.OrderStatus(e.Status),
 		Notes:                e.Notes,
+		AdditionalCharges:    e.AdditionalCharges,
 		ExpectedDeliveryDate: expectedDeliveryDate,
 		DeliveredDate:        deliveredDate,
 		CustomerId:           e.CustomerId,
@@ -304,6 +310,7 @@ func (m *mapper) OrderItem(e requestModel.OrderItem) (*entities.OrderItem, error
 		Quantity:             e.Quantity,
 		Price:                e.Price,
 		Total:                e.Total,
+		AdditionalCharges:    e.AdditionalCharges,
 		ExpectedDeliveryDate: expectedDeliveryDate,
 		DeliveredDate:        deliveredDate,
 		PersonId:             e.PersonId,
@@ -400,5 +407,32 @@ func (m *mapper) MeasurementHistory(e requestModel.MeasurementHistory) (*entitie
 		MeasurementId: e.MeasurementId,
 		PerformedAt:   performedAt,
 		PerformedById: e.PerformedById,
+	}, nil
+}
+
+func (m *mapper) ExpenseTracker(e requestModel.ExpenseTracker) (*entities.ExpenseTracker, error) {
+	var purchaseDate *time.Time
+	if e.PurchaseDate != nil {
+		date, err := util.GenerateDateTimeFromString(e.PurchaseDate)
+		if err != nil {
+			return nil, err
+		}
+		purchaseDate = date
+	}
+
+	var isActive bool = true
+	if e.IsActive != nil {
+		isActive = *e.IsActive
+	}
+
+	return &entities.ExpenseTracker{
+		Model:        &entities.Model{ID: e.ID, IsActive: isActive},
+		PurchaseDate: purchaseDate,
+		BillNumber:   e.BillNumber,
+		CompanyName:  e.CompanyName,
+		Material:     e.Material,
+		Price:        e.Price,
+		Location:     e.Location,
+		Notes:        e.Notes,
 	}, nil
 }

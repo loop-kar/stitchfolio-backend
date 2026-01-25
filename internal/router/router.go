@@ -163,7 +163,8 @@ func InitRouter(handler baseHandler.BaseHandler, srvConfig config.ServerConfig) 
 		measurementEndpoints := appRouter.Group("measurement", router.VerifyJWT(srvConfig.JwtSecretKey))
 		{
 			measurementEndpoints.POST("", handler.MeasurementHandler.SaveMeasurement)
-			measurementEndpoints.PUT(":id", handler.MeasurementHandler.UpdateMeasurement)
+			measurementEndpoints.POST("bulk", handler.MeasurementHandler.SaveBulkMeasurements)
+			measurementEndpoints.PUT("", handler.MeasurementHandler.UpdateMeasurement)
 			measurementEndpoints.GET(":id", handler.MeasurementHandler.Get)
 			measurementEndpoints.GET("", handler.MeasurementHandler.GetAllMeasurements)
 			measurementEndpoints.DELETE(":id", handler.MeasurementHandler.Delete)
@@ -202,6 +203,23 @@ func InitRouter(handler baseHandler.BaseHandler, srvConfig config.ServerConfig) 
 			measurementHistoryEndpoints.GET(":id", handler.MeasurementHistoryHandler.Get)
 			measurementHistoryEndpoints.GET("", handler.MeasurementHistoryHandler.GetAllMeasurementHistories)
 			measurementHistoryEndpoints.GET("measurement/:measurementId", handler.MeasurementHistoryHandler.GetByMeasurementId)
+		}
+
+		enquiryHistoryEndpoints := appRouter.Group("enquiry-history", router.VerifyJWT(srvConfig.JwtSecretKey))
+		{
+			enquiryHistoryEndpoints.POST("", handler.EnquiryHistoryHandler.SaveEnquiryHistory)
+			enquiryHistoryEndpoints.GET(":id", handler.EnquiryHistoryHandler.Get)
+			enquiryHistoryEndpoints.GET("", handler.EnquiryHistoryHandler.GetAllEnquiryHistories)
+			enquiryHistoryEndpoints.GET("enquiry/:enquiryId", handler.EnquiryHistoryHandler.GetByEnquiryId)
+		}
+
+		expenseTrackerEndpoints := appRouter.Group("expense-tracker", router.VerifyJWT(srvConfig.JwtSecretKey))
+		{
+			expenseTrackerEndpoints.POST("", handler.ExpenseTrackerHandler.SaveExpenseTracker)
+			expenseTrackerEndpoints.PUT(":id", handler.ExpenseTrackerHandler.UpdateExpenseTracker)
+			expenseTrackerEndpoints.GET(":id", handler.ExpenseTrackerHandler.Get)
+			expenseTrackerEndpoints.GET("", handler.ExpenseTrackerHandler.GetAllExpenseTrackers)
+			expenseTrackerEndpoints.DELETE(":id", handler.ExpenseTrackerHandler.Delete)
 		}
 	}
 	return g
