@@ -6,11 +6,11 @@ import (
 
 	"github.com/imkarthi24/sf-backend/internal/entities"
 	"github.com/imkarthi24/sf-backend/internal/repository/scopes"
+	"github.com/loop-kar/pixie/constants"
 	"github.com/loop-kar/pixie/db"
 	"github.com/loop-kar/pixie/errs"
 	"github.com/loop-kar/pixie/util"
-  "github.com/loop-kar/pixie/constants"
-	
+
 	"gorm.io/gorm"
 )
 
@@ -46,7 +46,7 @@ func (mr *measurementRepository) BatchCreate(ctx *context.Context, measurements 
 		return nil
 	}
 
-	res := mr.txn.Txn(ctx).CreateInBatches(measurements, 100)
+	res := mr.WithDB(ctx).CreateInBatches(measurements, 100)
 	if res.Error != nil {
 		return errs.NewXError(errs.DATABASE, "Unable to batch save measurements", res.Error)
 	}
@@ -66,7 +66,7 @@ func (mr *measurementRepository) BatchUpdate(ctx *context.Context, measurements 
 		if measurement.ID == 0 {
 			continue
 		}
-		err := mr.customDB.Update(ctx, *measurement)
+		err := mr.GormDAL.Update(ctx, *measurement)
 		if err != nil {
 			return errs.NewXError(errs.DATABASE, "Unable to batch update measurements", err)
 		}
@@ -90,7 +90,7 @@ func (mr *measurementRepository) Get(ctx *context.Context, id uint) (*entities.M
 
 func (mr *measurementRepository) GetByPersonIdAndDressTypeId(ctx *context.Context, personId uint, dressTypeId uint) (*entities.Measurement, *errs.XError) {
 	measurement := entities.Measurement{}
-	res := mr.txn.Txn(ctx).
+	res := mr.WithDB(ctx).
 		Where("person_id = ? AND dress_type_id = ?", personId, dressTypeId).
 		First(&measurement)
 	if res.Error != nil {
@@ -111,7 +111,7 @@ func (mr *measurementRepository) GetAll(ctx *context.Context, search string) ([]
 		filter = filterValue.(string)
 	}
 
-	res := mr.txn.Txn(ctx).
+	res := mr.WithDB(ctx).
 		Scopes(scopes.Channel(), scopes.IsActive()).
 		Scopes(scopes.GetMeasurements_Search(search)).
 		Scopes(scopes.GetMeasurements_Filter(filter)).

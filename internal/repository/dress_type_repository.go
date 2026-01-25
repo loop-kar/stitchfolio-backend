@@ -21,8 +21,8 @@ type dressTypeRepository struct {
 	GormDAL
 }
 
-func ProvideDressTypeRepository(customDB GormDAL) DressTypeRepository {
-	return &dressTypeRepository{GormDAL: customDB}
+func ProvideDressTypeRepository(dal GormDAL) DressTypeRepository {
+	return &dressTypeRepository{GormDAL: dal}
 }
 
 func (dtr *dressTypeRepository) Create(ctx *context.Context, dressType *entities.DressType) *errs.XError {
