@@ -26,6 +26,7 @@ type Mapper interface {
 	OrderItems(items []requestModel.OrderItem) ([]entities.OrderItem, error)
 	OrderHistory(e requestModel.OrderHistory) (*entities.OrderHistory, error)
 	MeasurementHistory(e requestModel.MeasurementHistory) (*entities.MeasurementHistory, error)
+	ExpenseTracker(e requestModel.ExpenseTracker) (*entities.ExpenseTracker, error)
 }
 
 type mapper struct{}
@@ -406,5 +407,32 @@ func (m *mapper) MeasurementHistory(e requestModel.MeasurementHistory) (*entitie
 		MeasurementId: e.MeasurementId,
 		PerformedAt:   performedAt,
 		PerformedById: e.PerformedById,
+	}, nil
+}
+
+func (m *mapper) ExpenseTracker(e requestModel.ExpenseTracker) (*entities.ExpenseTracker, error) {
+	var purchaseDate *time.Time
+	if e.PurchaseDate != nil {
+		date, err := util.GenerateDateTimeFromString(e.PurchaseDate)
+		if err != nil {
+			return nil, err
+		}
+		purchaseDate = date
+	}
+
+	var isActive bool = true
+	if e.IsActive != nil {
+		isActive = *e.IsActive
+	}
+
+	return &entities.ExpenseTracker{
+		Model:        &entities.Model{ID: e.ID, IsActive: isActive},
+		PurchaseDate: purchaseDate,
+		BillNumber:   e.BillNumber,
+		CompanyName:  e.CompanyName,
+		Material:     e.Material,
+		Price:        e.Price,
+		Location:     e.Location,
+		Notes:        e.Notes,
 	}, nil
 }

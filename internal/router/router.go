@@ -212,6 +212,15 @@ func InitRouter(handler baseHandler.BaseHandler, srvConfig config.ServerConfig) 
 			enquiryHistoryEndpoints.GET("", handler.EnquiryHistoryHandler.GetAllEnquiryHistories)
 			enquiryHistoryEndpoints.GET("enquiry/:enquiryId", handler.EnquiryHistoryHandler.GetByEnquiryId)
 		}
+
+		expenseTrackerEndpoints := appRouter.Group("expense-tracker", router.VerifyJWT(srvConfig.JwtSecretKey))
+		{
+			expenseTrackerEndpoints.POST("", handler.ExpenseTrackerHandler.SaveExpenseTracker)
+			expenseTrackerEndpoints.PUT(":id", handler.ExpenseTrackerHandler.UpdateExpenseTracker)
+			expenseTrackerEndpoints.GET(":id", handler.ExpenseTrackerHandler.Get)
+			expenseTrackerEndpoints.GET("", handler.ExpenseTrackerHandler.GetAllExpenseTrackers)
+			expenseTrackerEndpoints.DELETE(":id", handler.ExpenseTrackerHandler.Delete)
+		}
 	}
 	return g
 }

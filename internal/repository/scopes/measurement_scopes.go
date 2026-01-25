@@ -19,13 +19,16 @@ func GetMeasurements_Search(search string) func(db *gorm.DB) *gorm.DB {
 		formattedSearch := util.EncloseWithPercentageOperator(search)
 		whereClause := fmt.Sprintf(
 			`(EXISTS (SELECT 1 FROM "stich"."DressTypes" DT WHERE DT.id = "stich"."Measurements".dress_type_id AND DT.name ILIKE %s) OR 
-			 EXISTS (SELECT 1 FROM "stich"."Persons" P WHERE P.id = "stich"."Measurements".person_id AND (P.first_name ILIKE %s OR P.last_name ILIKE %s)) OR 
-			 EXISTS (SELECT 1 FROM "stich"."Users" U WHERE U.id = "stich"."Measurements".taken_by_id AND (U.first_name ILIKE %s OR U.last_name ILIKE %s)))`,
+			 EXISTS (SELECT 1 FROM "stich"."Persons" P WHERE P.id = "stich"."Measurements".person_id AND (P.first_name ILIKE %s OR P.last_name ILIKE %s)) 
+			 -- OR EXISTS (SELECT 1 FROM "stich"."Users" U WHERE U.id = "stich"."Measurements".taken_by_id AND (U.first_name ILIKE %s OR U.last_name ILIKE %s))
+			 )`,
 			formattedSearch, formattedSearch, formattedSearch, formattedSearch, formattedSearch,
 		)
 		return db.Where(whereClause)
 	}
 }
+
+// ... existing code ...
 
 func GetMeasurements_Filter(filters string) func(db *gorm.DB) *gorm.DB {
 	defaultReturn := func(db *gorm.DB) *gorm.DB { return db }
@@ -41,65 +44,71 @@ func GetMeasurements_Filter(filters string) func(db *gorm.DB) *gorm.DB {
 	}
 
 	return func(db *gorm.DB) *gorm.DB {
-		// Parse filters to separate DressType name from other filters
-		filterArray := strings.Split(filters, ",")
-		var measurementFilters []string
-		var dressTypeNameFilter string
+		// Split filters - use semicolon when "in" operator has comma-separated values
+		// Format examples:
+		// - "PersonId in 1,2,3; TakenById in 5,6"
+		var filterArray []string
+		if strings.Contains(filters, ";") {
+			filterArray = strings.Split(filters, ";")
+		}
+
+		var regularFilters []string
+		inFilters := make(map[string][]interface{})
 
 		for _, filter := range filterArray {
-			parts := strings.Split(strings.TrimSpace(filter), " ")
-			if len(parts) >= 3 {
-				field := strings.ToLower(parts[0])
-				if field == "name" || field == "dresstypename" || field == "dress_type_name" {
-					dressTypeNameFilter = filter
-				} else {
-					measurementFilters = append(measurementFilters, filter)
+			filter = strings.TrimSpace(filter)
+			if filter == "" {
+				continue
+			}
+
+			parts := strings.Fields(filter)
+			if len(parts) < 3 {
+				continue
+			}
+
+			field := parts[0]
+			operator := strings.ToLower(parts[1])
+			valueStr := strings.Join(parts[2:], " ")
+
+			// Normalize field name to CamelCase
+			dbField, exists := fieldMap[field]
+			if !exists {
+				regularFilters = append(regularFilters, filter)
+				continue
+			}
+
+			// Handle "in" operator for multiple IDs
+			if operator == "in" {
+				values := strings.Split(valueStr, ",")
+				var cleanValues []interface{}
+				for _, v := range values {
+					v = strings.TrimSpace(v)
+					if v != "" {
+						cleanValues = append(cleanValues, v)
+					}
 				}
+				if len(cleanValues) > 0 {
+					inFilters[dbField] = cleanValues
+				}
+			} else {
+				regularFilters = append(regularFilters, filter)
 			}
 		}
 
-		measurementFiltersStr := strings.Join(measurementFilters, ",")
-		if !util.IsNilOrEmptyString(&measurementFiltersStr) {
-			queryString := util.BuildQuery(measurementFiltersStr, fieldMap)
+		// Apply regular filters using existing BuildQuery
+		if len(regularFilters) > 0 {
+			regularFiltersStr := strings.Join(regularFilters, ",")
+			queryString := util.BuildQuery(regularFiltersStr, fieldMap)
 			if !util.IsNilOrEmptyString(&queryString) {
 				db = db.Where(queryString)
 			}
 		}
 
-		// Handle DressType name filter separately (requires JOIN)
-		if !util.IsNilOrEmptyString(&dressTypeNameFilter) {
-			parts := strings.Split(strings.TrimSpace(dressTypeNameFilter), " ")
-			if len(parts) >= 3 {
-				operator := parts[1]
-				value := strings.Join(parts[2:], " ")
-
-				var operatorSymbol string
-				switch operator {
-				case "eq":
-					operatorSymbol = "="
-				case "lt":
-					operatorSymbol = "<"
-				case "gt":
-					operatorSymbol = ">"
-				case "neq":
-					operatorSymbol = "!="
-				case "has":
-					// For ILIKE search
-					formattedValue := util.EncloseWithPercentageOperator(value)
-					existsQuery := fmt.Sprintf(
-						`EXISTS (SELECT 1 FROM "stich"."DressTypes" DT WHERE DT.id = "stich"."Measurements".dress_type_id AND DT.name ILIKE %s)`,
-						formattedValue,
-					)
-					return db.Where(existsQuery)
-				default:
-					operatorSymbol = "="
-				}
-
-				existsQuery := fmt.Sprintf(
-					`EXISTS (SELECT 1 FROM "stich"."DressTypes" DT WHERE DT.id = "stich"."Measurements".dress_type_id AND DT.name %s ?)`,
-					operatorSymbol,
-				)
-				db = db.Where(existsQuery, value)
+		// Apply IN filters using GORM's Where with IN clause
+		for dbField, values := range inFilters {
+			if len(values) > 0 {
+				// Use GORM's Where with IN clause
+				db = db.Where(fmt.Sprintf(`"%s" IN ?`, dbField), values)
 			}
 		}
 

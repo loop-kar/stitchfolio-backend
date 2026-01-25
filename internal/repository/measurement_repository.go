@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"errors"
 
 	"github.com/imkarthi24/sf-backend/internal/entities"
 	"github.com/imkarthi24/sf-backend/internal/repository/common"
@@ -10,6 +11,7 @@ import (
 	"github.com/imkarthi24/sf-backend/pkg/db"
 	"github.com/imkarthi24/sf-backend/pkg/errs"
 	"github.com/imkarthi24/sf-backend/pkg/util"
+	"gorm.io/gorm"
 )
 
 type MeasurementRepository interface {
@@ -18,6 +20,7 @@ type MeasurementRepository interface {
 	Update(*context.Context, *entities.Measurement) *errs.XError
 	BatchUpdate(*context.Context, []*entities.Measurement) *errs.XError
 	Get(*context.Context, uint) (*entities.Measurement, *errs.XError)
+	GetByPersonIdAndDressTypeId(*context.Context, uint, uint) (*entities.Measurement, *errs.XError)
 	GetAll(*context.Context, string) ([]entities.Measurement, *errs.XError)
 	Delete(*context.Context, uint) *errs.XError
 }
@@ -81,6 +84,20 @@ func (mr *measurementRepository) Get(ctx *context.Context, id uint) (*entities.M
 		Preload("TakenBy", scopes.SelectFields("first_name", "last_name")).
 		Find(&measurement, id)
 	if res.Error != nil {
+		return nil, errs.NewXError(errs.DATABASE, "Unable to find measurement", res.Error)
+	}
+	return &measurement, nil
+}
+
+func (mr *measurementRepository) GetByPersonIdAndDressTypeId(ctx *context.Context, personId uint, dressTypeId uint) (*entities.Measurement, *errs.XError) {
+	measurement := entities.Measurement{}
+	res := mr.txn.Txn(ctx).
+		Where("person_id = ? AND dress_type_id = ?", personId, dressTypeId).
+		First(&measurement)
+	if res.Error != nil {
+		if errors.Is(res.Error, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find measurement", res.Error)
 	}
 	return &measurement, nil

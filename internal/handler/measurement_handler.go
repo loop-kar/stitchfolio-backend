@@ -85,25 +85,25 @@ func (h MeasurementHandler) SaveBulkMeasurements(ctx *gin.Context) {
 // Update Measurement
 //
 //	@Summary		Update Measurement(s)
-//	@Description	Updates one or more measurements. Each measurement must have an ID in the JSON body.
+//	@Description	Updates measurements by personId and dressTypeId. If measurement exists, it will be updated; otherwise, it will be created.
 //	@Tags			Measurement
 //	@Accept			json
-//	@Success		201				{object}	response.Response
-//	@Failure		400				{object}	response.Response
-//	@Failure		501				{object}	response.Response
-//	@Param			measurements	body		[]requestModel.Measurement	true	"Array of measurements with IDs"
+//	@Success		201		{object}	response.Response
+//	@Failure		400		{object}	response.Response
+//	@Failure		501		{object}	response.Response
+//	@Param			request	body		requestModel.BulkUpdateMeasurementRequest	true	"Bulk update measurement request with persons array"
 //	@Router			/measurement [put]
 func (h MeasurementHandler) UpdateMeasurement(ctx *gin.Context) {
 	context := util.CopyContextFromGin(ctx)
-	var measurements []requesModel.Measurement
-	err := ctx.Bind(&measurements)
+	var request requesModel.BulkUpdateMeasurementRequest
+	err := ctx.Bind(&request)
 	if err != nil {
 		x := errs.NewXError(errs.INVALID_REQUEST, errs.MALFORMED_REQUEST, err)
 		h.resp.DefaultFailureResponse(x).FormatAndSend(&context, ctx, http.StatusBadRequest)
 		return
 	}
 
-	errr := h.measurementSvc.UpdateBulkMeasurements(&context, measurements)
+	errr := h.measurementSvc.UpdateBulkMeasurementsByPerson(&context, request)
 	if errr != nil {
 		h.resp.DefaultFailureResponse(errr).FormatAndSend(&context, ctx, http.StatusInternalServerError)
 		return

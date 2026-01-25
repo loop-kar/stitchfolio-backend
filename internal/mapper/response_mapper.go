@@ -43,6 +43,8 @@ type ResponseMapper interface {
 	OrderHistories(items []entities.OrderHistory) ([]responseModel.OrderHistory, error)
 	MeasurementHistory(e *entities.MeasurementHistory) (*responseModel.MeasurementHistory, error)
 	MeasurementHistories(items []entities.MeasurementHistory) ([]responseModel.MeasurementHistory, error)
+	ExpenseTracker(e *entities.ExpenseTracker) (*responseModel.ExpenseTracker, error)
+	ExpenseTrackers(items []entities.ExpenseTracker) ([]responseModel.ExpenseTracker, error)
 }
 
 func ProvideResponseMapper() ResponseMapper {
@@ -613,6 +615,40 @@ func (m *responseMapper) MeasurementHistories(items []entities.MeasurementHistor
 	result := make([]responseModel.MeasurementHistory, 0)
 	for _, item := range items {
 		mappedItem, err := m.MeasurementHistory(&item)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, *mappedItem)
+	}
+	return result, nil
+}
+
+func (m *responseMapper) ExpenseTracker(e *entities.ExpenseTracker) (*responseModel.ExpenseTracker, error) {
+	if e == nil {
+		return nil, nil
+	}
+
+	return &responseModel.ExpenseTracker{
+		ID:           e.ID,
+		IsActive:     e.IsActive,
+		PurchaseDate: e.PurchaseDate,
+		BillNumber:   e.BillNumber,
+		CompanyName:  e.CompanyName,
+		Material:     e.Material,
+		Price:        e.Price,
+		Location:     e.Location,
+		Notes:        e.Notes,
+		CreatedAt:    e.CreatedAt,
+		UpdatedAt:    e.UpdatedAt,
+		CreatedById:  e.CreatedById,
+		UpdatedById:  e.UpdatedById,
+	}, nil
+}
+
+func (m *responseMapper) ExpenseTrackers(items []entities.ExpenseTracker) ([]responseModel.ExpenseTracker, error) {
+	result := make([]responseModel.ExpenseTracker, 0)
+	for _, item := range items {
+		mappedItem, err := m.ExpenseTracker(&item)
 		if err != nil {
 			return nil, err
 		}

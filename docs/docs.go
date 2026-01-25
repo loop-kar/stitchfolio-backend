@@ -1086,6 +1086,197 @@ const docTemplate = `{
                 }
             }
         },
+        "/expense-tracker": {
+            "get": {
+                "description": "Get all active expense trackers",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ExpenseTracker"
+                ],
+                "summary": "Get all active expense trackers",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "search",
+                        "name": "search",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.ExpenseTracker"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Saves an instance of ExpenseTracker",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ExpenseTracker"
+                ],
+                "summary": "Save ExpenseTracker",
+                "parameters": [
+                    {
+                        "description": "expenseTracker",
+                        "name": "expenseTracker",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.ExpenseTracker"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/expense-tracker/{id}": {
+            "get": {
+                "description": "Get an instance of ExpenseTracker",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ExpenseTracker"
+                ],
+                "summary": "Get a specific ExpenseTracker",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ExpenseTracker id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responseModel.ExpenseTracker"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.DataResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates an instance of ExpenseTracker",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ExpenseTracker"
+                ],
+                "summary": "Update ExpenseTracker",
+                "parameters": [
+                    {
+                        "description": "expenseTracker",
+                        "name": "expenseTracker",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requestModel.ExpenseTracker"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ExpenseTracker id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "501": {
+                        "description": "Not Implemented",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes an instance of ExpenseTracker",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ExpenseTracker"
+                ],
+                "summary": "Delete ExpenseTracker",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "expenseTracker id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/health": {
             "get": {
                 "description": "get string by ID",
@@ -1378,7 +1569,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Updates one or more measurements. Each measurement must have an ID in the JSON body.",
+                "description": "Updates measurements by personId and dressTypeId. If measurement exists, it will be updated; otherwise, it will be created.",
                 "consumes": [
                     "application/json"
                 ],
@@ -1388,15 +1579,12 @@ const docTemplate = `{
                 "summary": "Update Measurement(s)",
                 "parameters": [
                     {
-                        "description": "Array of measurements with IDs",
-                        "name": "measurements",
+                        "description": "Bulk update measurement request with persons array",
+                        "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/requestModel.Measurement"
-                            }
+                            "$ref": "#/definitions/requestModel.BulkUpdateMeasurementRequest"
                         }
                     }
                 ],
@@ -3462,6 +3650,37 @@ const docTemplate = `{
                 }
             }
         },
+        "requestModel.BulkUpdateMeasurementPerson": {
+            "type": "object",
+            "properties": {
+                "isActive": {
+                    "type": "boolean"
+                },
+                "measurements": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/requestModel.BulkMeasurementItem"
+                    }
+                },
+                "personId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "requestModel.BulkUpdateMeasurementRequest": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "persons": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/requestModel.BulkUpdateMeasurementPerson"
+                    }
+                }
+            }
+        },
         "requestModel.Channel": {
             "type": "object",
             "properties": {
@@ -3631,6 +3850,38 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "visitingDate": {
+                    "type": "string"
+                }
+            }
+        },
+        "requestModel.ExpenseTracker": {
+            "type": "object",
+            "properties": {
+                "billNumber": {
+                    "type": "string"
+                },
+                "companyName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "material": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "purchaseDate": {
                     "type": "string"
                 }
             }
@@ -4326,6 +4577,50 @@ const docTemplate = `{
                 },
                 "visitingDate": {
                     "type": "string"
+                }
+            }
+        },
+        "responseModel.ExpenseTracker": {
+            "type": "object",
+            "properties": {
+                "billNumber": {
+                    "type": "string"
+                },
+                "companyName": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdById": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "material": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "purchaseDate": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedById": {
+                    "type": "integer"
                 }
             }
         },

@@ -254,6 +254,26 @@ definitions:
       personId:
         type: integer
     type: object
+  requestModel.BulkUpdateMeasurementPerson:
+    properties:
+      isActive:
+        type: boolean
+      measurements:
+        items:
+          $ref: '#/definitions/requestModel.BulkMeasurementItem'
+        type: array
+      personId:
+        type: integer
+    type: object
+  requestModel.BulkUpdateMeasurementRequest:
+    properties:
+      id:
+        type: integer
+      persons:
+        items:
+          $ref: '#/definitions/requestModel.BulkUpdateMeasurementPerson'
+        type: array
+    type: object
   requestModel.Channel:
     properties:
       id:
@@ -366,6 +386,27 @@ definitions:
       status:
         type: string
       visitingDate:
+        type: string
+    type: object
+  requestModel.ExpenseTracker:
+    properties:
+      billNumber:
+        type: string
+      companyName:
+        type: string
+      id:
+        type: integer
+      isActive:
+        type: boolean
+      location:
+        type: string
+      material:
+        type: string
+      notes:
+        type: string
+      price:
+        type: number
+      purchaseDate:
         type: string
     type: object
   requestModel.Login:
@@ -828,6 +869,35 @@ definitions:
         type: string
       visitingDate:
         type: string
+    type: object
+  responseModel.ExpenseTracker:
+    properties:
+      billNumber:
+        type: string
+      companyName:
+        type: string
+      createdAt:
+        type: string
+      createdById:
+        type: integer
+      id:
+        type: integer
+      isActive:
+        type: boolean
+      location:
+        type: string
+      material:
+        type: string
+      notes:
+        type: string
+      price:
+        type: number
+      purchaseDate:
+        type: string
+      updatedAt:
+        type: string
+      updatedById:
+        type: integer
     type: object
   responseModel.Measurement:
     properties:
@@ -1772,6 +1842,132 @@ paths:
       summary: Update Enquiry and Customer
       tags:
       - Enquiry
+  /expense-tracker:
+    get:
+      consumes:
+      - application/json
+      description: Get all active expense trackers
+      parameters:
+      - description: search
+        in: query
+        name: search
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responseModel.ExpenseTracker'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Get all active expense trackers
+      tags:
+      - ExpenseTracker
+    post:
+      consumes:
+      - application/json
+      description: Saves an instance of ExpenseTracker
+      parameters:
+      - description: expenseTracker
+        in: body
+        name: expenseTracker
+        required: true
+        schema:
+          $ref: '#/definitions/requestModel.ExpenseTracker'
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "501":
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Save ExpenseTracker
+      tags:
+      - ExpenseTracker
+  /expense-tracker/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes an instance of ExpenseTracker
+      parameters:
+      - description: expenseTracker id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete ExpenseTracker
+      tags:
+      - ExpenseTracker
+    get:
+      consumes:
+      - application/json
+      description: Get an instance of ExpenseTracker
+      parameters:
+      - description: ExpenseTracker id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responseModel.ExpenseTracker'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.DataResponse'
+      summary: Get a specific ExpenseTracker
+      tags:
+      - ExpenseTracker
+    put:
+      consumes:
+      - application/json
+      description: Updates an instance of ExpenseTracker
+      parameters:
+      - description: expenseTracker
+        in: body
+        name: expenseTracker
+        required: true
+        schema:
+          $ref: '#/definitions/requestModel.ExpenseTracker'
+      - description: ExpenseTracker id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "501":
+          description: Not Implemented
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Update ExpenseTracker
+      tags:
+      - ExpenseTracker
   /health:
     get:
       description: get string by ID
@@ -1994,17 +2190,15 @@ paths:
     put:
       consumes:
       - application/json
-      description: Updates one or more measurements. Each measurement must have an
-        ID in the JSON body.
+      description: Updates measurements by personId and dressTypeId. If measurement
+        exists, it will be updated; otherwise, it will be created.
       parameters:
-      - description: Array of measurements with IDs
+      - description: Bulk update measurement request with persons array
         in: body
-        name: measurements
+        name: request
         required: true
         schema:
-          items:
-            $ref: '#/definitions/requestModel.Measurement'
-          type: array
+          $ref: '#/definitions/requestModel.BulkUpdateMeasurementRequest'
       responses:
         "201":
           description: Created

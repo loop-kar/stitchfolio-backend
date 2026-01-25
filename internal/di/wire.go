@@ -48,6 +48,7 @@ var handlerSet = wire.NewSet(
 	handler.ProvideOrderHistoryHandler,
 	handler.ProvideMeasurementHistoryHandler,
 	handler.ProvideEnquiryHistoryHandler,
+	handler.ProvideExpenseTrackerHandler,
 )
 var logSet = wire.NewSet(
 	newreliclog.ProvideNewRelic,
@@ -83,6 +84,7 @@ var svcSet = wire.NewSet(
 	service.ProvideOrderHistoryService,
 	service.ProvideMeasurementHistoryService,
 	service.ProvideEnquiryHistoryService,
+	service.ProvideExpenseTrackerService,
 )
 
 var baseSvc = wire.NewSet(
@@ -106,6 +108,7 @@ var repoSet = wire.NewSet(
 	repository.ProvideOrderHistoryRepository,
 	repository.ProvideMeasurementHistoryRepository,
 	repository.ProvideEnquiryHistoryRepository,
+	repository.ProvideExpenseTrackerRepository,
 )
 
 var cronSet = wire.NewSet(

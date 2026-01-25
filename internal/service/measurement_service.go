@@ -18,6 +18,7 @@ type MeasurementService interface {
 	SaveMeasurement(*context.Context, requestModel.Measurement) *errs.XError
 	SaveBulkMeasurements(*context.Context, []requestModel.BulkMeasurementRequest) *errs.XError
 	UpdateBulkMeasurements(*context.Context, []requestModel.Measurement) *errs.XError
+	UpdateBulkMeasurementsByPerson(*context.Context, requestModel.BulkUpdateMeasurementRequest) *errs.XError
 	Get(*context.Context, uint) (*responseModel.Measurement, *errs.XError)
 	GetAll(*context.Context, string) ([]responseModel.Measurement, *errs.XError)
 	Delete(*context.Context, uint) *errs.XError
@@ -152,6 +153,96 @@ func (svc measurementService) UpdateBulkMeasurements(ctx *context.Context, measu
 			errr = svc.recordMeasurementHistory(ctx, measurement.ID, entities.MeasurementHistoryActionUpdated, &oldMeasurement.Value)
 			if errr != nil {
 				return errr
+			}
+		}
+	}
+
+	return nil
+}
+
+func (svc measurementService) UpdateBulkMeasurementsByPerson(ctx *context.Context, request requestModel.BulkUpdateMeasurementRequest) *errs.XError {
+	userID := utils.GetUserId(ctx)
+	var measurementsToUpdate []*entities.Measurement
+	var measurementsToCreate []*entities.Measurement
+	var oldMeasurementsMap = make(map[uint]*entities.Measurement)
+
+	// Process each person's measurements
+	for _, personData := range request.Persons {
+		for _, measurementItem := range personData.Measurements {
+			// Try to find existing measurement by personId + dressTypeId
+			existingMeasurement, err := svc.measurementRepo.GetByPersonIdAndDressTypeId(ctx, personData.PersonId, measurementItem.DressTypeId)
+			if err != nil {
+				return err
+			}
+
+			var valuesJSON entitiy_types.JSON
+			if len(measurementItem.Values) > 0 {
+				valuesJSON = entitiy_types.JSON(measurementItem.Values)
+			}
+
+			// Determine isActive value: use provided value or default to true
+			isActive := true
+			if personData.IsActive != nil {
+				isActive = *personData.IsActive
+			}
+
+			if existingMeasurement != nil {
+				// Store old value for history BEFORE updating
+				oldValue := existingMeasurement.Value
+				oldMeasurementsMap[existingMeasurement.ID] = &entities.Measurement{
+					Value: oldValue,
+				}
+				// Update existing measurement
+				existingMeasurement.Value = valuesJSON
+				existingMeasurement.IsActive = isActive
+				measurementsToUpdate = append(measurementsToUpdate, existingMeasurement)
+			} else {
+				// Create new measurement
+				newMeasurement := &entities.Measurement{
+					Model: &entities.Model{
+						IsActive: isActive,
+					},
+					Value:       valuesJSON,
+					PersonId:    personData.PersonId,
+					DressTypeId: measurementItem.DressTypeId,
+					TakenById:   &userID,
+				}
+				measurementsToCreate = append(measurementsToCreate, newMeasurement)
+			}
+		}
+	}
+
+	// Batch create new measurements
+	if len(measurementsToCreate) > 0 {
+		errr := svc.measurementRepo.BatchCreate(ctx, measurementsToCreate)
+		if errr != nil {
+			return errr
+		}
+
+		// Record history for created measurements
+		for _, measurement := range measurementsToCreate {
+			errr = svc.recordMeasurementHistory(ctx, measurement.ID, entities.MeasurementHistoryActionCreated, nil)
+			if errr != nil {
+				return errr
+			}
+		}
+	}
+
+	// Batch update existing measurements
+	if len(measurementsToUpdate) > 0 {
+		errr := svc.measurementRepo.BatchUpdate(ctx, measurementsToUpdate)
+		if errr != nil {
+			return errr
+		}
+
+		// Record history for updated measurements
+		for _, measurement := range measurementsToUpdate {
+			oldMeasurement, exists := oldMeasurementsMap[measurement.ID]
+			if exists {
+				errr = svc.recordMeasurementHistory(ctx, measurement.ID, entities.MeasurementHistoryActionUpdated, &oldMeasurement.Value)
+				if errr != nil {
+					return errr
+				}
 			}
 		}
 	}
