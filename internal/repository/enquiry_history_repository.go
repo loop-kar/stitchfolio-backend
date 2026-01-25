@@ -4,10 +4,9 @@ import (
 	"context"
 
 	"github.com/imkarthi24/sf-backend/internal/entities"
-	"github.com/imkarthi24/sf-backend/internal/repository/common"
 	"github.com/imkarthi24/sf-backend/internal/repository/scopes"
-	"github.com/imkarthi24/sf-backend/pkg/db"
-	"github.com/imkarthi24/sf-backend/pkg/errs"
+	"github.com/loop-kar/pixie/db"
+	"github.com/loop-kar/pixie/errs"
 )
 
 type EnquiryHistoryRepository interface {
@@ -18,16 +17,15 @@ type EnquiryHistoryRepository interface {
 }
 
 type enquiryHistoryRepository struct {
-	txn      db.DBTransactionManager
-	customDB common.CustomGormDB
+	GormDAL
 }
 
-func ProvideEnquiryHistoryRepository(txn db.DBTransactionManager, customDB common.CustomGormDB) EnquiryHistoryRepository {
-	return &enquiryHistoryRepository{txn: txn, customDB: customDB}
+func ProvideEnquiryHistoryRepository(dal GormDAL) EnquiryHistoryRepository {
+	return &enquiryHistoryRepository{GormDAL: dal}
 }
 
 func (ehr *enquiryHistoryRepository) Create(ctx *context.Context, enquiryHistory *entities.EnquiryHistory) *errs.XError {
-	res := ehr.txn.Txn(ctx).Create(&enquiryHistory)
+	res := ehr.WithDB(ctx).Create(&enquiryHistory)
 	if res.Error != nil {
 		return errs.NewXError(errs.DATABASE, "Unable to save enquiry history", res.Error)
 	}
@@ -36,7 +34,7 @@ func (ehr *enquiryHistoryRepository) Create(ctx *context.Context, enquiryHistory
 
 func (ehr *enquiryHistoryRepository) Get(ctx *context.Context, id uint) (*entities.EnquiryHistory, *errs.XError) {
 	enquiryHistory := entities.EnquiryHistory{}
-	res := ehr.txn.Txn(ctx).
+	res := ehr.WithDB(ctx).
 		Preload("Employee", scopes.SelectFields("first_name", "last_name")).
 		Preload("PerformedBy", scopes.SelectFields("first_name", "last_name")).
 		Find(&enquiryHistory, id)
@@ -48,7 +46,7 @@ func (ehr *enquiryHistoryRepository) Get(ctx *context.Context, id uint) (*entiti
 
 func (ehr *enquiryHistoryRepository) GetAll(ctx *context.Context, search string) ([]entities.EnquiryHistory, *errs.XError) {
 	var enquiryHistories []entities.EnquiryHistory
-	res := ehr.txn.Txn(ctx).Table(entities.EnquiryHistory{}.TableNameForQuery()).
+	res := ehr.WithDB(ctx).Table(entities.EnquiryHistory{}.TableNameForQuery()).
 		Scopes(scopes.Channel(), scopes.IsActive()).
 		Scopes(db.Paginate(ctx)).
 		Preload("Employee", scopes.SelectFields("first_name", "last_name")).
@@ -62,7 +60,7 @@ func (ehr *enquiryHistoryRepository) GetAll(ctx *context.Context, search string)
 
 func (ehr *enquiryHistoryRepository) GetByEnquiryId(ctx *context.Context, enquiryId uint) ([]entities.EnquiryHistory, *errs.XError) {
 	var enquiryHistories []entities.EnquiryHistory
-	res := ehr.txn.Txn(ctx).
+	res := ehr.WithDB(ctx).
 		Where("enquiry_id = ?", enquiryId).
 		Scopes(scopes.IsActive()).
 		Preload("Employee", scopes.SelectFields("first_name", "last_name")).

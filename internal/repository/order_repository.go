@@ -5,10 +5,10 @@ import (
 
 	"github.com/imkarthi24/sf-backend/internal/entities"
 	"github.com/imkarthi24/sf-backend/internal/repository/scopes"
+	"github.com/loop-kar/pixie/constants"
 	"github.com/loop-kar/pixie/db"
 	"github.com/loop-kar/pixie/errs"
-  "github.com/loop-kar/pixie/constants"
-	"github.com/loop-kar/pixie/util"	
+	"github.com/loop-kar/pixie/util"
 )
 
 type OrderRepository interface {
@@ -63,7 +63,7 @@ func (or *orderRepository) GetAll(ctx *context.Context, search string) ([]entiti
 		filter = filterValue.(string)
 	}
 
-	res := or.txn.Txn(ctx).Model(&entities.Order{}).
+	res := or.WithDB(ctx).Model(&entities.Order{}).
 		Select(`"stich"."Orders".*,
 			(SELECT COALESCE(SUM(quantity), 0) FROM "stich"."OrderItems" 
 			 WHERE "stich"."OrderItems".order_id = "stich"."Orders".id) as order_quantity,

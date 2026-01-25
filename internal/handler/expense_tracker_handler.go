@@ -7,15 +7,15 @@ import (
 	"github.com/gin-gonic/gin"
 	requesModel "github.com/imkarthi24/sf-backend/internal/model/request"
 	"github.com/imkarthi24/sf-backend/internal/service"
-	"github.com/imkarthi24/sf-backend/pkg/errs"
-	"github.com/imkarthi24/sf-backend/pkg/response"
-	"github.com/imkarthi24/sf-backend/pkg/util"
+	"github.com/loop-kar/pixie/errs"
+	"github.com/loop-kar/pixie/response"
+	"github.com/loop-kar/pixie/util"
 )
 
 type ExpenseTrackerHandler struct {
 	expenseTrackerSvc service.ExpenseTrackerService
-	resp               response.Response
-	dataResp           response.DataResponse
+	resp              response.Response
+	dataResp          response.DataResponse
 }
 
 func ProvideExpenseTrackerHandler(svc service.ExpenseTrackerService) *ExpenseTrackerHandler {
