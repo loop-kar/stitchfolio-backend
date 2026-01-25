@@ -24,14 +24,3 @@ type BulkMeasurementRequest struct {
 	PersonId     uint                  `json:"personId"`
 	Measurements []BulkMeasurementItem `json:"measurements"`
 }
-
-type BulkUpdateMeasurementPerson struct {
-	PersonId     uint                  `json:"personId"`
-	Measurements []BulkMeasurementItem `json:"measurements"`
-	IsActive     *bool                 `json:"isActive,omitempty"`
-}
-
-type BulkUpdateMeasurementRequest struct {
-	ID      uint                          `json:"id,omitempty"`
-	Persons []BulkUpdateMeasurementPerson `json:"persons"`
-}
