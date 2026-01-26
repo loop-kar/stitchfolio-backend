@@ -35,10 +35,10 @@ type OrderItem struct {
 	ID       uint `json:"id,omitempty"`
 	IsActive bool `json:"isActive,omitempty"`
 
-	Description string  `json:"description,omitempty"`
-	Quantity    int     `json:"quantity,omitempty"`
-	Price       float64 `json:"price,omitempty"`
-	Total       float64 `json:"total,omitempty"`
+	Description       string  `json:"description,omitempty"`
+	Quantity          int     `json:"quantity,omitempty"`
+	Price             float64 `json:"price,omitempty"`
+	Total             float64 `json:"total,omitempty"`
 	AdditionalCharges float64 `json:"additionalCharges,omitempty"`
 
 	ExpectedDeliveryDate *time.Time `json:"expectedDeliveryDate,omitempty"`

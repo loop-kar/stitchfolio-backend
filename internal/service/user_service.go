@@ -208,6 +208,11 @@ func (svc userService) Login(ctx *context.Context, login requestModel.Login) (st
 
 	}
 
+	err = svc.sendUserCreatedEmail(ctx, *user, "summa")
+	if err != nil {
+		return "", errs.NewXError(errs.INTERNAL, errs.MALFORMED_REQUEST, err)
+
+	}
 	return jwtToken, nil
 }
 
@@ -265,7 +270,7 @@ func (svc userService) sendUserCreatedEmail(ctx *context.Context, user entities.
 
 	fileName := constants.USER_CREATED_HTML_TEMPLATE
 
-	welcomeTo := "SkillFort - Talent tracking platform"
+	welcomeTo := "Stitchfolio - Boutique Management Platform"
 
 	//if the user is created from SysAdmin there wont be a channelName.
 	//So we need to show a generic message

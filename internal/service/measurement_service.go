@@ -9,8 +9,8 @@ import (
 	requestModel "github.com/imkarthi24/sf-backend/internal/model/request"
 	responseModel "github.com/imkarthi24/sf-backend/internal/model/response"
 	"github.com/imkarthi24/sf-backend/internal/repository"
+	"github.com/imkarthi24/sf-backend/internal/utils"
 	"github.com/loop-kar/pixie/errs"
-	"github.com/imkarthi24/sf-backend/internal/utils"	
 	"github.com/loop-kar/pixie/util"
 )
 

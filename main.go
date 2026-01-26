@@ -12,9 +12,9 @@ import (
 	"github.com/imkarthi24/sf-backend/internal/di"
 )
 
-//	@title			SkillFort-backend API docs
+//	@title			Stitchfolio-backend API docs
 //	@version		1.0
-//	@description	This is the backend for SkillFort.
+//	@description	This is the backend for Stitchfolio.
 
 //	@host		localhost:9000
 //	@BasePath	/api/sf/v1

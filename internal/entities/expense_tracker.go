@@ -9,9 +9,9 @@ type ExpenseTracker struct {
 	BillNumber   string     `json:"billNumber"`
 	CompanyName  string     `json:"companyName"`
 	Material     string     `json:"material"`
-	Price         *float64   `json:"price,omitempty"`
-	Location      *string    `json:"location,omitempty"`
-	Notes         *string    `json:"notes,omitempty"`
+	Price        *float64   `json:"price,omitempty"`
+	Location     *string    `json:"location,omitempty"`
+	Notes        *string    `json:"notes,omitempty"`
 }
 
 func (ExpenseTracker) TableName() string {

@@ -5,10 +5,10 @@ import "time"
 type OrderItem struct {
 	*Model `mapstructure:",squash"`
 
-	Description string  `json:"description"`
-	Quantity    int     `json:"quantity"`
-	Price       float64 `json:"price"`
-	Total       float64 `json:"total"`
+	Description       string  `json:"description"`
+	Quantity          int     `json:"quantity"`
+	Price             float64 `json:"price"`
+	Total             float64 `json:"total"`
 	AdditionalCharges float64 `json:"additionalCharges"`
 
 	ExpectedDeliveryDate *time.Time `json:"expectedDeliveryDate,omitempty"`
