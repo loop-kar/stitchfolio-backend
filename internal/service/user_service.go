@@ -208,11 +208,6 @@ func (svc userService) Login(ctx *context.Context, login requestModel.Login) (st
 
 	}
 
-	err = svc.sendUserCreatedEmail(ctx, *user, "summa")
-	if err != nil {
-		return "", errs.NewXError(errs.INTERNAL, errs.MALFORMED_REQUEST, err)
-
-	}
 	return jwtToken, nil
 }
 
