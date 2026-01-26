@@ -7,7 +7,6 @@ import (
 
 	"github.com/imkarthi24/sf-backend/internal/entities"
 	"github.com/imkarthi24/sf-backend/internal/repository/scopes"
-	"github.com/loop-kar/pixie/db"
 	"github.com/loop-kar/pixie/errs"
 	"github.com/loop-kar/pixie/util"
 
@@ -111,13 +110,12 @@ func (mr *measurementRepository) GetAll(ctx *context.Context, search string) ([]
 	// 	filter = filterValue.(string)
 	// }
 
-	query := mr.WithDB(ctx).
-		Table("\"stich\".\"Measurements\" M").
-		Select(`M.person_id, 
+	query := mr.WithDB(ctx).Table(entities.Measurement{}.TableNameForQuery()).
+		Scopes(scopes.IsActive("E"), scopes.Channel("E")).
+		Select(`E.person_id, 
 			STRING_AGG(DISTINCT DT.name, ',' ORDER BY DT.name) as dress_types`).
-		Joins(`INNER JOIN "stich"."DressTypes" DT ON DT.id = M.dress_type_id`).
-		Joins(`INNER JOIN "stich"."Persons" P ON P.id = M.person_id`).
-		Where("M.is_active = ?", true).
+		Joins(`INNER JOIN "stich"."DressTypes" DT ON DT.id = E.dress_type_id`).
+		Joins(`INNER JOIN "stich"."Persons" P ON P.id = E.person_id`).
 		Group("person_id")
 
 	if !util.IsNilOrEmptyString(&search) {
@@ -129,10 +127,6 @@ func (mr *measurementRepository) GetAll(ctx *context.Context, search string) ([]
 		query = query.Joins(`INNER JOIN "stich"."Customers" C ON C.id = P.customer_id`).
 			Where(whereClause)
 	}
-
-	query = query.Scopes(scopes.Channel("M"))
-
-	query = query.Scopes(db.Paginate(ctx))
 
 	res := query.Scan(&groupedMeasurements)
 	if res.Error != nil {
