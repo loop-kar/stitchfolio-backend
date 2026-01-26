@@ -1,13 +1,13 @@
 module github.com/imkarthi24/sf-backend
 
-go 1.25.4
+go 1.25.0
 
 require (
 	github.com/gin-contrib/gzip v0.0.6
 	github.com/gin-gonic/gin v1.11.0
 	github.com/google/wire v0.5.0
 	github.com/iancoleman/strcase v0.3.0
-	github.com/loop-kar/pixie v0.0.0-20260126120033-b31ce8b1792c
+	github.com/loop-kar/pixie v1.0.0
 	github.com/newrelic/go-agent/v3 v3.42.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/stretchr/testify v1.11.1
