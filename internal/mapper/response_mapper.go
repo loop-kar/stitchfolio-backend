@@ -437,6 +437,16 @@ func (m *responseMapper) Order(e *entities.Order) (*responseModel.Order, error) 
 		}
 	}
 
+	var orderTakenBy string
+	if e.OrderTakenBy != nil {
+		orderTakenBy = e.OrderTakenBy.FirstName + " " + e.OrderTakenBy.LastName
+	}
+
+	var customerName string
+	if e.Customer != nil {
+		customerName = e.Customer.FirstName + " " + e.Customer.LastName
+	}
+
 	return &responseModel.Order{
 		ID:                   e.ID,
 		IsActive:             e.IsActive,
@@ -446,15 +456,14 @@ func (m *responseMapper) Order(e *entities.Order) (*responseModel.Order, error) 
 		ExpectedDeliveryDate: e.ExpectedDeliveryDate,
 		DeliveredDate:        e.DeliveredDate,
 		CustomerId:           e.CustomerId,
-		// Customer:       customer,
-		CustomerName:   e.Customer.FirstName + " " + e.Customer.LastName,
-		OrderTakenById: e.OrderTakenById,
-		OrderTakenBy:   e.OrderTakenBy.FirstName + " " + e.OrderTakenBy.LastName,
-		OrderQuantity:  orderQuantity,
-		OrderValue:     orderValue,
-		CreatedAt:      e.CreatedAt,
-		UpdatedAt:      e.UpdatedAt,
-		OrderItems:     orderItems,
+		CustomerName:         customerName,
+		OrderTakenById:       e.OrderTakenById,
+		OrderTakenBy:         orderTakenBy,
+		OrderQuantity:        orderQuantity,
+		OrderValue:           orderValue,
+		CreatedAt:            e.CreatedAt,
+		UpdatedAt:            e.UpdatedAt,
+		OrderItems:           orderItems,
 	}, nil
 }
 
