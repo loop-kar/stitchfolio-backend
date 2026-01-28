@@ -43,8 +43,8 @@ type ResponseMapper interface {
 	OrderHistories(items []entities.OrderHistory) ([]responseModel.OrderHistory, error)
 	MeasurementHistory(e *entities.MeasurementHistory) (*responseModel.MeasurementHistory, error)
 	MeasurementHistories(items []entities.MeasurementHistory) ([]responseModel.MeasurementHistory, error)
-	ExpenseTracker(e *entities.ExpenseTracker) (*responseModel.ExpenseTracker, error)
-	ExpenseTrackers(items []entities.ExpenseTracker) ([]responseModel.ExpenseTracker, error)
+	ExpenseTracker(e *entities.Expense) (*responseModel.ExpenseTracker, error)
+	ExpenseTrackers(items []entities.Expense) ([]responseModel.ExpenseTracker, error)
 }
 
 func ProvideResponseMapper() ResponseMapper {
@@ -623,7 +623,7 @@ func (m *responseMapper) MeasurementHistories(items []entities.MeasurementHistor
 	return result, nil
 }
 
-func (m *responseMapper) ExpenseTracker(e *entities.ExpenseTracker) (*responseModel.ExpenseTracker, error) {
+func (m *responseMapper) ExpenseTracker(e *entities.Expense) (*responseModel.ExpenseTracker, error) {
 	if e == nil {
 		return nil, nil
 	}
@@ -645,7 +645,7 @@ func (m *responseMapper) ExpenseTracker(e *entities.ExpenseTracker) (*responseMo
 	}, nil
 }
 
-func (m *responseMapper) ExpenseTrackers(items []entities.ExpenseTracker) ([]responseModel.ExpenseTracker, error) {
+func (m *responseMapper) ExpenseTrackers(items []entities.Expense) ([]responseModel.ExpenseTracker, error) {
 	result := make([]responseModel.ExpenseTracker, 0)
 	for _, item := range items {
 		mappedItem, err := m.ExpenseTracker(&item)

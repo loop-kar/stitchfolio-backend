@@ -19,10 +19,10 @@ func GetExpenseTrackers_Search(search string) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		formattedSearch := util.EncloseWithPercentageOperator(search)
 		whereClause := fmt.Sprintf(
-			`("stich"."ExpenseTrackers".bill_number ILIKE %s OR 
-			 "stich"."ExpenseTrackers".company_name ILIKE %s OR 
-			 "stich"."ExpenseTrackers".material ILIKE %s OR 
-			 "stich"."ExpenseTrackers".notes ILIKE %s)`,
+			`("stich"."Expenses".bill_number ILIKE %s OR 
+			 "stich"."Expenses".company_name ILIKE %s OR 
+			 "stich"."Expenses".material ILIKE %s OR 
+			 "stich"."Expenses".notes ILIKE %s)`,
 			formattedSearch, formattedSearch, formattedSearch, formattedSearch,
 		)
 		return db.Where(whereClause)

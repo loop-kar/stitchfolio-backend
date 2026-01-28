@@ -8,6 +8,11 @@ import (
 
 type JSON json.RawMessage
 
+func NewJSON() *JSON {
+	json := JSON(json.RawMessage{})
+	return &json
+}
+
 func (j JSON) Value() (driver.Value, error) {
 	if len(j) == 0 {
 		return nil, nil

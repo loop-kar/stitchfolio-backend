@@ -12,10 +12,10 @@ import (
 )
 
 type ExpenseTrackerRepository interface {
-	Create(*context.Context, *entities.ExpenseTracker) *errs.XError
-	Update(*context.Context, *entities.ExpenseTracker) *errs.XError
-	Get(*context.Context, uint) (*entities.ExpenseTracker, *errs.XError)
-	GetAll(*context.Context, string) ([]entities.ExpenseTracker, *errs.XError)
+	Create(*context.Context, *entities.Expense) *errs.XError
+	Update(*context.Context, *entities.Expense) *errs.XError
+	Get(*context.Context, uint) (*entities.Expense, *errs.XError)
+	GetAll(*context.Context, string) ([]entities.Expense, *errs.XError)
 	Delete(*context.Context, uint) *errs.XError
 }
 
@@ -27,7 +27,7 @@ func ProvideExpenseTrackerRepository(dal GormDAL) ExpenseTrackerRepository {
 	return &expenseTrackerRepository{GormDAL: dal}
 }
 
-func (etr *expenseTrackerRepository) Create(ctx *context.Context, expenseTracker *entities.ExpenseTracker) *errs.XError {
+func (etr *expenseTrackerRepository) Create(ctx *context.Context, expenseTracker *entities.Expense) *errs.XError {
 	res := etr.WithDB(ctx).Create(&expenseTracker)
 	if res.Error != nil {
 		return errs.NewXError(errs.DATABASE, "Unable to save expense tracker", res.Error)
@@ -35,12 +35,12 @@ func (etr *expenseTrackerRepository) Create(ctx *context.Context, expenseTracker
 	return nil
 }
 
-func (etr *expenseTrackerRepository) Update(ctx *context.Context, expenseTracker *entities.ExpenseTracker) *errs.XError {
+func (etr *expenseTrackerRepository) Update(ctx *context.Context, expenseTracker *entities.Expense) *errs.XError {
 	return etr.GormDAL.Update(ctx, *expenseTracker)
 }
 
-func (etr *expenseTrackerRepository) Get(ctx *context.Context, id uint) (*entities.ExpenseTracker, *errs.XError) {
-	expenseTracker := entities.ExpenseTracker{}
+func (etr *expenseTrackerRepository) Get(ctx *context.Context, id uint) (*entities.Expense, *errs.XError) {
+	expenseTracker := entities.Expense{}
 	res := etr.WithDB(ctx).
 		Scopes(scopes.Channel(), scopes.IsActive()).
 		Find(&expenseTracker, id)
@@ -50,8 +50,8 @@ func (etr *expenseTrackerRepository) Get(ctx *context.Context, id uint) (*entiti
 	return &expenseTracker, nil
 }
 
-func (etr *expenseTrackerRepository) GetAll(ctx *context.Context, search string) ([]entities.ExpenseTracker, *errs.XError) {
-	var expenseTrackers []entities.ExpenseTracker
+func (etr *expenseTrackerRepository) GetAll(ctx *context.Context, search string) ([]entities.Expense, *errs.XError) {
+	var expenseTrackers []entities.Expense
 
 	filterValue := util.ReadValueFromContext(ctx, constants.FILTER_KEY)
 	var filter string
@@ -72,7 +72,7 @@ func (etr *expenseTrackerRepository) GetAll(ctx *context.Context, search string)
 }
 
 func (etr *expenseTrackerRepository) Delete(ctx *context.Context, id uint) *errs.XError {
-	expenseTracker := &entities.ExpenseTracker{Model: &entities.Model{ID: id, IsActive: false}}
+	expenseTracker := &entities.Expense{Model: &entities.Model{ID: id, IsActive: false}}
 	err := etr.GormDAL.Delete(ctx, expenseTracker)
 	if err != nil {
 		return err

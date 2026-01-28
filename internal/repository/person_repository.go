@@ -44,7 +44,7 @@ func (pr *personRepository) Get(ctx *context.Context, id uint) (*entities.Person
 		Preload("Customer").
 		Preload("Measurements").
 		Find(&person, id)
-	if res.Error != nil {
+	if res.Error != nil || res.RowsAffected != 1 {
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find person", res.Error)
 	}
 	return &person, nil
