@@ -13,8 +13,8 @@ import (
 )
 
 type TaskHandler struct {
-	taskSvc service.TaskService
-	resp    response.Response
+	taskSvc  service.TaskService
+	resp     response.Response
 	dataResp response.DataResponse
 }
 
@@ -28,9 +28,9 @@ func ProvideTaskHandler(svc service.TaskService) *TaskHandler {
 //	@Description	Saves an instance of Task
 //	@Tags			Task
 //	@Accept			json
-//	@Success		201	{object}	response.Response
-//	@Failure		400	{object}	response.Response
-//	@Failure		501	{object}	response.Response
+//	@Success		201		{object}	response.Response
+//	@Failure		400		{object}	response.Response
+//	@Failure		501		{object}	response.Response
 //	@Param			task	body		requestModel.Task	true	"task"
 //	@Router			/task [post]
 func (h TaskHandler) SaveTask(ctx *gin.Context) {
@@ -58,9 +58,9 @@ func (h TaskHandler) SaveTask(ctx *gin.Context) {
 //	@Description	Updates an instance of Task
 //	@Tags			Task
 //	@Accept			json
-//	@Success		202	{object}	response.Response
-//	@Failure		400	{object}	response.Response
-//	@Failure		501	{object}	response.Response
+//	@Success		202		{object}	response.Response
+//	@Failure		400		{object}	response.Response
+//	@Failure		501		{object}	response.Response
 //	@Param			task	body		requestModel.Task	true	"task"
 //	@Param			id		path		int					true	"Task id"
 //	@Router			/task/{id} [put]
@@ -114,8 +114,8 @@ func (h TaskHandler) Get(ctx *gin.Context) {
 //	@Description	Get all active tasks
 //	@Tags			Task
 //	@Accept			json
-//	@Success		200	{object}	[]responseModel.Task
-//	@Failure		400	{object}	response.DataResponse
+//	@Success		200		{object}	[]responseModel.Task
+//	@Failure		400		{object}	response.DataResponse
 //	@Param			search	query		string	false	"search"
 //	@Router			/task [get]
 func (h TaskHandler) GetAllTasks(ctx *gin.Context) {

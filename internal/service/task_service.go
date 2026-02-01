@@ -19,8 +19,8 @@ type TaskService interface {
 }
 
 type taskService struct {
-	taskRepo repository.TaskRepository
-	mapper   mapper.Mapper
+	taskRepo   repository.TaskRepository
+	mapper     mapper.Mapper
 	respMapper mapper.ResponseMapper
 }
 

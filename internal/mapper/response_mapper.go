@@ -673,19 +673,19 @@ func (m *responseMapper) Task(e *entities.Task) (*responseModel.Task, error) {
 		return nil, nil
 	}
 	return &responseModel.Task{
-		ID:            e.ID,
-		IsActive:      e.IsActive,
-		Title:         e.Title,
-		Description:   e.Description,
-		IsCompleted:   e.IsCompleted,
-		Priority:      e.Priority,
-		DueDate:       e.DueDate,
-		CompletedAt:   e.CompletedAt,
-		AssignedToId:  e.AssignedToId,
-		CreatedAt:     e.CreatedAt,
-		UpdatedAt:     e.UpdatedAt,
-		CreatedById:   e.CreatedById,
-		UpdatedById:   e.UpdatedById,
+		ID:           e.ID,
+		IsActive:     e.IsActive,
+		Title:        e.Title,
+		Description:  e.Description,
+		IsCompleted:  e.IsCompleted,
+		Priority:     e.Priority,
+		DueDate:      e.DueDate,
+		CompletedAt:  e.CompletedAt,
+		AssignedToId: e.AssignedToId,
+		CreatedAt:    e.CreatedAt,
+		UpdatedAt:    e.UpdatedAt,
+		CreatedById:  e.CreatedById,
+		UpdatedById:  e.UpdatedById,
 	}, nil
 }
 
