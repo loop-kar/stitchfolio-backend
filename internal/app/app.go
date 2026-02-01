@@ -79,7 +79,7 @@ func (a *App) Migrate(ctx *context.Context, checkErr func(err error)) {
 		// &entities.UserConfig{},
 		// &entities.User{},
 		// &entities.WhatsappNotification{},
-
+		// &entities.Task{},  // Uncomment when generating 004_add_task_entity migration
 	}
 
 	//************************//

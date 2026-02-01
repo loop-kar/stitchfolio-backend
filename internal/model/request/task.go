@@ -1,0 +1,13 @@
+package requestModel
+
+type Task struct {
+	ID          uint   `json:"id,omitempty"`
+	IsActive    *bool  `json:"isActive,omitempty"`
+	Title       string `json:"title"`
+	Description *string `json:"description,omitempty"`
+	IsCompleted bool   `json:"isCompleted"`
+	Priority    *int   `json:"priority,omitempty"`
+	DueDate     *string `json:"dueDate,omitempty"`
+	CompletedAt *string `json:"completedAt,omitempty"`
+	AssignedToId *uint  `json:"assignedToId,omitempty"`
+}

@@ -45,6 +45,8 @@ type ResponseMapper interface {
 	MeasurementHistories(items []entities.MeasurementHistory) ([]responseModel.MeasurementHistory, error)
 	ExpenseTracker(e *entities.Expense) (*responseModel.ExpenseTracker, error)
 	ExpenseTrackers(items []entities.Expense) ([]responseModel.ExpenseTracker, error)
+	Task(e *entities.Task) (*responseModel.Task, error)
+	Tasks(items []entities.Task) ([]responseModel.Task, error)
 }
 
 func ProvideResponseMapper() ResponseMapper {
@@ -658,6 +660,39 @@ func (m *responseMapper) ExpenseTrackers(items []entities.Expense) ([]responseMo
 	result := make([]responseModel.ExpenseTracker, 0)
 	for _, item := range items {
 		mappedItem, err := m.ExpenseTracker(&item)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, *mappedItem)
+	}
+	return result, nil
+}
+
+func (m *responseMapper) Task(e *entities.Task) (*responseModel.Task, error) {
+	if e == nil {
+		return nil, nil
+	}
+	return &responseModel.Task{
+		ID:            e.ID,
+		IsActive:      e.IsActive,
+		Title:         e.Title,
+		Description:   e.Description,
+		IsCompleted:   e.IsCompleted,
+		Priority:      e.Priority,
+		DueDate:       e.DueDate,
+		CompletedAt:   e.CompletedAt,
+		AssignedToId:  e.AssignedToId,
+		CreatedAt:     e.CreatedAt,
+		UpdatedAt:     e.UpdatedAt,
+		CreatedById:   e.CreatedById,
+		UpdatedById:   e.UpdatedById,
+	}, nil
+}
+
+func (m *responseMapper) Tasks(items []entities.Task) ([]responseModel.Task, error) {
+	result := make([]responseModel.Task, 0)
+	for _, item := range items {
+		mappedItem, err := m.Task(&item)
 		if err != nil {
 			return nil, err
 		}
