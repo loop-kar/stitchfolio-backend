@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	config_cache "github.com/imkarthi24/sf-backend/internal/cache"
 	"github.com/imkarthi24/sf-backend/internal/config"
+	"github.com/imkarthi24/sf-backend/internal/entities"
 	"github.com/imkarthi24/sf-backend/internal/repository"
 
 	// "github.com/loop-kar/pixie/db/migrator"
@@ -75,6 +76,7 @@ func (a *App) Migrate(ctx *context.Context, checkErr func(err error)) {
 		// &entities.Order{},
 		// &entities.OrderItem{},
 		// &entities.Person{},
+		&entities.Task{},
 		// &entities.UserChannelDetail{},
 		// &entities.UserConfig{},
 		// &entities.User{},
