@@ -8,6 +8,7 @@ type Task struct {
 	IsCompleted  bool    `json:"isCompleted"`
 	Priority     *int    `json:"priority,omitempty"`
 	DueDate      *string `json:"dueDate,omitempty"`
+	ReminderDate *string `json:"reminderDate,omitempty"`
 	CompletedAt  *string `json:"completedAt,omitempty"`
 	AssignedToId *uint   `json:"assignedToId,omitempty"`
 }

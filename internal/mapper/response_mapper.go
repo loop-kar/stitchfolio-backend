@@ -680,6 +680,7 @@ func (m *responseMapper) Task(e *entities.Task) (*responseModel.Task, error) {
 		IsCompleted:  e.IsCompleted,
 		Priority:     e.Priority,
 		DueDate:      e.DueDate,
+		ReminderDate: e.ReminderDate,
 		CompletedAt:  e.CompletedAt,
 		AssignedToId: e.AssignedToId,
 		CreatedAt:    e.CreatedAt,

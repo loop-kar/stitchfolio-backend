@@ -448,6 +448,15 @@ func (m *mapper) Task(e requestModel.Task) (*entities.Task, error) {
 		dueDate = date
 	}
 
+	var reminderDate *time.Time
+	if e.ReminderDate != nil {
+		date, err := util.GenerateDateTimeFromString(e.ReminderDate)
+		if err != nil {
+			return nil, err
+		}
+		reminderDate = date
+	}
+
 	var completedAt *time.Time
 	if e.CompletedAt != nil {
 		date, err := util.GenerateDateTimeFromString(e.CompletedAt)
@@ -463,13 +472,14 @@ func (m *mapper) Task(e requestModel.Task) (*entities.Task, error) {
 	}
 
 	return &entities.Task{
-		Model:        &entities.Model{ID: e.ID, IsActive: isActive},
-		Title:        e.Title,
-		Description:  e.Description,
-		IsCompleted:  e.IsCompleted,
-		Priority:     e.Priority,
-		DueDate:      dueDate,
-		CompletedAt:  completedAt,
-		AssignedToId: e.AssignedToId,
+		Model:         &entities.Model{ID: e.ID, IsActive: isActive},
+		Title:         e.Title,
+		Description:   e.Description,
+		IsCompleted:   e.IsCompleted,
+		Priority:      e.Priority,
+		DueDate:       dueDate,
+		ReminderDate:  reminderDate,
+		CompletedAt:   completedAt,
+		AssignedToId:  e.AssignedToId,
 	}, nil
 }

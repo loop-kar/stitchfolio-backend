@@ -76,6 +76,7 @@ func (a *App) Migrate(ctx *context.Context, checkErr func(err error)) {
 		// &entities.Order{},
 		// &entities.OrderItem{},
 		// &entities.Person{},
+		&entities.Task{},
 		// &entities.UserChannelDetail{},
 		// &entities.UserConfig{},
 		// &entities.User{},
