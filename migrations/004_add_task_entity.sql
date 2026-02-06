@@ -1,5 +1,5 @@
--- Migration: 003_add_expense_entity
--- Generated: 2026-02-03T21:53:30+05:30
+-- Migration: 004_add_task_entity
+-- Generated: 2026-02-05T07:32:10+05:30
 
 -- ====================================
 -- UP Migration
@@ -19,7 +19,6 @@ CREATE TABLE IF NOT EXISTS stich."Tasks" (
   is_completed BOOLEAN DEFAULT false,
   priority INTEGER,
   due_date TIMESTAMPTZ,
-  reminder_date TIMESTAMPTZ,
   completed_at TIMESTAMPTZ,
   assigned_to_id INTEGER,
   PRIMARY KEY (id)
