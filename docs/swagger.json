@@ -3623,6 +3623,15 @@
                 "SUPERADMIN": "to be used for the owner of the application (customer)",
                 "SYSTEM_ADMIN": "to be used for managing system only,not exposed"
             },
+            "x-enum-descriptions": [
+                "to be used for managing system only,not exposed",
+                "to be used by developer, only read access in PROD",
+                "to be used for the owner of the application (customer)",
+                "to be used by the application administrator",
+                "",
+                "",
+                ""
+            ],
             "x-enum-varnames": [
                 "SYSTEM_ADMIN",
                 "DEV",
@@ -3818,6 +3827,25 @@
                 "UNANTICIPATED": "Unanticipated error.",
                 "VALIDATION": "Input validation error."
             },
+            "x-enum-descriptions": [
+                "Unclassified error. This value is not printed in the error message.",
+                "Invalid operation for this type of item.",
+                "External I/O error such as network failure.",
+                "Item already exists.",
+                "Item does not exist.",
+                "Information withheld.",
+                "Internal error or inconsistency.",
+                "Link target does not exist.",
+                "Error from database.",
+                "Input validation error.",
+                "Unanticipated error.",
+                "Invalid Request",
+                "SMTP Error",
+                "SMTP Error",
+                "Storage Error",
+                "Insufficient Access",
+                "Duplicate Transaction"
+            ],
             "x-enum-varnames": [
                 "OTHER",
                 "INVALID",
@@ -4650,6 +4678,12 @@
                 "address": {
                     "type": "string"
                 },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdById": {
+                    "type": "integer"
+                },
                 "email": {
                     "type": "string"
                 },
@@ -4686,6 +4720,12 @@
                 "phoneNumber": {
                     "type": "string"
                 },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedById": {
+                    "type": "integer"
+                },
                 "whatsappNumber": {
                     "type": "string"
                 }
@@ -4714,6 +4754,12 @@
         "responseModel.DressType": {
             "type": "object",
             "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdById": {
+                    "type": "integer"
+                },
                 "description": {
                     "type": "string"
                 },
@@ -4728,12 +4774,24 @@
                 },
                 "name": {
                     "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedById": {
+                    "type": "integer"
                 }
             }
         },
         "responseModel.Enquiry": {
             "type": "object",
             "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdById": {
+                    "type": "integer"
+                },
                 "customer": {
                     "$ref": "#/definitions/responseModel.Customer"
                 },
@@ -4763,6 +4821,12 @@
                 },
                 "subject": {
                     "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedById": {
+                    "type": "integer"
                 }
             }
         },
@@ -4771,6 +4835,12 @@
             "properties": {
                 "callBackDate": {
                     "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdById": {
+                    "type": "integer"
                 },
                 "customerComment": {
                     "type": "string"
@@ -4810,6 +4880,12 @@
                 },
                 "status": {
                     "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedById": {
+                    "type": "integer"
                 },
                 "visitingDate": {
                     "type": "string"
@@ -4863,6 +4939,12 @@
         "responseModel.Measurement": {
             "type": "object",
             "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdById": {
+                    "type": "integer"
+                },
                 "dressType": {
                     "$ref": "#/definitions/responseModel.DressType"
                 },
@@ -4944,6 +5026,12 @@
                 "changedValues": {
                     "type": "string"
                 },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdById": {
+                    "type": "integer"
+                },
                 "id": {
                     "type": "integer"
                 },
@@ -4970,6 +5058,12 @@
                 },
                 "performedById": {
                     "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedById": {
+                    "type": "integer"
                 }
             }
         },
@@ -4981,6 +5075,9 @@
                 },
                 "createdAt": {
                     "type": "string"
+                },
+                "createdById": {
+                    "type": "integer"
                 },
                 "customer": {
                     "$ref": "#/definitions/responseModel.Customer"
@@ -5033,6 +5130,9 @@
                 },
                 "updatedAt": {
                     "type": "string"
+                },
+                "updatedById": {
+                    "type": "integer"
                 }
             }
         },
@@ -5044,6 +5144,12 @@
                 },
                 "changedFields": {
                     "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdById": {
+                    "type": "integer"
                 },
                 "deliveredDate": {
                     "type": "string"
@@ -5081,6 +5187,12 @@
                 },
                 "status": {
                     "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedById": {
+                    "type": "integer"
                 }
             }
         },
@@ -5089,6 +5201,12 @@
             "properties": {
                 "additionalCharges": {
                     "type": "number"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdById": {
+                    "type": "integer"
                 },
                 "deliveredDate": {
                     "type": "string"
@@ -5131,6 +5249,12 @@
                 },
                 "total": {
                     "type": "number"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedById": {
+                    "type": "integer"
                 }
             }
         },
@@ -5138,6 +5262,12 @@
             "type": "object",
             "properties": {
                 "age": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdById": {
                     "type": "integer"
                 },
                 "customer": {
@@ -5166,6 +5296,12 @@
                     "items": {
                         "$ref": "#/definitions/responseModel.Measurement"
                     }
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedById": {
+                    "type": "integer"
                 }
             }
         },
@@ -5219,6 +5355,12 @@
         "responseModel.User": {
             "type": "object",
             "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdById": {
+                    "type": "integer"
+                },
                 "department": {
                     "type": "string"
                 },
@@ -5263,6 +5405,12 @@
                 },
                 "role": {
                     "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedById": {
+                    "type": "integer"
                 },
                 "userChannelDetails": {
                     "type": "array",

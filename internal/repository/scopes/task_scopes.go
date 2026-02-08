@@ -3,9 +3,27 @@ package scopes
 import (
 	"fmt"
 
+	"github.com/loop-kar/pixie/constants"
 	"github.com/loop-kar/pixie/util"
 	"gorm.io/gorm"
 )
+
+func TasksForCurrentUser() func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		val, ok := db.Get(constants.USER_ID)
+		if !ok || val == nil {
+			return db
+		}
+		userID, ok := val.(*uint)
+		if !ok || userID == nil || *userID == 0 {
+			return db
+		}
+		return db.Where(
+			`(assigned_to_id = ? OR created_by_id = ?)`,
+			*userID, *userID,
+		)
+	}
+}
 
 func GetTasks_Search(search string) func(db *gorm.DB) *gorm.DB {
 	defaultReturn := func(db *gorm.DB) *gorm.DB { return db }

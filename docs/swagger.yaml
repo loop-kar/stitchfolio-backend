@@ -57,6 +57,14 @@ definitions:
       DEV: to be used by developer, only read access in PROD
       SUPERADMIN: to be used for the owner of the application (customer)
       SYSTEM_ADMIN: to be used for managing system only,not exposed
+    x-enum-descriptions:
+    - to be used for managing system only,not exposed
+    - to be used by developer, only read access in PROD
+    - to be used for the owner of the application (customer)
+    - to be used by the application administrator
+    - ""
+    - ""
+    - ""
     x-enum-varnames:
     - SYSTEM_ADMIN
     - DEV
@@ -207,6 +215,24 @@ definitions:
       STORAGE: Storage Error
       UNANTICIPATED: Unanticipated error.
       VALIDATION: Input validation error.
+    x-enum-descriptions:
+    - Unclassified error. This value is not printed in the error message.
+    - Invalid operation for this type of item.
+    - External I/O error such as network failure.
+    - Item already exists.
+    - Item does not exist.
+    - Information withheld.
+    - Internal error or inconsistency.
+    - Link target does not exist.
+    - Error from database.
+    - Input validation error.
+    - Unanticipated error.
+    - Invalid Request
+    - SMTP Error
+    - SMTP Error
+    - Storage Error
+    - Insufficient Access
+    - Duplicate Transaction
     x-enum-varnames:
     - OTHER
     - INVALID
@@ -764,6 +790,10 @@ definitions:
     properties:
       address:
         type: string
+      createdAt:
+        type: string
+      createdById:
+        type: integer
       email:
         type: string
       enquiries:
@@ -788,6 +818,10 @@ definitions:
         type: array
       phoneNumber:
         type: string
+      updatedAt:
+        type: string
+      updatedById:
+        type: integer
       whatsappNumber:
         type: string
     type: object
@@ -806,6 +840,10 @@ definitions:
     type: object
   responseModel.DressType:
     properties:
+      createdAt:
+        type: string
+      createdById:
+        type: integer
       description:
         type: string
       id:
@@ -816,9 +854,17 @@ definitions:
         type: string
       name:
         type: string
+      updatedAt:
+        type: string
+      updatedById:
+        type: integer
     type: object
   responseModel.Enquiry:
     properties:
+      createdAt:
+        type: string
+      createdById:
+        type: integer
       customer:
         $ref: '#/definitions/responseModel.Customer'
       customerId:
@@ -839,11 +885,19 @@ definitions:
         type: string
       subject:
         type: string
+      updatedAt:
+        type: string
+      updatedById:
+        type: integer
     type: object
   responseModel.EnquiryHistory:
     properties:
       callBackDate:
         type: string
+      createdAt:
+        type: string
+      createdById:
+        type: integer
       customerComment:
         type: string
       employee:
@@ -870,6 +924,10 @@ definitions:
         type: string
       status:
         type: string
+      updatedAt:
+        type: string
+      updatedById:
+        type: integer
       visitingDate:
         type: string
     type: object
@@ -904,6 +962,10 @@ definitions:
     type: object
   responseModel.Measurement:
     properties:
+      createdAt:
+        type: string
+      createdById:
+        type: integer
       dressType:
         $ref: '#/definitions/responseModel.DressType'
       dressTypeId:
@@ -958,6 +1020,10 @@ definitions:
         type: string
       changedValues:
         type: string
+      createdAt:
+        type: string
+      createdById:
+        type: integer
       id:
         type: integer
       isActive:
@@ -976,6 +1042,10 @@ definitions:
         $ref: '#/definitions/responseModel.User'
       performedById:
         type: integer
+      updatedAt:
+        type: string
+      updatedById:
+        type: integer
     type: object
   responseModel.Order:
     properties:
@@ -983,6 +1053,8 @@ definitions:
         type: number
       createdAt:
         type: string
+      createdById:
+        type: integer
       customer:
         $ref: '#/definitions/responseModel.Customer'
       customerId:
@@ -1019,6 +1091,8 @@ definitions:
         type: string
       updatedAt:
         type: string
+      updatedById:
+        type: integer
     type: object
   responseModel.OrderHistory:
     properties:
@@ -1026,6 +1100,10 @@ definitions:
         type: string
       changedFields:
         type: string
+      createdAt:
+        type: string
+      createdById:
+        type: integer
       deliveredDate:
         type: string
       expectedDeliveryDate:
@@ -1051,11 +1129,19 @@ definitions:
         type: integer
       status:
         type: string
+      updatedAt:
+        type: string
+      updatedById:
+        type: integer
     type: object
   responseModel.OrderItem:
     properties:
       additionalCharges:
         type: number
+      createdAt:
+        type: string
+      createdById:
+        type: integer
       deliveredDate:
         type: string
       description:
@@ -1084,10 +1170,18 @@ definitions:
         type: integer
       total:
         type: number
+      updatedAt:
+        type: string
+      updatedById:
+        type: integer
     type: object
   responseModel.Person:
     properties:
       age:
+        type: integer
+      createdAt:
+        type: string
+      createdById:
         type: integer
       customer:
         $ref: '#/definitions/responseModel.Customer'
@@ -1107,6 +1201,10 @@ definitions:
         items:
           $ref: '#/definitions/responseModel.Measurement'
         type: array
+      updatedAt:
+        type: string
+      updatedById:
+        type: integer
     type: object
   responseModel.Task:
     properties:
@@ -1141,6 +1239,10 @@ definitions:
     type: object
   responseModel.User:
     properties:
+      createdAt:
+        type: string
+      createdById:
+        type: integer
       department:
         type: string
       email:
@@ -1171,6 +1273,10 @@ definitions:
         type: string
       role:
         type: string
+      updatedAt:
+        type: string
+      updatedById:
+        type: integer
       userChannelDetails:
         items:
           $ref: '#/definitions/responseModel.UserChannelDetail'

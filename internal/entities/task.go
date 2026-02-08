@@ -5,10 +5,10 @@ import "time"
 type Task struct {
 	*Model `mapstructure:",squash"`
 
-	Title       string     `gorm:"size:255;not null" json:"title"`
-	Description *string    `gorm:"type:text" json:"description,omitempty"`
-	IsCompleted bool       `gorm:"default:false" json:"isCompleted"`
-	Priority    *int       `json:"priority,omitempty"`
+	Title        string     `gorm:"size:255;not null" json:"title"`
+	Description  *string    `gorm:"type:text" json:"description,omitempty"`
+	IsCompleted  bool       `gorm:"default:false" json:"isCompleted"`
+	Priority     *int       `json:"priority,omitempty"`
 	DueDate      *time.Time `json:"dueDate,omitempty"`
 	ReminderDate *time.Time `json:"reminderDate,omitempty"`
 	CompletedAt  *time.Time `json:"completedAt,omitempty"`
