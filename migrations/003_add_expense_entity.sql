@@ -1,12 +1,12 @@
 -- Migration: 003_add_expense_entity
--- Generated: 2026-02-03T21:53:30+05:30
+-- Generated: 2026-01-28T20:36:54+05:30
 
 -- ====================================
 -- UP Migration
 -- ====================================
 
--- Create table: stich.Tasks
-CREATE TABLE IF NOT EXISTS stich."Tasks" (
+-- Create table: stich.Expenses
+CREATE TABLE IF NOT EXISTS stich."Expenses" (
   id BIGSERIAL NOT NULL,
   created_at TIMESTAMPTZ,
   updated_at TIMESTAMPTZ,
@@ -14,19 +14,15 @@ CREATE TABLE IF NOT EXISTS stich."Tasks" (
   created_by_id INTEGER,
   updated_by_id INTEGER,
   channel_id INTEGER,
-  title VARCHAR(255) NOT NULL,
-  description TEXT,
-  is_completed BOOLEAN DEFAULT false,
-  priority INTEGER,
-  due_date TIMESTAMPTZ,
-  reminder_date TIMESTAMPTZ,
-  completed_at TIMESTAMPTZ,
-  assigned_to_id INTEGER,
+  purchase_date TIMESTAMPTZ,
+  bill_number TEXT,
+  company_name TEXT,
+  material TEXT,
+  price DOUBLE PRECISION,
+  location TEXT,
+  notes TEXT,
   PRIMARY KEY (id)
 );
-
--- Add foreign key to stich.Tasks
-ALTER TABLE stich."Tasks" ADD CONSTRAINT fk_Task_assigned_to_id FOREIGN KEY (assigned_to_id) REFERENCES stich."Users" (id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
 -- ====================================
