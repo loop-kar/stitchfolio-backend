@@ -49,9 +49,9 @@ func (or *orderRepository) Get(ctx *context.Context, id uint) (*entities.Order, 
 			 WHERE "stich"."OrderItems".order_id = "stich"."Orders".id) as order_value`).
 		Preload("Customer").
 		Preload("OrderTakenBy", scopes.SelectFields("first_name", "last_name")).
-		Preload("OrderItems.Person").
-		Preload("OrderItems.Measurement").
-		Preload("OrderItems.Measurement.DressType").
+		Preload("OrderItems.Measurement", scopes.SelectFields("person_id", "dress_type_id")).
+		Preload("OrderItems.Measurement.Person", scopes.SelectFields("first_name", "last_name")).
+		Preload("OrderItems.Measurement.DressType", scopes.SelectFields("name")).
 		Find(&order, id)
 	if res.Error != nil {
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find order", res.Error)
@@ -80,10 +80,6 @@ func (or *orderRepository) GetAll(ctx *context.Context, search string) ([]entiti
 		Scopes(db.Paginate(ctx)).
 		Preload("Customer", scopes.SelectFields("first_name", "last_name")).
 		Preload("OrderTakenBy", scopes.SelectFields("first_name", "last_name")).
-		Preload("OrderItems").
-		// Preload("OrderItems.Person").
-		// Preload("OrderItems.Measurement").
-		// Preload("OrderItems.Measurement.DressType").
 		Find(&orders)
 	if res.Error != nil {
 		return nil, errs.NewXError(errs.DATABASE, "Unable to find orders", res.Error)

@@ -46,6 +46,12 @@ func (svc measurementService) SaveMeasurement(ctx *context.Context, measurement 
 		return errs.NewXError(errs.INVALID_REQUEST, "Unable to save measurement", err)
 	}
 
+	// Set TakenById to the current user if it's not provided in the request
+	if measurement.TakenById == nil {
+		userID := utils.GetUserId(ctx)
+		dbMeasurement.TakenById = &userID
+	}
+
 	errr := svc.measurementRepo.Create(ctx, dbMeasurement)
 	if errr != nil {
 		return errr
@@ -117,6 +123,11 @@ func (svc measurementService) UpdateMeasurement(ctx *context.Context, measuremen
 	}
 
 	dbMeasurement.ID = id
+	// Set TakenById to the current user if it's not provided in the request
+	if measurement.TakenById == nil {
+		userID := utils.GetUserId(ctx)
+		dbMeasurement.TakenById = &userID
+	}
 
 	errr := svc.measurementRepo.Update(ctx, dbMeasurement)
 	if errr != nil {
