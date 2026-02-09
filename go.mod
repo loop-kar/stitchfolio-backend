@@ -2,14 +2,14 @@ module github.com/imkarthi24/sf-backend
 
 go 1.25.0
 
-// replace github.com/loop-kar/pixie => /../../loop-kar/pixie
+replace github.com/loop-kar/pixie => /../../loop-kar/pixie
 
 require (
 	github.com/gin-contrib/gzip v0.0.6
 	github.com/gin-gonic/gin v1.11.0
 	github.com/google/wire v0.5.0
 	github.com/iancoleman/strcase v0.3.0
-	github.com/loop-kar/pixie v1.0.1
+	github.com/loop-kar/pixie v1.0.2
 	github.com/newrelic/go-agent/v3 v3.42.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/stretchr/testify v1.11.1

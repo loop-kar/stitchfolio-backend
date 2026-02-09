@@ -62,7 +62,10 @@ func (customDB *GormDAL) Update(ctx *context.Context, model interface{}) *errs.X
 	// 	updateMap["updated_by_id"] = val.(*models.Session).UserId
 	// }
 
-	res := customDB.WithDB(ctx).Model(model).Save(model)
+	res := customDB.WithDB(ctx).Session(&gorm.Session{
+		FullSaveAssociations: true,
+	}).Model(model).Save(model)
+
 	if res.Error != nil {
 		return errs.NewXError(errs.DATABASE, "Unable to update entity", res.Error)
 	}
