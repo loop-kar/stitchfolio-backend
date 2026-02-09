@@ -55,7 +55,7 @@ func (pr *personRepository) GetAll(ctx *context.Context, search string) ([]entit
 	var persons []entities.Person
 	res := pr.WithDB(ctx).Table(entities.Person{}.TableNameForQuery()).
 		Scopes(scopes.Channel(), scopes.IsActive()).
-		Scopes(scopes.ILike(search, "name")).
+		Scopes(scopes.ILike(search, "first_name", "last_name")).
 		Scopes(db.Paginate(ctx)).
 		Preload("Customer").
 		Find(&persons)
