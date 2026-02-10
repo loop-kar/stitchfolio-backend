@@ -50,6 +50,12 @@ func (svc orderService) SaveOrder(ctx *context.Context, order requestModel.Order
 		return errr
 	}
 
+	// Set TakenById to the current user if it's not provided in the request
+	if order.OrderTakenById == nil {
+		userID := utils.GetUserId(ctx)
+		dbOrder.OrderTakenById = &userID
+	}
+
 	// Record order history for CREATED action
 	errr = svc.recordOrderHistory(ctx, dbOrder.ID, entities.OrderHistoryActionCreated, nil, nil, nil, nil)
 	if errr != nil {
@@ -69,6 +75,12 @@ func (svc orderService) UpdateOrder(ctx *context.Context, order requestModel.Ord
 	dbOrder, mapErr := svc.mapper.Order(order)
 	if mapErr != nil {
 		return errs.NewXError(errs.INVALID_REQUEST, "Unable to update order", mapErr)
+	}
+
+	// Set TakenById to the current user if it's not provided in the request
+	if order.OrderTakenById == nil {
+		userID := utils.GetUserId(ctx)
+		dbOrder.OrderTakenById = &userID
 	}
 
 	dbOrder.ID = id

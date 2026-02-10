@@ -42,7 +42,7 @@ func (pr *personRepository) Get(ctx *context.Context, id uint) (*entities.Person
 	person := entities.Person{}
 	res := pr.WithDB(ctx).
 		Preload("Customer").
-		Preload("Measurements").
+		Preload("Measurements", scopes.IsActive()).
 		Preload("Measurements.DressType", scopes.SelectFields("name")).
 		Find(&person, id)
 	if res.Error != nil || res.RowsAffected != 1 {
@@ -55,7 +55,7 @@ func (pr *personRepository) GetAll(ctx *context.Context, search string) ([]entit
 	var persons []entities.Person
 	res := pr.WithDB(ctx).Table(entities.Person{}.TableNameForQuery()).
 		Scopes(scopes.Channel(), scopes.IsActive()).
-		Scopes(scopes.ILike(search, "name")).
+		Scopes(scopes.ILike(search, "first_name", "last_name")).
 		Scopes(db.Paginate(ctx)).
 		Preload("Customer").
 		Find(&persons)
