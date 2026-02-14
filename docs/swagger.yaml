@@ -826,6 +826,10 @@ definitions:
     properties:
       address:
         type: string
+      createdAt:
+        type: string
+      createdBy:
+        type: string
       email:
         type: string
       enquiries:
@@ -850,6 +854,10 @@ definitions:
         type: array
       phoneNumber:
         type: string
+      updatedAt:
+        type: string
+      updatedBy:
+        type: string
       whatsappNumber:
         type: string
     type: object
@@ -868,6 +876,10 @@ definitions:
     type: object
   responseModel.DressType:
     properties:
+      createdAt:
+        type: string
+      createdBy:
+        type: string
       description:
         type: string
       id:
@@ -878,9 +890,17 @@ definitions:
         type: string
       name:
         type: string
+      updatedAt:
+        type: string
+      updatedBy:
+        type: string
     type: object
   responseModel.Enquiry:
     properties:
+      createdAt:
+        type: string
+      createdBy:
+        type: string
       customer:
         $ref: '#/definitions/responseModel.Customer'
       customerId:
@@ -901,10 +921,18 @@ definitions:
         type: string
       subject:
         type: string
+      updatedAt:
+        type: string
+      updatedBy:
+        type: string
     type: object
   responseModel.EnquiryHistory:
     properties:
       callBackDate:
+        type: string
+      createdAt:
+        type: string
+      createdBy:
         type: string
       customerComment:
         type: string
@@ -931,6 +959,10 @@ definitions:
       responseStatus:
         type: string
       status:
+        type: string
+      updatedAt:
+        type: string
+      updatedBy:
         type: string
       visitingDate:
         type: string
@@ -1012,6 +1044,10 @@ definitions:
         type: string
       changedValues:
         type: string
+      createdAt:
+        type: string
+      createdBy:
+        type: string
       id:
         type: integer
       isActive:
@@ -1030,6 +1066,10 @@ definitions:
         $ref: '#/definitions/responseModel.User'
       performedById:
         type: integer
+      updatedAt:
+        type: string
+      updatedBy:
+        type: string
     type: object
   responseModel.Order:
     properties:
@@ -1078,6 +1118,10 @@ definitions:
         type: string
       changedFields:
         type: string
+      createdAt:
+        type: string
+      createdBy:
+        type: string
       deliveredDate:
         type: string
       expectedDeliveryDate:
@@ -1102,6 +1146,10 @@ definitions:
       performedById:
         type: integer
       status:
+        type: string
+      updatedAt:
+        type: string
+      updatedBy:
         type: string
     type: object
   responseModel.OrderItem:
@@ -1143,6 +1191,10 @@ definitions:
     properties:
       age:
         type: integer
+      createdAt:
+        type: string
+      createdBy:
+        type: string
       customer:
         $ref: '#/definitions/responseModel.Customer'
       customerId:
@@ -1161,6 +1213,10 @@ definitions:
         items:
           $ref: '#/definitions/responseModel.Measurement'
         type: array
+      updatedAt:
+        type: string
+      updatedBy:
+        type: string
     type: object
   responseModel.Task:
     properties:
@@ -1189,6 +1245,10 @@ definitions:
     type: object
   responseModel.User:
     properties:
+      createdAt:
+        type: string
+      createdBy:
+        type: string
       department:
         type: string
       email:
@@ -1218,6 +1278,10 @@ definitions:
       resetPasswordString:
         type: string
       role:
+        type: string
+      updatedAt:
+        type: string
+      updatedBy:
         type: string
       userChannelDetails:
         items:

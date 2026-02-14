@@ -4736,6 +4736,12 @@ const docTemplate = `{
                 "address": {
                     "type": "string"
                 },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdBy": {
+                    "type": "string"
+                },
                 "email": {
                     "type": "string"
                 },
@@ -4772,6 +4778,12 @@ const docTemplate = `{
                 "phoneNumber": {
                     "type": "string"
                 },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedBy": {
+                    "type": "string"
+                },
                 "whatsappNumber": {
                     "type": "string"
                 }
@@ -4800,6 +4812,12 @@ const docTemplate = `{
         "responseModel.DressType": {
             "type": "object",
             "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdBy": {
+                    "type": "string"
+                },
                 "description": {
                     "type": "string"
                 },
@@ -4814,12 +4832,24 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedBy": {
+                    "type": "string"
                 }
             }
         },
         "responseModel.Enquiry": {
             "type": "object",
             "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdBy": {
+                    "type": "string"
+                },
                 "customer": {
                     "$ref": "#/definitions/responseModel.Customer"
                 },
@@ -4849,6 +4879,12 @@ const docTemplate = `{
                 },
                 "subject": {
                     "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedBy": {
+                    "type": "string"
                 }
             }
         },
@@ -4856,6 +4892,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "callBackDate": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdBy": {
                     "type": "string"
                 },
                 "customerComment": {
@@ -4895,6 +4937,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedBy": {
                     "type": "string"
                 },
                 "visitingDate": {
@@ -5018,6 +5066,12 @@ const docTemplate = `{
                 "changedValues": {
                     "type": "string"
                 },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdBy": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
@@ -5044,6 +5098,12 @@ const docTemplate = `{
                 },
                 "performedById": {
                     "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedBy": {
+                    "type": "string"
                 }
             }
         },
@@ -5116,6 +5176,12 @@ const docTemplate = `{
                 "changedFields": {
                     "type": "string"
                 },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdBy": {
+                    "type": "string"
+                },
                 "deliveredDate": {
                     "type": "string"
                 },
@@ -5151,6 +5217,12 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "status": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedBy": {
                     "type": "string"
                 }
             }
@@ -5214,6 +5286,12 @@ const docTemplate = `{
                 "age": {
                     "type": "integer"
                 },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdBy": {
+                    "type": "string"
+                },
                 "customer": {
                     "$ref": "#/definitions/responseModel.Customer"
                 },
@@ -5240,6 +5318,12 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/responseModel.Measurement"
                     }
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedBy": {
+                    "type": "string"
                 }
             }
         },
@@ -5284,6 +5368,12 @@ const docTemplate = `{
         "responseModel.User": {
             "type": "object",
             "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdBy": {
+                    "type": "string"
+                },
                 "department": {
                     "type": "string"
                 },
@@ -5327,6 +5417,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "role": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedBy": {
                     "type": "string"
                 },
                 "userChannelDetails": {

@@ -4730,6 +4730,12 @@
                 "address": {
                     "type": "string"
                 },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdBy": {
+                    "type": "string"
+                },
                 "email": {
                     "type": "string"
                 },
@@ -4766,6 +4772,12 @@
                 "phoneNumber": {
                     "type": "string"
                 },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedBy": {
+                    "type": "string"
+                },
                 "whatsappNumber": {
                     "type": "string"
                 }
@@ -4794,6 +4806,12 @@
         "responseModel.DressType": {
             "type": "object",
             "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdBy": {
+                    "type": "string"
+                },
                 "description": {
                     "type": "string"
                 },
@@ -4808,12 +4826,24 @@
                 },
                 "name": {
                     "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedBy": {
+                    "type": "string"
                 }
             }
         },
         "responseModel.Enquiry": {
             "type": "object",
             "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdBy": {
+                    "type": "string"
+                },
                 "customer": {
                     "$ref": "#/definitions/responseModel.Customer"
                 },
@@ -4843,6 +4873,12 @@
                 },
                 "subject": {
                     "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedBy": {
+                    "type": "string"
                 }
             }
         },
@@ -4850,6 +4886,12 @@
             "type": "object",
             "properties": {
                 "callBackDate": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdBy": {
                     "type": "string"
                 },
                 "customerComment": {
@@ -4889,6 +4931,12 @@
                     "type": "string"
                 },
                 "status": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedBy": {
                     "type": "string"
                 },
                 "visitingDate": {
@@ -5012,6 +5060,12 @@
                 "changedValues": {
                     "type": "string"
                 },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdBy": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
@@ -5038,6 +5092,12 @@
                 },
                 "performedById": {
                     "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedBy": {
+                    "type": "string"
                 }
             }
         },
@@ -5110,6 +5170,12 @@
                 "changedFields": {
                     "type": "string"
                 },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdBy": {
+                    "type": "string"
+                },
                 "deliveredDate": {
                     "type": "string"
                 },
@@ -5145,6 +5211,12 @@
                     "type": "integer"
                 },
                 "status": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedBy": {
                     "type": "string"
                 }
             }
@@ -5208,6 +5280,12 @@
                 "age": {
                     "type": "integer"
                 },
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdBy": {
+                    "type": "string"
+                },
                 "customer": {
                     "$ref": "#/definitions/responseModel.Customer"
                 },
@@ -5234,6 +5312,12 @@
                     "items": {
                         "$ref": "#/definitions/responseModel.Measurement"
                     }
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedBy": {
+                    "type": "string"
                 }
             }
         },
@@ -5278,6 +5362,12 @@
         "responseModel.User": {
             "type": "object",
             "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "createdBy": {
+                    "type": "string"
+                },
                 "department": {
                     "type": "string"
                 },
@@ -5321,6 +5411,12 @@
                     "type": "string"
                 },
                 "role": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "updatedBy": {
                     "type": "string"
                 },
                 "userChannelDetails": {
