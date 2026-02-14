@@ -12,7 +12,7 @@ env:
   SSH_HOST: "31.97.202.6"
   SSH_USER: "root"
   DEPLOY_PATH: "/stitchfolio/backend-prod"
-  ENV_FILE: "/stitchfolio/env/.prod.env"
+  ENV_FILE: "/stitchfolio_env/prod.env"
   CONFIG_FILE: "prod.yaml"
   NGINX_HOST_PORT: "80"
   COMPOSE_PROJECT: "stitchfolio-prod"

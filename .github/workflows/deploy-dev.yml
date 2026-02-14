@@ -12,7 +12,7 @@ env:
   SSH_HOST: "31.97.202.6"
   SSH_USER: "root"
   DEPLOY_PATH: "/stitchfolio/backend-dev"
-  ENV_FILE: "/stitchfolio/env/.dev.env"
+  ENV_FILE: "/stitchfolio_env/dev.env"
   CONFIG_FILE: "dev.yaml"
   NGINX_HOST_PORT: "9001"
   COMPOSE_PROJECT: "stitchfolio-dev"
