@@ -16,6 +16,4 @@ type MeasurementHistory struct {
 	PerformedAt   time.Time       `json:"performedAt,omitempty"`
 	PerformedById uint            `json:"performedById,omitempty"`
 	PerformedBy   *User           `json:"performedBy,omitempty"`
-
-	AuditFields
 }
