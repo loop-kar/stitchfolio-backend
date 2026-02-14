@@ -104,6 +104,7 @@ func (m *responseMapper) User(usr *entities.User) (*responseModel.User, error) {
 		LoginFailureCounter: usr.LoginFailureCounter,
 		Experience:          usr.Experience,
 		Department:          usr.Department,
+		AuditFields:         responseModel.AuditFields{CreatedAt: usr.CreatedAt, UpdatedAt: usr.UpdatedAt, CreatedById: usr.CreatedById, UpdatedById: usr.UpdatedById},
 	}, nil
 }
 
@@ -159,6 +160,7 @@ func (m *responseMapper) Enquiry(e *entities.Enquiry) (*responseModel.Enquiry, e
 		Source:              e.Source,
 		ReferredBy:          e.ReferredBy,
 		ReferrerPhoneNumber: e.ReferrerPhoneNumber,
+		AuditFields:         responseModel.AuditFields{CreatedAt: e.CreatedAt, UpdatedAt: e.UpdatedAt, CreatedById: e.CreatedById, UpdatedById: e.UpdatedById},
 	}, nil
 }
 
@@ -219,6 +221,7 @@ func (m *responseMapper) EnquiryHistory(e *entities.EnquiryHistory) (*responseMo
 		PerformedAt:     e.PerformedAt,
 		PerformedById:   e.PerformedById,
 		PerformedBy:     performedBy,
+		AuditFields:     responseModel.AuditFields{CreatedAt: e.CreatedAt, UpdatedAt: e.UpdatedAt, CreatedById: e.CreatedById, UpdatedById: e.UpdatedById},
 	}, nil
 }
 func (m *responseMapper) MasterConfig(e *entities.MasterConfig) (*responseModel.MasterConfig, error) {
@@ -279,6 +282,7 @@ func (m *responseMapper) Customer(e *entities.Customer) (*responseModel.Customer
 		PhoneNumber:    e.PhoneNumber,
 		WhatsappNumber: e.WhatsappNumber,
 		Address:        e.Address,
+		AuditFields:    responseModel.AuditFields{CreatedAt: e.CreatedAt, UpdatedAt: e.UpdatedAt, CreatedById: e.CreatedById, UpdatedById: e.UpdatedById},
 		Persons:        persons,
 		Enquiries:      enquiries,
 		Orders:         orders,
@@ -309,6 +313,7 @@ func (m *responseMapper) Person(e *entities.Person) (*responseModel.Person, erro
 		Age:          e.Age,
 		CustomerId:   &e.CustomerId,
 		Customer:     customer,
+		AuditFields:  responseModel.AuditFields{CreatedAt: e.CreatedAt, UpdatedAt: e.UpdatedAt, CreatedById: e.CreatedById, UpdatedById: e.UpdatedById},
 		Measurements: measurements,
 	}, nil
 }
@@ -336,6 +341,7 @@ func (m *responseMapper) DressType(e *entities.DressType) (*responseModel.DressT
 		Name:         e.Name,
 		Description:  e.Description,
 		Measurements: e.Measurements,
+		AuditFields:  responseModel.AuditFields{CreatedAt: e.CreatedAt, UpdatedAt: e.UpdatedAt, CreatedById: e.CreatedById, UpdatedById: e.UpdatedById},
 	}, nil
 }
 
@@ -573,6 +579,7 @@ func (m *responseMapper) OrderHistory(e *entities.OrderHistory) (*responseModel.
 		PerformedAt:          e.PerformedAt,
 		PerformedById:        e.PerformedById,
 		PerformedBy:          performedBy,
+		AuditFields:          responseModel.AuditFields{CreatedAt: e.CreatedAt, UpdatedAt: e.UpdatedAt, CreatedById: e.CreatedById, UpdatedById: e.UpdatedById},
 	}, nil
 }
 
@@ -618,6 +625,7 @@ func (m *responseMapper) MeasurementHistory(e *entities.MeasurementHistory) (*re
 		PerformedAt:   e.PerformedAt,
 		PerformedById: e.PerformedById,
 		PerformedBy:   performedBy,
+		AuditFields:   responseModel.AuditFields{CreatedAt: e.CreatedAt, UpdatedAt: e.UpdatedAt, CreatedById: e.CreatedById, UpdatedById: e.UpdatedById},
 	}, nil
 }
 
