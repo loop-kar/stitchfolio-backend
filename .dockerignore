@@ -1,7 +1,6 @@
 .git
 .idea
 .vscode
-.cursorrules
 
 .env
 .env*
