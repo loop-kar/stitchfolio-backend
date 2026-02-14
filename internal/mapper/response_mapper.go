@@ -233,7 +233,7 @@ func (m *responseMapper) MasterConfig(e *entities.MasterConfig) (*responseModel.
 		PreviousValue: e.PreviousValue,
 		Description:   e.Description,
 		Format:        e.Format,
-		AuditFields:   responseModel.AuditFields{CreatedAt: e.CreatedAt, UpdatedAt: e.UpdatedAt, CreatedById: e.CreatedById, UpdatedById: e.UpdatedById},
+		AuditFields:   responseModel.AuditFields{CreatedAt: e.CreatedAt, UpdatedAt: e.UpdatedAt, CreatedBy: e.CreatedBy, UpdatedBy: e.UpdatedBy},
 	}, nil
 }
 
@@ -399,7 +399,7 @@ func (m *responseMapper) Measurement(e *entities.Measurement) (*responseModel.Me
 		DressType:   dressType,
 		TakenById:   e.TakenById,
 		TakenBy:     takenBy,
-		AuditFields: responseModel.AuditFields{CreatedAt: e.CreatedAt, UpdatedAt: e.UpdatedAt, CreatedById: e.CreatedById, UpdatedById: e.UpdatedById},
+		AuditFields: responseModel.AuditFields{CreatedAt: e.CreatedAt, UpdatedAt: e.UpdatedAt, CreatedBy: e.CreatedBy, UpdatedBy: e.UpdatedBy},
 	}, nil
 }
 
@@ -463,7 +463,7 @@ func (m *responseMapper) Order(e *entities.Order) (*responseModel.Order, error) 
 		OrderTakenBy:         orderTakenBy,
 		OrderQuantity:        orderQuantity,
 		OrderValue:           orderValue,
-		AuditFields:          responseModel.AuditFields{CreatedAt: e.CreatedAt, UpdatedAt: e.UpdatedAt, CreatedById: e.CreatedById, UpdatedById: e.UpdatedById},
+		AuditFields:          responseModel.AuditFields{CreatedAt: e.CreatedAt, UpdatedAt: e.UpdatedAt, CreatedBy: e.CreatedBy, UpdatedBy: e.UpdatedBy},
 		OrderItems:           orderItems,
 	}, nil
 }
@@ -516,7 +516,7 @@ func (m *responseMapper) OrderItem(e *entities.OrderItem) (*responseModel.OrderI
 		Measurement:          measurement,
 		OrderId:              e.OrderId,
 		Order:                order,
-		AuditFields:          responseModel.AuditFields{CreatedAt: e.CreatedAt, UpdatedAt: e.UpdatedAt, CreatedById: e.CreatedById, UpdatedById: e.UpdatedById},
+		AuditFields:          responseModel.AuditFields{CreatedAt: e.CreatedAt, UpdatedAt: e.UpdatedAt, CreatedBy: e.CreatedBy, UpdatedBy: e.UpdatedBy},
 	}, nil
 }
 
@@ -648,7 +648,7 @@ func (m *responseMapper) ExpenseTracker(e *entities.Expense) (*responseModel.Exp
 		Price:        e.Price,
 		Location:     e.Location,
 		Notes:        e.Notes,
-		AuditFields:  responseModel.AuditFields{CreatedAt: e.CreatedAt, UpdatedAt: e.UpdatedAt, CreatedById: e.CreatedById, UpdatedById: e.UpdatedById},
+		AuditFields:  responseModel.AuditFields{CreatedAt: e.CreatedAt, UpdatedAt: e.UpdatedAt, CreatedBy: e.CreatedBy, UpdatedBy: e.UpdatedBy},
 	}, nil
 }
 
@@ -679,7 +679,7 @@ func (m *responseMapper) Task(e *entities.Task) (*responseModel.Task, error) {
 		ReminderDate: e.ReminderDate,
 		CompletedAt:  e.CompletedAt,
 		AssignedToId: e.AssignedToId,
-		AuditFields:  responseModel.AuditFields{CreatedAt: e.CreatedAt, UpdatedAt: e.UpdatedAt, CreatedById: e.CreatedById, UpdatedById: e.UpdatedById},
+		AuditFields:  responseModel.AuditFields{CreatedAt: e.CreatedAt, UpdatedAt: e.UpdatedAt, CreatedBy: e.CreatedBy, UpdatedBy: e.UpdatedBy},
 	}, nil
 }
 
