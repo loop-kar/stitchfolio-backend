@@ -18,11 +18,19 @@
 
 ## GitHub secrets
 
+<<<<<<< Updated upstream
 - **`SSH_PRIVATE_KEY`** (required): Private key that can SSH as `root@72.61.254.64`. Add in **Settings → Secrets and variables → Actions** (or at org level).
 
 ## Server setup
 
 On `72.61.254.64`:
+=======
+- **`SERVER_SECRET`** (required): Private key that can SSH as `root@31.97.202.6`. Add in **Settings → Secrets and variables → Actions** (or at org level).
+
+## Server setup
+
+On `31.97.202.6`:
+>>>>>>> Stashed changes
 
 1. **Env files** (already in place):
    - `/stitchfolio/env/.dev.env`

@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 env:
-  SSH_HOST: "72.61.254.64"
+  SSH_HOST: "31.97.202.6"
   SSH_USER: "root"
   DEPLOY_PATH: "/stitchfolio/backend-dev"
   ENV_FILE: "/stitchfolio/env/.dev.env"
