@@ -8,14 +8,12 @@ package di
 
 import (
 	"context"
-
 	"github.com/google/wire"
 	"github.com/imkarthi24/sf-backend/internal/app"
 	"github.com/imkarthi24/sf-backend/internal/config"
 	"github.com/imkarthi24/sf-backend/internal/cron"
 	"github.com/imkarthi24/sf-backend/internal/handler"
 	"github.com/imkarthi24/sf-backend/internal/handler/base"
-	"github.com/imkarthi24/sf-backend/internal/log/newreliclog"
 	"github.com/imkarthi24/sf-backend/internal/mapper"
 	"github.com/imkarthi24/sf-backend/internal/repository"
 	"github.com/imkarthi24/sf-backend/internal/router"
@@ -33,8 +31,7 @@ func InitApp(ctx *context.Context) (*app.App, error) {
 	if err != nil {
 		return nil, err
 	}
-	databaseConfig := appConfig.Database
-	databaseConnectionParams := ProvideDatabaseConnectionParams(databaseConfig)
+	databaseConnectionParams := ProvideDatabaseConnectionParams(appConfig)
 	gormDB, err := db.ProvideDatabase(databaseConnectionParams)
 	if err != nil {
 		return nil, err
@@ -94,9 +91,9 @@ func InitApp(ctx *context.Context) (*app.App, error) {
 	taskService := service.ProvideTaskService(taskRepository, mapperMapper, responseMapper)
 	taskHandler := handler.ProvideTaskHandler(taskService)
 	baseHandler := base.ProvideBaseHandler(health, userHandler, channelHandler, masterConfigHandler, adminHandler, customerHandler, enquiryHandler, orderHandler, orderItemHandler, measurementHandler, personHandler, dressTypeHandler, orderHistoryHandler, measurementHistoryHandler, enquiryHistoryHandler, expenseTrackerHandler, taskHandler)
+	application := ProvideNewRelic(appConfig)
 	serverConfig := appConfig.Server
-	engine := router.InitRouter(baseHandler, serverConfig)
-	application := newreliclog.ProvideNewRelic(appConfig)
+	engine := router.InitRouter(baseHandler, application, serverConfig)
 	appApp := &app.App{
 		Server:                 engine,
 		AppConfig:              appConfig,
@@ -112,8 +109,7 @@ func InitJobService(ctx *context.Context) (*app.Task, error) {
 	if err != nil {
 		return nil, err
 	}
-	databaseConfig := appConfig.Database
-	databaseConnectionParams := ProvideDatabaseConnectionParams(databaseConfig)
+	databaseConnectionParams := ProvideDatabaseConnectionParams(appConfig)
 	gormDB, err := db.ProvideDatabase(databaseConnectionParams)
 	if err != nil {
 		return nil, err
@@ -156,7 +152,7 @@ func InitJobService(ctx *context.Context) (*app.Task, error) {
 	taskRepository := repository.ProvideTaskRepository(gormDAL)
 	taskService := service.ProvideTaskService(taskRepository, mapperMapper, responseMapper)
 	baseService := base2.ProvideBaseService(userService, notificationService, channelService, masterConfigService, customerService, enquiryService, orderService, orderItemService, measurementService, personService, dressTypeService, orderHistoryService, measurementHistoryService, expenseTrackerService, taskService)
-	application := newreliclog.ProvideNewRelic(appConfig)
+	application := ProvideNewRelic(appConfig)
 	cronCron := cron.ProvideCron()
 	task := &app.Task{
 		ChitDb:      gormDB,
@@ -178,7 +174,9 @@ var pkgServiceSet = wire.NewSet(
 
 var handlerSet = wire.NewSet(base.ProvideHealthHandler, base.ProvideBaseHandler, handler.ProvideUserHandler, handler.ProvideChannelHandler, handler.ProvideMasterConfigHandler, handler.ProvideAdminHandler, handler.ProvideCustomerHandler, handler.ProvideEnquiryHandler, handler.ProvideOrderHandler, handler.ProvideOrderItemHandler, handler.ProvideMeasurementHandler, handler.ProvidePersonHandler, handler.ProvideDressTypeHandler, handler.ProvideOrderHistoryHandler, handler.ProvideMeasurementHistoryHandler, handler.ProvideEnquiryHistoryHandler, handler.ProvideExpenseTrackerHandler, handler.ProvideTaskHandler)
 
-var logSet = wire.NewSet(newreliclog.ProvideNewRelic)
+var logSet = wire.NewSet(
+	ProvideNewRelic,
+)
 
 var routerSet = wire.NewSet(router.InitRouter)
 
