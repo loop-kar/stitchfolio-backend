@@ -16,6 +16,7 @@ env:
   CONFIG_FILE: "dev.yaml"
   NGINX_HOST_PORT: "9001"
   COMPOSE_PROJECT: "stitchfolio-dev"
+  BRANCH: "dev"
 
 jobs:
   deploy:
@@ -34,12 +35,24 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             set -e
-            cd ${{ env.DEPLOY_PATH }}
+            DEPLOY_PATH="${{ env.DEPLOY_PATH }}"
+            BRANCH="${{ env.BRANCH }}"
+            REPO_URL="git@github.com:${{ github.repository }}.git"
 
-            echo "Pulling latest from dev..."
-            git fetch origin dev
-            git checkout dev
-            git pull origin dev
+            if [ ! -d "$DEPLOY_PATH" ]; then
+              echo "Deploy path not found. Creating and cloning..."
+              mkdir -p /stitchfolio
+              git clone "$REPO_URL" "$DEPLOY_PATH"
+              cd "$DEPLOY_PATH"
+              git checkout "$BRANCH"
+            else
+              cd "$DEPLOY_PATH"
+            fi
+
+            echo "Pulling latest from $BRANCH..."
+            git fetch origin "$BRANCH"
+            git checkout "$BRANCH"
+            git pull origin "$BRANCH"
 
             echo "Writing .env for compose..."
             echo "ENV_FILE_PATH=${{ env.ENV_FILE }}" > .env

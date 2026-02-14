@@ -18,37 +18,23 @@
 
 ## GitHub secrets
 
-<<<<<<< Updated upstream
-- **`SSH_PRIVATE_KEY`** (required): Private key that can SSH as `root@72.61.254.64`. Add in **Settings → Secrets and variables → Actions** (or at org level).
-
-## Server setup
-
-On `72.61.254.64`:
-=======
-- **`SERVER_SECRET`** (required): Private key that can SSH as `root@31.97.202.6`. Add in **Settings → Secrets and variables → Actions** (or at org level).
+- **`SSH_PRIVATE_KEY`** (required): Private key that can SSH as `root@31.97.202.6`. Add in **Settings → Secrets and variables → Actions** (or at org level).
 
 ## Server setup
 
 On `31.97.202.6`:
->>>>>>> Stashed changes
 
 1. **Env files** (already in place):
    - `/stitchfolio/env/.dev.env`
    - `/stitchfolio/env/.prod.env`
 
-2. **Clone the repo in two directories** (dev and prod run as separate compose stacks):
-
-   ```bash
-   mkdir -p /stitchfolio
-   git clone <repo-url> /stitchfolio/backend-dev
-   git clone <repo-url> /stitchfolio/backend-prod
-   cd /stitchfolio/backend-dev && git checkout dev
-   cd /stitchfolio/backend-prod && git checkout main
-   ```
+2. **Deploy directories**: The workflow creates `/stitchfolio` and clones the repo into `/stitchfolio/backend-dev` or `/stitchfolio/backend-prod` on first run if those paths don’t exist. For a **private** repo, the server must be able to clone from GitHub (e.g. add the server’s SSH key as a deploy key in the repo). You can still create the dirs and clone manually if you prefer.
 
 3. **Docker**: Docker (and Docker Compose v2) must be installed. The user used by the workflow (e.g. `root`) must be able to run `docker` and `docker compose` without sudo.
 
 4. **Ports**: Dev is exposed on host port **9001** (nginx). Prod is on **80** (nginx). The backend is not exposed on the host; only nginx is.
+
+5. **Git (for auto-clone)**: If you rely on the workflow to create and clone the repo, ensure `git` is installed on the server. For private repos, configure GitHub clone access (e.g. deploy key: `ssh-keygen` on server, add `~/.ssh/id_rsa.pub` to the repo’s **Deploy keys**).
 
 ## Repo layout
 
